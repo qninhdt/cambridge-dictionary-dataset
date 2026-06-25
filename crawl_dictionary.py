@@ -461,12 +461,12 @@ def fetch(url: str) -> tuple[str, int]:
     for attempt in range(MAX_RETRIES):
         try:
             resp = session.get(url, timeout=20)
-            return resp.text, resp.status_code
-        except requests.exceptions.RequestException as e:
-            status_code = e.response.status_code if (e.response is not None) else 0
-            if status_code == 404:
+            status_code = resp.status_code
+            if status_code == 200:
+                return resp.text, 200
+            elif status_code == 404:
                 return "", 404
-            if status_code == 429:
+            elif status_code == 429:
                 tqdm.write(f"\n[WARNING] Rate limited (429) on {url}. Retrying...")
                 time.sleep(10 * (attempt + 1))
             elif status_code == 403:
@@ -474,6 +474,8 @@ def fetch(url: str) -> tuple[str, int]:
                 time.sleep(5 * (attempt + 1))
             else:
                 time.sleep(2 ** attempt)
+        except requests.exceptions.RequestException:
+            time.sleep(2 ** attempt)
         except Exception:
             time.sleep(2 ** attempt)
     return "", 0
@@ -805,13 +807,13 @@ def process_word(
             consecutive_errors = 0
         return "not_found"
 
-    if code == 0:
-        write_queue.put((word_id, [], "error", "Network error after retries", None))
+    if code != 200:
+        write_queue.put((word_id, [], "error", f"HTTP Error status: {code}", None))
         with state_lock:
             consecutive_errors += 1
             if consecutive_errors >= 5:
                 abort_crawl = True
-                tqdm.write("\n[CRITICAL] 5 consecutive network errors! Suspected IP ban or network down. Aborting...")
+                tqdm.write(f"\n[CRITICAL] 5 consecutive network errors! Last HTTP status: {code}. Aborting...")
         return "error"
 
     try:
