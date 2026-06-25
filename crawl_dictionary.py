@@ -101,6 +101,15 @@ CREATE TABLE IF NOT EXISTS entries (
     dictionary_source TEXT          -- E.g. American Dictionary, Business English, etc.
 );
 
+CREATE TABLE IF NOT EXISTS entry_inflections (
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    entry_id       INTEGER NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+    form_type      TEXT,            -- e.g. "plural", "past tense"
+    inflected_form TEXT NOT NULL    -- e.g. "children", "went"
+);
+
+CREATE INDEX IF NOT EXISTS idx_inflections_form ON entry_inflections(inflected_form);
+
 CREATE TABLE IF NOT EXISTS senses (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     entry_id    INTEGER NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
@@ -186,6 +195,14 @@ def init_db(db_path: str) -> sqlite3.Connection:
             
     # Create new tables if they don't exist yet (safe to re-run)
     conn.executescript("""
+        CREATE TABLE IF NOT EXISTS entry_inflections (
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            entry_id       INTEGER NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+            form_type      TEXT,
+            inflected_form TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_inflections_form ON entry_inflections(inflected_form);
+
         CREATE TABLE IF NOT EXISTS sense_synonyms (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
             sense_id    INTEGER NOT NULL REFERENCES senses(id) ON DELETE CASCADE,
@@ -335,6 +352,15 @@ class DbWriterThread(threading.Thread):
                         ),
                     )
                     entry_id = cur.lastrowid
+
+                    # Inflections
+                    infls = entry_data.get("inflections", [])
+                    if infls:
+                        cur.executemany(
+                            """INSERT INTO entry_inflections (entry_id, form_type, inflected_form)
+                               VALUES (?,?,?)""",
+                            [(entry_id, inf["form_type"], inf["inflected_form"]) for inf in infls],
+                        )
 
                     for sense_data in entry_data["senses"]:
                         cur.execute(
@@ -533,6 +559,7 @@ def parse_page(html: str) -> list[dict]:
             "audio_uk_url": "",
             "audio_us_url": "",
             "dictionary_source": "",
+            "inflections": [],
             "senses": [],
         }
 
@@ -564,6 +591,30 @@ def parse_page(html: str) -> list[dict]:
         # ── Audio URLs ────────────────────────────────────────────────────────
         entry["audio_uk_url"] = _get_audio_url(block, "uk")
         entry["audio_us_url"] = _get_audio_url(block, "us")
+
+        # ── Inflections ───────────────────────────────────────────────────────
+        entry["inflections"] = []
+        infl_blocks = block.select(".irreg-infls .inf-group, .dinfls .dinfg")
+        if infl_blocks:
+            for infl_block in infl_blocks:
+                lab_tag = infl_block.select_one(".lab, .inf-lab")
+                inf_tag = infl_block.select_one(".inf")
+                if inf_tag:
+                    form_type = _text(lab_tag).strip()
+                    inflected_form = _text(inf_tag).strip()
+                    if inflected_form:
+                        entry["inflections"].append({
+                            "form_type": form_type,
+                            "inflected_form": inflected_form
+                        })
+        else:
+            for inf_tag in block.select(".irreg-infls .inf, .dinfls .inf"):
+                inf_text = _text(inf_tag).strip()
+                if inf_text:
+                    entry["inflections"].append({
+                        "form_type": "",
+                        "inflected_form": inf_text
+                    })
 
         # ── Dictionary Source ─────────────────────────────────────────────────
         curr = block
