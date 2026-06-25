@@ -515,9 +515,12 @@ def parse_page(html: str) -> list[dict]:
     soup = BeautifulSoup(html, "html.parser")
     entries = []
 
+    # 1. Identify entry blocks.
+    # On standard pages, we look for ".entry-body__el".
+    # On phrase/idiom pages, we fall back to ".di-body".
     entry_blocks = soup.select(".entry-body__el")
     if not entry_blocks:
-        return entries
+        entry_blocks = soup.select(".di-body")
 
     for entry_idx, block in enumerate(entry_blocks):
         entry: dict = {
@@ -534,15 +537,15 @@ def parse_page(html: str) -> list[dict]:
         }
 
         # ── Headword ──────────────────────────────────────────────────────────
-        hw = block.select_one(".hw.dhw")
+        hw = block.select_one(".hw, .dhw, .headword")
         entry["headword"] = _text(hw)
 
         # ── Part of speech ────────────────────────────────────────────────────
-        pos_tag = block.select_one(".pos-header .pos.dpos")
+        pos_tag = block.select_one(".pos-header .pos.dpos, .di-info .pos.dpos, .pos.dpos")
         entry["pos"] = _text(pos_tag)
 
         # ── Grammar code ──────────────────────────────────────────────────────
-        gram_tag = block.select_one(".pos-header .posgram .gram.dgram")
+        gram_tag = block.select_one(".pos-header .posgram .gram.dgram, .di-info .gram.dgram, .posgram .gram.dgram")
         if gram_tag:
             gc = gram_tag.select(".gc.dgc")
             if gc:
@@ -552,10 +555,10 @@ def parse_page(html: str) -> list[dict]:
                 entry["grammar"] = raw
 
         # ── Pronunciation (IPA) ───────────────────────────────────────────────
-        uk_ipa = block.select_one(".pos-header .uk.dpron-i .ipa.dipa")
+        uk_ipa = block.select_one(".pos-header .uk.dpron-i .ipa.dipa, .uk.dpron-i .ipa.dipa, .dpron-i.uk .ipa")
         entry["pronunciation_uk"] = _text(uk_ipa)
 
-        us_ipa = block.select_one(".pos-header .us.dpron-i .ipa.dipa")
+        us_ipa = block.select_one(".pos-header .us.dpron-i .ipa.dipa, .us.dpron-i .ipa.dipa, .dpron-i.us .ipa")
         entry["pronunciation_us"] = _text(us_ipa)
 
         # ── Audio URLs ────────────────────────────────────────────────────────
@@ -563,7 +566,14 @@ def parse_page(html: str) -> list[dict]:
         entry["audio_us_url"] = _get_audio_url(block, "us")
 
         # ── Dictionary Source ─────────────────────────────────────────────────
-        dict_container = block.find_parent(class_="dictionary")
+        curr = block
+        dict_container = None
+        while curr:
+            if curr.get("class") and "dictionary" in curr.get("class"):
+                dict_container = curr
+                break
+            curr = curr.parent
+                
         if dict_container:
             header = dict_container.select_one("h2.c_hh, .di-title")
             if header:
@@ -577,15 +587,13 @@ def parse_page(html: str) -> list[dict]:
         sense_order = 0
         sense_blocks = block.select(".dsense")
 
-        for sense_block in sense_blocks:
-            gw_tag = sense_block.select_one(".guideword.dsense_gw")
-            guideword = _text(gw_tag).strip("()")
-
-            def_blocks = sense_block.select(".ddef_block")
+        if not sense_blocks:
+            # Phrase pages do not have .dsense wrappers, parse def-blocks directly
+            def_blocks = block.select(".ddef_block")
             for def_block in def_blocks:
                 sense: dict = {
                     "sense_order": sense_order,
-                    "guideword": guideword,
+                    "guideword": "",
                     "definition": "",
                     "cefr_level": "",
                     "grammar": "",
@@ -626,9 +634,9 @@ def parse_page(html: str) -> list[dict]:
                 sense["labels"] = [_text(l) for l in lab_tags if _text(l)]
 
                 # Phrase parent
-                phrase_parent = def_block.find_parent(class_="phrase-block")
+                phrase_parent = def_block.find_parent(class_="phrase-block") or def_block.find_parent(class_="idiom-block")
                 if phrase_parent:
-                    phrase_title_tag = phrase_parent.select_one(".phrase-title")
+                    phrase_title_tag = phrase_parent.select_one(".phrase-title, .di-title")
                     if phrase_title_tag:
                         sense["phrase_title"] = phrase_title_tag.text.strip()
 
@@ -665,44 +673,130 @@ def parse_page(html: str) -> list[dict]:
 
                 sense_order += 1
                 entry["senses"].append(sense)
+        else:
+            # Standard .dsense wrapper block loop
+            for sense_block in sense_blocks:
+                gw_tag = sense_block.select_one(".guideword.dsense_gw")
+                guideword = _text(gw_tag).strip("()")
 
-            # ── "More examples" & "Thesaurus" (sense-level) ───────────────────
-            if entry["senses"]:
-                last_sense = entry["senses"][-1]
-                seen_texts = {ex["text"] for ex in last_sense["examples"]}
-                for daccord in sense_block.select(".daccord"):
-                    if "smartt" in (daccord.get("class") or []):
+                def_blocks = sense_block.select(".ddef_block")
+                for def_block in def_blocks:
+                    sense: dict = {
+                        "sense_order": sense_order,
+                        "guideword": guideword,
+                        "definition": "",
+                        "cefr_level": "",
+                        "grammar": "",
+                        "domain": "",
+                        "labels": [],
+                        "phrase_title": None,
+                        "synonyms": [],
+                        "examples": [],
+                    }
+
+                    # Definition text
+                    def_tag = def_block.select_one(".def.ddef_d")
+                    if def_tag:
+                        sense["definition"] = _text(def_tag).rstrip(":").strip()
+
+                    if not sense["definition"]:
                         continue
+
+                    # CEFR level
+                    cefr_tag = def_block.select_one(".epp-xref")
+                    sense["cefr_level"] = _text(cefr_tag)
+
+                    # Grammar
+                    gram_tag = def_block.select_one(".ddef_h .gram.dgram")
+                    if gram_tag:
+                        gc = gram_tag.select(".gc.dgc")
+                        sense["grammar"] = (
+                            "[ " + " ".join(_text(g) for g in gc) + " ]"
+                            if gc else _text(gram_tag)
+                        )
+
+                    # Domain label
+                    domain_tag = def_block.select_one(".domain.ddomain")
+                    sense["domain"] = _text(domain_tag)
+
+                    # Labels
+                    lab_tags = def_block.select(".lab.dlab .usage.dusage")
+                    sense["labels"] = [_text(l) for l in lab_tags if _text(l)]
+
+                    # Phrase parent
+                    phrase_parent = def_block.find_parent(class_="phrase-block") or def_block.find_parent(class_="idiom-block")
+                    if phrase_parent:
+                        phrase_title_tag = phrase_parent.select_one(".phrase-title, .di-title")
+                        if phrase_title_tag:
+                            sense["phrase_title"] = phrase_title_tag.text.strip()
+
+                    # Synonyms inside ddef_block
+                    for a in def_block.select("a[href*='/thesaurus/']"):
+                        href = a.get("href", "")
+                        if "articles" in href:
+                            continue
+                        path = href.split("?")[0].rstrip("/")
+                        slug = path.split("/")[-1]
                         
-                    # Thesaurus accordion
-                    title_tag = daccord.select_one(".daccord_lt")
-                    title_text = title_tag.text.lower() if title_tag else ""
-                    if "thesaurus" in title_text or "synonym" in title_text or "opposite" in title_text:
-                        for a in daccord.select("a[href*='/thesaurus/']"):
-                            href = a.get("href", "")
-                            if "articles" in href:
-                                continue
-                            path = href.split("?")[0].rstrip("/")
-                            slug = path.split("/")[-1]
-                            is_antonym = 1 if "opposite" in title_text or "antonym" in title_text else 0
+                        is_antonym = 0
+                        sibling = a.find_previous(["span", "div", "h3", "h4"])
+                        if sibling and any(k in sibling.text.lower() for k in ["opposite", "antonym"]):
+                            is_antonym = 1
                             
-                            last_sense["synonyms"].append({
-                                "synonym": a.text.strip(),
-                                "slug": slug,
-                                "is_antonym": is_antonym
-                            })
-                        continue
-                        
-                    # Extra examples
-                    for li in daccord.select("li.eg.dexamp.hax"):
-                        text = _text(li)
-                        if text and text not in seen_texts:
-                            last_sense["examples"].append({
-                                "text": text,
-                                "collocation": "",
-                                "is_extra": 1,
-                            })
-                            seen_texts.add(text)
+                        sense["synonyms"].append({
+                            "synonym": a.text.strip(),
+                            "slug": slug,
+                            "is_antonym": is_antonym
+                        })
+
+                    # Examples
+                    for ex_block in def_block.select(".examp.dexamp"):
+                        eg_tag = ex_block.select_one(".eg.deg")
+                        if not eg_tag:
+                            continue
+                        lu_tag = ex_block.select_one(".lu.dlu")
+                        sense["examples"].append({
+                            "text": _text(eg_tag),
+                            "collocation": _text(lu_tag),
+                            "is_extra": 0,
+                        })
+
+                    # Extra examples inside dsense
+                    seen_texts = {ex["text"] for ex in sense["examples"]}
+                    for daccord in sense_block.select(".daccord"):
+                        if "smartt" in (daccord.get("class") or []):
+                            continue
+                            
+                        title_tag = daccord.select_one(".daccord_lt")
+                        title_text = title_tag.text.lower() if title_tag else ""
+                        if "thesaurus" in title_text or "synonym" in title_text or "opposite" in title_text:
+                            for a in daccord.select("a[href*='/thesaurus/']"):
+                                href = a.get("href", "")
+                                if "articles" in href:
+                                    continue
+                                path = href.split("?")[0].rstrip("/")
+                                slug = path.split("/")[-1]
+                                is_antonym = 1 if "opposite" in title_text or "antonym" in title_text else 0
+                                
+                                sense["synonyms"].append({
+                                    "synonym": a.text.strip(),
+                                    "slug": slug,
+                                    "is_antonym": is_antonym
+                                })
+                            continue
+                            
+                        for li in daccord.select("li.eg.dexamp.hax"):
+                            text = _text(li)
+                            if text and text not in seen_texts:
+                                sense["examples"].append({
+                                    "text": text,
+                                    "collocation": "",
+                                    "is_extra": 1,
+                                })
+                                seen_texts.add(text)
+
+                    sense_order += 1
+                    entry["senses"].append(sense)
 
         if entry["headword"] or entry["pos"] or entry["senses"]:
             entries.append(entry)
@@ -715,6 +809,7 @@ def parse_page(html: str) -> list[dict]:
             continue
         topic_url = topic_link.get("href", "").strip()
         topic_title = _text(topic_link)
+        import re
         slug_match = re.search(r'/topics/[^/]+/([^/?]+)/?', topic_url)
         if not slug_match:
             slug_match = re.search(r'/([^/?]+)/?$', topic_url)
@@ -739,6 +834,7 @@ def parse_page(html: str) -> list[dict]:
     for container in soup.select(".cdo-more-results"):
         for a in container.select("a[href*='/dictionary/english/']"):
             href = a.get("href", "")
+            import re
             m = re.search(r'/dictionary/english/([^?\s]+)', href)
             if m:
                 more_meanings_slugs.append(m.group(1).strip())
