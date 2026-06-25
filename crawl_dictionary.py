@@ -7,7 +7,7 @@ Crawls full content for each word and stores in SQLite incrementally.
 Usage:
     python crawl_dictionary.py --words cambridge_words.txt --db cambridge.db
     python crawl_dictionary.py --words cambridge_words.txt --db cambridge.db --workers 5
-    python crawl_dictionary.py --db cambridge.db --resume          # resume from last run
+    python crawl_dictionary.py --db cambridge.db                    # automatically resumes crawling pending words
 
 Requirements:
     pip install beautifulsoup4 tqdm requests
