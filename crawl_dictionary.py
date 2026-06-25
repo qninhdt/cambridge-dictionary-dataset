@@ -602,7 +602,7 @@ def parse_page(html: str) -> list[dict]:
                 if inf_tag:
                     form_type = _text(lab_tag).strip()
                     inflected_form = _text(inf_tag).strip()
-                    if inflected_form:
+                    if inflected_form and not (inflected_form.startswith("-") and inflected_form.endswith("-")):
                         entry["inflections"].append({
                             "form_type": form_type,
                             "inflected_form": inflected_form
@@ -610,7 +610,7 @@ def parse_page(html: str) -> list[dict]:
         else:
             for inf_tag in block.select(".irreg-infls .inf, .dinfls .inf"):
                 inf_text = _text(inf_tag).strip()
-                if inf_text:
+                if inf_text and not (inf_text.startswith("-") and inf_text.endswith("-")):
                     entry["inflections"].append({
                         "form_type": "",
                         "inflected_form": inf_text
