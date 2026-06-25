@@ -10,32 +10,33 @@ Usage:
     python crawl_dictionary.py --db cambridge.db --resume          # resume from last run
 
 Requirements:
-    pip install beautifulsoup4 tqdm
+    pip install beautifulsoup4 tqdm requests
 """
 
 import argparse
 import json
+import queue
 import re
 import sqlite3
 import sys
 import time
-import urllib.request
-import urllib.error
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from threading import Lock
+import requests
 
 # ── Dependency check ───────────────────────────────────────────────────────────
 try:
     from bs4 import BeautifulSoup
 except ImportError:
-    print("Missing dependency: pip install beautifulsoup4 tqdm")
+    print("Missing dependency: pip install beautifulsoup4 tqdm requests")
     sys.exit(1)
 
 try:
     from tqdm import tqdm
 except ImportError:
-    print("Missing dependency: pip install beautifulsoup4 tqdm")
+    print("Missing dependency: pip install beautifulsoup4 tqdm requests")
     sys.exit(1)
 
 # ── Config ─────────────────────────────────────────────────────────────────────
@@ -49,9 +50,23 @@ HEADERS = {
 DELAY_PER_WORKER = 0.5   # seconds between requests per thread
 MAX_RETRIES = 3
 
-# Global abort states
+# Global states
 abort_crawl = False
 consecutive_errors = 0
+state_lock = Lock()
+
+# Queue for database writing (Producer-Consumer)
+write_queue = queue.Queue()
+
+# Thread-local storage for requests session to keep Keep-Alive active
+thread_local = threading.local()
+
+
+def get_session():
+    if not hasattr(thread_local, "session"):
+        thread_local.session = requests.Session()
+        thread_local.session.headers.update(HEADERS)
+    return thread_local.session
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -196,11 +211,6 @@ def init_db(db_path: str) -> sqlite3.Connection:
 def load_words(conn: sqlite3.Connection, words_file: str):
     """
     Insert/update words table from a word list file. Safe to re-run.
-
-    Supported formats:
-      - 1-column plain text:  slug
-      - 2-column TSV:         slug  TAB  entry_type          (old format)
-      - 3-column TSV:         slug  TAB  display_form  TAB  entry_type  (new format)
     """
     rows: list[tuple[str, str, str]] = []   # (slug, display_form, entry_type)
     with open(words_file, encoding="utf-8") as f:
@@ -240,174 +250,205 @@ def load_words(conn: sqlite3.Connection, words_file: str):
         print(f"    {t:<16}: {n}")
 
 
-def get_pending(conn: sqlite3.Connection) -> list[tuple[int, str]]:
+def get_pending(conn: sqlite3.Connection) -> list[tuple[int, str, str]]:
     cur = conn.cursor()
     rows = cur.execute(
-        "SELECT id, word FROM words WHERE status='pending' ORDER BY id"
+        "SELECT id, word, entry_type FROM words WHERE status='pending' ORDER BY id"
     ).fetchall()
     return rows
 
 
-def save_result(
-    conn: sqlite3.Connection,
-    lock: Lock,
-    word_id: int,
-    entries_data: list[dict],
-    status: str,
-    error_msg: str = None,
-    collocations: list[dict] = None,
-):
-    with lock:
+# ═══════════════════════════════════════════════════════════════════════════════
+# PRODUCER-CONSUMER DATABASE WRITER THREAD
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class DbWriterThread(threading.Thread):
+    """
+    Dedicated database writer thread. Reads finished crawl tasks from the queue
+    and commits them in batches. This completely avoids lock contention.
+    """
+    def __init__(self, db_path: str, batch_size: int = 50):
+        super().__init__()
+        self.db_path = db_path
+        self.batch_size = batch_size
+        self.daemon = True
+        self.running = True
+
+    def run(self):
+        conn = init_db(self.db_path)
+        batch = []
+
+        while self.running or not write_queue.empty():
+            try:
+                # Wait for item with timeout to commit partial batches on idle
+                item = write_queue.get(timeout=0.5)
+                if item is None:
+                    write_queue.task_done()
+                    break
+                batch.append(item)
+                write_queue.task_done()
+            except queue.Empty:
+                pass
+
+            # Flush batch if full, or if the queue is empty and we have pending writes
+            if len(batch) >= self.batch_size or (len(batch) > 0 and write_queue.empty()):
+                self.write_batch(conn, batch)
+                batch = []
+
+        if batch:
+            self.write_batch(conn, batch)
+        conn.close()
+
+    def write_batch(self, conn: sqlite3.Connection, batch: list[tuple]):
         cur = conn.cursor()
         now = datetime.utcnow().isoformat()
-
-        # Update word status
-        cur.execute(
-            "UPDATE words SET status=?, crawled_at=?, error_msg=? WHERE id=?",
-            (status, now, error_msg, word_id),
-        )
-
-        # Delete old data (re-crawl support)
-        cur.execute("DELETE FROM entries WHERE word_id=?", (word_id,))
-        cur.execute("DELETE FROM collocations WHERE word_id=?", (word_id,))
-
-        for entry_data in entries_data:
-            cur.execute(
-                """INSERT INTO entries
-                   (word_id, entry_order, headword, pos, grammar,
-                    pronunciation_uk, pronunciation_us, audio_uk_url, audio_us_url,
-                    dictionary_source)
-                   VALUES (?,?,?,?,?,?,?,?,?,?)""",
-                (
-                    word_id,
-                    entry_data["entry_order"],
-                    entry_data["headword"],
-                    entry_data["pos"],
-                    entry_data["grammar"],
-                    entry_data["pronunciation_uk"],
-                    entry_data["pronunciation_us"],
-                    entry_data["audio_uk_url"],
-                    entry_data["audio_us_url"],
-                    entry_data.get("dictionary_source", ""),
-                ),
-            )
-            entry_id = cur.lastrowid
-
-            for sense_data in entry_data["senses"]:
+        try:
+            for word_id, entries_data, status, error_msg, collocations in batch:
+                # Update status
                 cur.execute(
-                    """INSERT INTO senses
-                       (entry_id, sense_order, guideword, definition,
-                        cefr_level, grammar, domain, labels, phrase_title)
-                       VALUES (?,?,?,?,?,?,?,?,?)""",
-                    (
-                        entry_id,
-                        sense_data["sense_order"],
-                        sense_data["guideword"],
-                        sense_data["definition"],
-                        sense_data["cefr_level"],
-                        sense_data["grammar"],
-                        sense_data["domain"],
-                        json.dumps(sense_data["labels"], ensure_ascii=False),
-                        sense_data.get("phrase_title"),
-                    ),
+                    "UPDATE words SET status=?, crawled_at=?, error_msg=? WHERE id=?",
+                    (status, now, error_msg, word_id),
                 )
-                sense_id = cur.lastrowid
 
-                # Save synonyms in bulk
-                syns = sense_data.get("synonyms", [])
-                if syns:
+                # Delete old
+                cur.execute("DELETE FROM entries WHERE word_id=?", (word_id,))
+                cur.execute("DELETE FROM collocations WHERE word_id=?", (word_id,))
+
+                for entry_data in entries_data:
+                    cur.execute(
+                        """INSERT INTO entries
+                           (word_id, entry_order, headword, pos, grammar,
+                            pronunciation_uk, pronunciation_us, audio_uk_url, audio_us_url,
+                            dictionary_source)
+                           VALUES (?,?,?,?,?,?,?,?,?,?)""",
+                        (
+                            word_id,
+                            entry_data["entry_order"],
+                            entry_data["headword"],
+                            entry_data["pos"],
+                            entry_data["grammar"],
+                            entry_data["pronunciation_uk"],
+                            entry_data["pronunciation_us"],
+                            entry_data["audio_uk_url"],
+                            entry_data["audio_us_url"],
+                            entry_data.get("dictionary_source", ""),
+                        ),
+                    )
+                    entry_id = cur.lastrowid
+
+                    for sense_data in entry_data["senses"]:
+                        cur.execute(
+                            """INSERT INTO senses
+                               (entry_id, sense_order, guideword, definition,
+                                cefr_level, grammar, domain, labels, phrase_title)
+                               VALUES (?,?,?,?,?,?,?,?,?)""",
+                            (
+                                entry_id,
+                                sense_data["sense_order"],
+                                sense_data["guideword"],
+                                sense_data["definition"],
+                                sense_data["cefr_level"],
+                                sense_data["grammar"],
+                                sense_data["domain"],
+                                json.dumps(sense_data["labels"], ensure_ascii=False),
+                                sense_data.get("phrase_title"),
+                            ),
+                        )
+                        sense_id = cur.lastrowid
+
+                        # Synonyms
+                        syns = sense_data.get("synonyms", [])
+                        if syns:
+                            cur.executemany(
+                                """INSERT INTO sense_synonyms (sense_id, synonym, slug, is_antonym)
+                                   VALUES (?,?,?,?)""",
+                                [(sense_id, syn["synonym"], syn["slug"], syn["is_antonym"]) for syn in syns],
+                            )
+
+                        # Examples
+                        exs = sense_data["examples"]
+                        if exs:
+                            cur.executemany(
+                                """INSERT INTO examples
+                                   (sense_id, example_order, example, collocation, is_extra)
+                                   VALUES (?,?,?,?,?)""",
+                                [(sense_id, ex_i, ex_data["text"], ex_data["collocation"], ex_data.get("is_extra", 0))
+                                 for ex_i, ex_data in enumerate(exs)],
+                            )
+
+                # Collocations
+                if collocations:
                     cur.executemany(
-                        """INSERT INTO sense_synonyms (sense_id, synonym, slug, is_antonym)
+                        """INSERT INTO collocations (word_id, collocation, example, source)
                            VALUES (?,?,?,?)""",
-                        [(sense_id, syn["synonym"], syn["slug"], syn["is_antonym"]) for syn in syns],
+                        [(word_id, c["collocation"], c["example"], c["source"]) for c in collocations],
                     )
 
-                # Save examples in bulk
-                exs = sense_data["examples"]
-                if exs:
+                # ── Topics & More Meanings Discovery ──────────────────────────
+                all_rel_slugs = []
+                topic_links = []  # list of (rel_slug, topic_id)
+
+                for topic_data in entries_data[0].get("topics", []) if entries_data else []:
+                    cur.execute(
+                        "INSERT OR IGNORE INTO topics (slug, title, url) VALUES (?,?,?)",
+                        (topic_data["slug"], topic_data["title"], topic_data["url"]),
+                    )
+                    cur.execute("SELECT id FROM topics WHERE slug=?", (topic_data["slug"],))
+                    topic_id = cur.fetchone()[0]
+
+                    cur.execute(
+                        "INSERT OR IGNORE INTO word_topics (word_id, topic_id) VALUES (?,?)",
+                        (word_id, topic_id),
+                    )
+
+                    for rel_slug in topic_data.get("related_slugs", []):
+                        all_rel_slugs.append(rel_slug)
+                        topic_links.append((rel_slug, topic_id))
+
+                more_meanings = entries_data[0].get("more_meanings", []) if entries_data else []
+
+                # 1. Bulk insert all new words
+                all_new_words = list(set(all_rel_slugs + more_meanings))
+                if all_new_words:
                     cur.executemany(
-                        """INSERT INTO examples
-                           (sense_id, example_order, example, collocation, is_extra)
-                           VALUES (?,?,?,?,?)""",
-                        [(sense_id, ex_i, ex_data["text"], ex_data["collocation"], ex_data.get("is_extra", 0))
-                         for ex_i, ex_data in enumerate(exs)],
+                        "INSERT OR IGNORE INTO words (word, status) VALUES (?, 'seen')",
+                        [(w,) for w in all_new_words]
                     )
 
-        # Save collocations in bulk
-        if collocations:
-            cur.executemany(
-                """INSERT INTO collocations (word_id, collocation, example, source)
-                   VALUES (?,?,?,?)""",
-                [(word_id, c["collocation"], c["example"], c["source"]) for c in collocations],
-            )
+                # 2. Bulk resolve word IDs and insert link mapping
+                if topic_links:
+                    unique_rel_slugs = list(set(all_rel_slugs))
+                    slug_to_id = {}
+                    for i in range(0, len(unique_rel_slugs), 900):
+                        chunk = unique_rel_slugs[i : i + 900]
+                        placeholders = ",".join("?" for _ in chunk)
+                        cur.execute(
+                            f"SELECT word, id FROM words WHERE word IN ({placeholders})",
+                            chunk,
+                        )
+                        for w, wid in cur.fetchall():
+                            slug_to_id[w] = wid
 
-        # ── Topics & More Meanings Discovery (Optimized Bulk Insert) ──────────
-        all_rel_slugs = []
-        topic_links = []  # list of (rel_slug, topic_id)
+                    word_topic_inserts = []
+                    for rel_slug, topic_id in topic_links:
+                        rel_word_id = slug_to_id.get(rel_slug)
+                        if rel_word_id:
+                            word_topic_inserts.append((rel_word_id, topic_id))
 
-        for topic_data in entries_data[0].get("topics", []) if entries_data else []:
-            # Insert topic globally
-            cur.execute(
-                "INSERT OR IGNORE INTO topics (slug, title, url) VALUES (?,?,?)",
-                (topic_data["slug"], topic_data["title"], topic_data["url"]),
-            )
-            cur.execute("SELECT id FROM topics WHERE slug=?", (topic_data["slug"],))
-            topic_id = cur.fetchone()[0]
+                    if word_topic_inserts:
+                        cur.executemany(
+                            "INSERT OR IGNORE INTO word_topics (word_id, topic_id) VALUES (?,?)",
+                            word_topic_inserts
+                        )
 
-            # Link current word to this topic
-            cur.execute(
-                "INSERT OR IGNORE INTO word_topics (word_id, topic_id) VALUES (?,?)",
-                (word_id, topic_id),
-            )
-
-            # Collect related slugs to batch later
-            for rel_slug in topic_data.get("related_slugs", []):
-                all_rel_slugs.append(rel_slug)
-                topic_links.append((rel_slug, topic_id))
-
-        more_meanings = entries_data[0].get("more_meanings", []) if entries_data else []
-
-        # 1. Bulk insert all new words (related + more meanings) in one query
-        all_new_words = list(set(all_rel_slugs + more_meanings))
-        if all_new_words:
-            cur.executemany(
-                "INSERT OR IGNORE INTO words (word, status) VALUES (?, 'seen')",
-                [(w,) for w in all_new_words]
-            )
-
-        # 2. Bulk resolve word IDs for related words and insert link mapping
-        if topic_links:
-            unique_rel_slugs = list(set(all_rel_slugs))
-            slug_to_id = {}
-            # Chunk to avoid SQLite parameter limit (999 parameters max)
-            for i in range(0, len(unique_rel_slugs), 900):
-                chunk = unique_rel_slugs[i : i + 900]
-                placeholders = ",".join("?" for _ in chunk)
-                cur.execute(
-                    f"SELECT word, id FROM words WHERE word IN ({placeholders})",
-                    chunk,
-                )
-                for w, wid in cur.fetchall():
-                    slug_to_id[w] = wid
-
-            # Prepare bulk insert into word_topics
-            word_topic_inserts = []
-            for rel_slug, topic_id in topic_links:
-                rel_word_id = slug_to_id.get(rel_slug)
-                if rel_word_id:
-                    word_topic_inserts.append((rel_word_id, topic_id))
-
-            if word_topic_inserts:
-                cur.executemany(
-                    "INSERT OR IGNORE INTO word_topics (word_id, topic_id) VALUES (?,?)",
-                    word_topic_inserts
-                )
-
-        conn.commit()
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            tqdm.write(f"\n[ERROR] Database write batch failed: {e}")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# FETCHER
+# FETCHER (Reuses Keep-Alive HTTP connection per worker thread)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def fetch(url: str) -> tuple[str, int]:
@@ -416,18 +457,19 @@ def fetch(url: str) -> tuple[str, int]:
     if abort_crawl:
         return "", 0
 
+    session = get_session()
     for attempt in range(MAX_RETRIES):
         try:
-            req = urllib.request.Request(url, headers=HEADERS)
-            with urllib.request.urlopen(req, timeout=20) as resp:
-                return resp.read().decode("utf-8", errors="ignore"), resp.status
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
+            resp = session.get(url, timeout=20)
+            return resp.text, resp.status_code
+        except requests.exceptions.RequestException as e:
+            status_code = e.response.status_code if (e.response is not None) else 0
+            if status_code == 404:
                 return "", 404
-            if e.code == 429:
-                tqdm.write(f"\n[WARNING] Rate limited (429) on {url}. Retrying in {10 * (attempt + 1)}s...")
+            if status_code == 429:
+                tqdm.write(f"\n[WARNING] Rate limited (429) on {url}. Retrying...")
                 time.sleep(10 * (attempt + 1))
-            elif e.code == 403:
+            elif status_code == 403:
                 tqdm.write(f"\n[WARNING] Forbidden (403) on {url}. Possible IP block.")
                 time.sleep(5 * (attempt + 1))
             else:
@@ -467,21 +509,10 @@ def _get_audio_url(block, region: str) -> str:
 def parse_page(html: str) -> list[dict]:
     """
     Parse a Cambridge dictionary word page.
-    Returns a list of entry dicts, each containing:
-      entry_order, headword, pos, grammar,
-      pronunciation_uk, pronunciation_us, audio_uk_url, audio_us_url,
-      dictionary_source,
-      topics: [{slug, title, url, related_slugs}]  (on first entry only)
-      more_meanings: [slug]                        (on first entry only)
-      senses: [{sense_order, guideword, definition, cefr_level,
-                grammar, domain, labels, phrase_title,
-                synonyms: [{synonym, slug, is_antonym}],
-                examples: [{text, collocation, is_extra}]}]
     """
     soup = BeautifulSoup(html, "html.parser")
     entries = []
 
-    # Each .entry-body__el is a separate dictionary entry (verb / noun / etc.)
     entry_blocks = soup.select(".entry-body__el")
     if not entry_blocks:
         return entries
@@ -511,7 +542,6 @@ def parse_page(html: str) -> list[dict]:
         # ── Grammar code ──────────────────────────────────────────────────────
         gram_tag = block.select_one(".pos-header .posgram .gram.dgram")
         if gram_tag:
-            # inner .gc tags contain the actual code letter
             gc = gram_tag.select(".gc.dgc")
             if gc:
                 entry["grammar"] = "[ " + " ".join(_text(g) for g in gc) + " ]"
@@ -530,13 +560,12 @@ def parse_page(html: str) -> list[dict]:
         entry["audio_uk_url"] = _get_audio_url(block, "uk")
         entry["audio_us_url"] = _get_audio_url(block, "us")
 
-        # ── Dictionary Source (Item 3) ────────────────────────────────────────
+        # ── Dictionary Source ─────────────────────────────────────────────────
         dict_container = block.find_parent(class_="dictionary")
         if dict_container:
             header = dict_container.select_one("h2.c_hh, .di-title")
             if header:
                 src_text = header.text.strip()
-                # If the header matches the headword (e.g. just "run"), normalize to British English
                 if src_text.lower() == entry["headword"].lower():
                     entry["dictionary_source"] = "Cambridge Advanced Learner's Dictionary"
                 else:
@@ -547,11 +576,9 @@ def parse_page(html: str) -> list[dict]:
         sense_blocks = block.select(".dsense")
 
         for sense_block in sense_blocks:
-            # Guide word for this sense group (e.g. "LEAVE")
             gw_tag = sense_block.select_one(".guideword.dsense_gw")
             guideword = _text(gw_tag).strip("()")
 
-            # Each .ddef_block is one definition
             def_blocks = sense_block.select(".ddef_block")
             for def_block in def_blocks:
                 sense: dict = {
@@ -573,13 +600,13 @@ def parse_page(html: str) -> list[dict]:
                     sense["definition"] = _text(def_tag).rstrip(":").strip()
 
                 if not sense["definition"]:
-                    continue  # skip empty def blocks
+                    continue
 
-                # CEFR level (B2, C1, etc.)
+                # CEFR level
                 cefr_tag = def_block.select_one(".epp-xref")
                 sense["cefr_level"] = _text(cefr_tag)
 
-                # Grammar (sense level)
+                # Grammar
                 gram_tag = def_block.select_one(".ddef_h .gram.dgram")
                 if gram_tag:
                     gc = gram_tag.select(".gc.dgc")
@@ -588,22 +615,22 @@ def parse_page(html: str) -> list[dict]:
                         if gc else _text(gram_tag)
                     )
 
-                # Domain label (COMPUTING, MEDICAL, etc.)
+                # Domain label
                 domain_tag = def_block.select_one(".domain.ddomain")
                 sense["domain"] = _text(domain_tag)
 
-                # Register/usage labels (formal, informal, etc.)
+                # Labels
                 lab_tags = def_block.select(".lab.dlab .usage.dusage")
                 sense["labels"] = [_text(l) for l in lab_tags if _text(l)]
 
-                # Check if this def_block belongs to an inline phrase-block (Item 1)
+                # Phrase parent
                 phrase_parent = def_block.find_parent(class_="phrase-block")
                 if phrase_parent:
                     phrase_title_tag = phrase_parent.select_one(".phrase-title")
                     if phrase_title_tag:
                         sense["phrase_title"] = phrase_title_tag.text.strip()
 
-                # Parse synonyms/antonyms inside this def_block (Item 2)
+                # Synonyms inside ddef_block
                 for a in def_block.select("a[href*='/thesaurus/']"):
                     href = a.get("href", "")
                     if "articles" in href:
@@ -622,7 +649,7 @@ def parse_page(html: str) -> list[dict]:
                         "is_antonym": is_antonym
                     })
 
-                # Standard examples inside this def block
+                # Examples
                 for ex_block in def_block.select(".examp.dexamp"):
                     eg_tag = ex_block.select_one(".eg.deg")
                     if not eg_tag:
@@ -637,15 +664,15 @@ def parse_page(html: str) -> list[dict]:
                 sense_order += 1
                 entry["senses"].append(sense)
 
-            # ── "More examples" & "Thesaurus" accordions (sense-level) ─────────
+            # ── "More examples" & "Thesaurus" (sense-level) ───────────────────
             if entry["senses"]:
                 last_sense = entry["senses"][-1]
                 seen_texts = {ex["text"] for ex in last_sense["examples"]}
                 for daccord in sense_block.select(".daccord"):
                     if "smartt" in (daccord.get("class") or []):
-                        continue  # skip SMART vocab block
+                        continue
                         
-                    # Check if it is a thesaurus block (Item 2)
+                    # Thesaurus accordion
                     title_tag = daccord.select_one(".daccord_lt")
                     title_text = title_tag.text.lower() if title_tag else ""
                     if "thesaurus" in title_text or "synonym" in title_text or "opposite" in title_text:
@@ -662,9 +689,9 @@ def parse_page(html: str) -> list[dict]:
                                 "slug": slug,
                                 "is_antonym": is_antonym
                             })
-                        continue  # skip example parsing for thesaurus accordion
+                        continue
                         
-                    # Otherwise it's a "More examples" accordion
+                    # Extra examples
                     for li in daccord.select("li.eg.dexamp.hax"):
                         text = _text(li)
                         if text and text not in seen_texts:
@@ -675,11 +702,10 @@ def parse_page(html: str) -> list[dict]:
                             })
                             seen_texts.add(text)
 
-        # Only add entries that have real content
         if entry["headword"] or entry["pos"] or entry["senses"]:
             entries.append(entry)
 
-    # ── SMART Vocabulary topics (at page level, attached to first entry) ──────
+    # ── SMART Vocabulary topics ───────────────────────────────────────────────
     topics: list[dict] = []
     for smart_block in soup.select(".smartt.daccord"):
         topic_link = smart_block.select_one(".daccord_lt a")
@@ -687,13 +713,11 @@ def parse_page(html: str) -> list[dict]:
             continue
         topic_url = topic_link.get("href", "").strip()
         topic_title = _text(topic_link)
-        # Extract slug from URL
         slug_match = re.search(r'/topics/[^/]+/([^/?]+)/?', topic_url)
         if not slug_match:
             slug_match = re.search(r'/([^/?]+)/?$', topic_url)
         topic_slug = slug_match.group(1) if slug_match else topic_url
 
-        # Related word slugs
         related_slugs: list[str] = []
         for a in smart_block.select(".daccord_lb a[href*='/dictionary/english/']"):
             href = a.get("href", "")
@@ -708,7 +732,7 @@ def parse_page(html: str) -> list[dict]:
             "related_slugs": related_slugs,
         })
 
-    # ── More Meanings Sidebar (Item 4) ────────────────────────────────────────
+    # ── More Meanings Sidebar ─────────────────────────────────────────────────
     more_meanings_slugs = []
     for container in soup.select(".cdo-more-results"):
         for a in container.select("a[href*='/dictionary/english/']"):
@@ -726,8 +750,7 @@ def parse_page(html: str) -> list[dict]:
 
 def parse_collocation_page(html: str) -> list[dict]:
     """
-    Parse a Cambridge collocation page (Item 6).
-    Returns list of dicts: [{"collocation": str, "example": str, "source": str}]
+    Parse a Cambridge collocation page.
     """
     soup = BeautifulSoup(html, "html.parser")
     collocations = []
@@ -758,18 +781,17 @@ def parse_collocation_page(html: str) -> list[dict]:
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# WORKER
+# WORKER (Push results to queue immediately)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def process_word(
     word_id: int,
     word: str,
-    conn: sqlite3.Connection,
-    lock: Lock,
+    entry_type: str,
 ) -> str:
-    """Fetch, parse, and save one word. Returns status string."""
+    """Fetch, parse, and queue one word. Returns status string."""
     global abort_crawl, consecutive_errors
-    with lock:
+    with state_lock:
         if abort_crawl:
             return "error"
 
@@ -778,14 +800,14 @@ def process_word(
     html, code = fetch(url)
 
     if code == 404 or (code == 200 and not html):
-        save_result(conn, lock, word_id, [], "not_found")
-        with lock:
+        write_queue.put((word_id, [], "not_found", None, None))
+        with state_lock:
             consecutive_errors = 0
         return "not_found"
 
     if code == 0:
-        save_result(conn, lock, word_id, [], "error", "Network error after retries")
-        with lock:
+        write_queue.put((word_id, [], "error", "Network error after retries", None))
+        with state_lock:
             consecutive_errors += 1
             if consecutive_errors >= 5:
                 abort_crawl = True
@@ -795,30 +817,32 @@ def process_word(
     try:
         entries = parse_page(html)
     except Exception as e:
-        save_result(conn, lock, word_id, [], "error", f"Parse error: {e}")
+        write_queue.put((word_id, [], "error", f"Parse error: {e}", None))
         return "error"
 
     if not entries:
-        save_result(conn, lock, word_id, [], "not_found", "No entries found")
-        with lock:
+        write_queue.put((word_id, [], "not_found", "No entries found", None))
+        with state_lock:
             consecutive_errors = 0
         return "not_found"
 
-    # Fetch collocations (Item 6)
-    time.sleep(DELAY_PER_WORKER)
-    colloc_url = f"https://dictionary.cambridge.org/collocation/english/{word}"
-    colloc_html, colloc_code = fetch(colloc_url)
-    
+    # Fetch collocations (Item 6) - only for plain words (exclude idioms/phrases)
     collocations = []
-    if colloc_code == 200 and colloc_html:
-        try:
-            collocations = parse_collocation_page(colloc_html)
-        except Exception:
-            pass # Collocation parse failure is non-blocking
+    if entry_type == "word":
+        time.sleep(DELAY_PER_WORKER)
+        colloc_url = f"https://dictionary.cambridge.org/collocation/english/{word}"
+        colloc_html, colloc_code = fetch(colloc_url)
+        
+        if colloc_code == 200 and colloc_html:
+            try:
+                collocations = parse_collocation_page(colloc_html)
+            except Exception:
+                pass
 
-    save_result(conn, lock, word_id, entries, "done", collocations=collocations)
+    # Push to queue to write in bulk asynchronously
+    write_queue.put((word_id, entries, "done", None, collocations))
     
-    with lock:
+    with state_lock:
         consecutive_errors = 0
 
     return "done"
@@ -830,7 +854,6 @@ def process_word(
 
 def print_stats(conn: sqlite3.Connection):
     cur = conn.cursor()
-    # Status breakdown
     rows = cur.execute("SELECT status, COUNT(*) FROM words GROUP BY status").fetchall()
     stats = {r[0]: r[1] for r in rows}
     total = sum(stats.values())
@@ -842,7 +865,7 @@ def print_stats(conn: sqlite3.Connection):
     print(f"  Pending  : {stats.get('pending', 0)}")
     print(f"  Not found: {stats.get('not_found', 0)}")
     print(f"  Errors   : {stats.get('error', 0)}")
-    # Type breakdown
+    
     type_rows = cur.execute(
         "SELECT entry_type, COUNT(*), SUM(status='done') FROM words GROUP BY entry_type"
     ).fetchall()
@@ -853,6 +876,7 @@ def print_stats(conn: sqlite3.Connection):
 
 
 def main():
+    global abort_crawl
     parser = argparse.ArgumentParser(
         description="Cambridge Dictionary crawler → SQLite",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -882,39 +906,49 @@ Examples:
     print(f"  DB       : {args.db}")
     print(f"  Workers  : {args.workers}")
 
+    # Load and resume DB connections
     conn = init_db(args.db)
 
     if args.stats:
         print_stats(conn)
+        conn.close()
         return
 
-    # Load words file if provided (idempotent — safe to re-run with same file)
+    # Load words file if provided
     if args.words:
         print(f"\n[1/2] Loading words from: {args.words}")
         load_words(conn, args.words)
 
     if args.load_only:
         print_stats(conn)
+        conn.close()
         return
 
-    # Get pending words — auto-resumes from previous runs
+    # Get pending words
     pending = get_pending(conn)
+    conn.close() # Close connection so DB Writer Thread can have exclusive write access
+
     if not pending:
+        conn = init_db(args.db)
         print("\nNo pending words to crawl.")
         print_stats(conn)
+        conn.close()
         return
 
     print(f"\n[2/2] Crawling {len(pending)} pending words with {args.workers} workers...")
     print(f"       Rate: ~{DELAY_PER_WORKER}s delay/worker → ~{DELAY_PER_WORKER/args.workers:.2f}s avg between requests")
     print()
 
-    lock = Lock()
+    # Start the DB writer thread
+    writer = DbWriterThread(args.db, batch_size=50)
+    writer.start()
+
     counters = {"done": 0, "error": 0, "not_found": 0}
 
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
         futures = {
-            executor.submit(process_word, wid, word, conn, lock): word
-            for wid, word in pending
+            executor.submit(process_word, wid, word, etype): word
+            for wid, word, etype in pending
         }
 
         with tqdm(
@@ -927,7 +961,7 @@ Examples:
                 word = futures[future]
                 try:
                     status = future.result()
-                except Exception as e:
+                except Exception:
                     status = "error"
 
                 counters[status] = counters.get(status, 0) + 1
@@ -939,6 +973,13 @@ Examples:
                 )
                 pbar.update(1)
 
+    # Stop the DB writer thread and flush remaining writes
+    writer.running = False
+    write_queue.put(None) # poison pill to exit thread
+    writer.join()
+
+    # Reopen DB connection for printing final statistics
+    conn = init_db(args.db)
     print()
     if abort_crawl:
         print("[ABORTED] Crawler was stopped early due to consecutive network errors (suspected IP block/ban).\n")
