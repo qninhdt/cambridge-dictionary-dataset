@@ -468,6 +468,7 @@ class DbWriterThread(threading.Thread):
                         )
 
             conn.commit()
+            tqdm.write(f"\n[INFO] Successfully committed batch of {len(batch)} words to DB.")
         except Exception as e:
             conn.rollback()
             tqdm.write(f"\n[ERROR] Database write batch failed: {e}")
@@ -500,9 +501,11 @@ def fetch(url: str) -> tuple[str, int]:
                 time.sleep(5 * (attempt + 1))
             else:
                 time.sleep(2 ** attempt)
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as e:
+            tqdm.write(f"\n[WARNING] Network error ({e.__class__.__name__}) on {url}. Retrying...")
             time.sleep(2 ** attempt)
-        except Exception:
+        except Exception as e:
+            tqdm.write(f"\n[WARNING] Unexpected fetch error ({e}) on {url}. Retrying...")
             time.sleep(2 ** attempt)
     return "", 0
 
