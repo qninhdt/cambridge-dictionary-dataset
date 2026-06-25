@@ -839,9 +839,15 @@ def parse_page(html: str) -> list[dict]:
             if m:
                 more_meanings_slugs.append(m.group(1).strip())
 
+    # Check if there is any link to collocation on the page
+    has_collocations = False
+    if soup.select_one("a[href*='/collocation/']"):
+        has_collocations = True
+
     if entries:
         entries[0]["topics"] = topics
         entries[0]["more_meanings"] = more_meanings_slugs
+        entries[0]["has_collocations"] = has_collocations
 
     return entries
 
@@ -924,9 +930,10 @@ def process_word(
             consecutive_errors = 0
         return "not_found"
 
-    # Fetch collocations (Item 6) - only for plain words (exclude idioms/phrases)
+    # Fetch collocations (Item 6) - only if the main page explicitly links to one
     collocations = []
-    if entry_type == "word":
+    has_collocations = entries[0].get("has_collocations", False) if entries else False
+    if entry_type == "word" and has_collocations:
         time.sleep(DELAY_PER_WORKER)
         colloc_url = f"https://dictionary.cambridge.org/collocation/english/{word}"
         colloc_html, colloc_code = fetch(colloc_url)
