@@ -1113,6 +1113,8 @@ Examples:
             total=len(pending),
             unit="word",
             dynamic_ncols=True,
+            smoothing=0.0,
+            mininterval=1.5,
             bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]",
         ) as pbar:
             for future in as_completed(futures):
