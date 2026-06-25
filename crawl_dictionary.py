@@ -51,8 +51,6 @@ DELAY_PER_WORKER = 0.5   # seconds between requests per thread
 MAX_RETRIES = 3
 
 # Global states
-abort_crawl = False
-consecutive_errors = 0
 state_lock = Lock()
 
 # Queue for database writing (Producer-Consumer)
@@ -175,7 +173,8 @@ CREATE INDEX IF NOT EXISTS idx_collocations_word ON collocations(word_id);
 
 
 def init_db(db_path: str) -> sqlite3.Connection:
-    conn = sqlite3.connect(db_path, check_same_thread=False)
+    conn = sqlite3.connect(db_path, timeout=30.0, check_same_thread=False)
+    conn.execute("PRAGMA journal_mode=WAL;")
     conn.execute("PRAGMA synchronous=NORMAL;")
     conn.execute("PRAGMA cache_size=-10000;")
     conn.executescript(SCHEMA)
@@ -284,7 +283,7 @@ class DbWriterThread(threading.Thread):
     Dedicated database writer thread. Reads finished crawl tasks from the queue
     and commits them in batches. This completely avoids lock contention.
     """
-    def __init__(self, db_path: str, batch_size: int = 50):
+    def __init__(self, db_path: str, batch_size: int = 20):
         super().__init__()
         self.db_path = db_path
         self.batch_size = batch_size
@@ -294,6 +293,8 @@ class DbWriterThread(threading.Thread):
     def run(self):
         conn = init_db(self.db_path)
         batch = []
+        last_flush_time = time.time()
+        FLUSH_INTERVAL = 30  # seconds: always flush after this long even if batch isn't full
 
         while self.running or not write_queue.empty():
             try:
@@ -307,10 +308,17 @@ class DbWriterThread(threading.Thread):
             except queue.Empty:
                 pass
 
-            # Flush batch if full, or if the queue is empty and we have pending writes
-            if len(batch) >= self.batch_size or (len(batch) > 0 and write_queue.empty()):
+            now = time.time()
+            # Flush batch if full, queue is empty, or enough time has passed
+            should_flush = (
+                len(batch) >= self.batch_size
+                or (len(batch) > 0 and write_queue.empty())
+                or (len(batch) > 0 and (now - last_flush_time) >= FLUSH_INTERVAL)
+            )
+            if should_flush:
                 self.write_batch(conn, batch)
                 batch = []
+                last_flush_time = time.time()
 
         if batch:
             self.write_batch(conn, batch)
@@ -480,10 +488,6 @@ class DbWriterThread(threading.Thread):
 
 def fetch(url: str) -> tuple[str, int]:
     """Return (html, status_code). status_code=0 on network error."""
-    global abort_crawl
-    if abort_crawl:
-        return "", 0
-
     session = get_session()
     for attempt in range(MAX_RETRIES):
         try:
@@ -948,30 +952,18 @@ def process_word(
     entry_type: str,
 ) -> str:
     """Fetch, parse, and queue one word. Returns status string."""
-    global abort_crawl, consecutive_errors
-    with state_lock:
-        if abort_crawl:
-            return "error"
-
     time.sleep(DELAY_PER_WORKER)
     url = BASE_URL.format(word=word)
     html, code = fetch(url)
 
     if code == 404 or (code == 200 and not html):
         write_queue.put((word_id, [], "not_found", None, None))
-        with state_lock:
-            consecutive_errors = 0
         return "not_found"
 
     if code != 200:
         # Transient network errors (like 403, 429, or server errors) are not word issues.
         # We record the error message but keep status as 'pending' so they will be retried on next run.
         write_queue.put((word_id, [], "pending", f"HTTP Error status: {code}", None))
-        with state_lock:
-            consecutive_errors += 1
-            if consecutive_errors >= 5:
-                abort_crawl = True
-                tqdm.write(f"\n[CRITICAL] 5 consecutive network errors! Last HTTP status: {code}. Aborting...")
         return "error"
 
     try:
@@ -982,8 +974,6 @@ def process_word(
 
     if not entries:
         write_queue.put((word_id, [], "not_found", "No entries found", None))
-        with state_lock:
-            consecutive_errors = 0
         return "not_found"
 
     # Fetch collocations (Item 6) - only if the main page explicitly links to one
@@ -1002,9 +992,6 @@ def process_word(
 
     # Push to queue to write in bulk asynchronously
     write_queue.put((word_id, entries, "done", None, collocations))
-    
-    with state_lock:
-        consecutive_errors = 0
 
     return "done"
 
@@ -1101,7 +1088,7 @@ Examples:
     print()
 
     # Start the DB writer thread
-    writer = DbWriterThread(args.db, batch_size=50)
+    writer = DbWriterThread(args.db, batch_size=20)
     writer.start()
 
     counters = {"done": 0, "error": 0, "not_found": 0}
@@ -1144,7 +1131,7 @@ Examples:
     # Reopen DB connection for printing final statistics
     conn = init_db(args.db)
     print()
-    if abort_crawl:
+    if False:  # abort_crawl removed
         print("[ABORTED] Crawler was stopped early due to consecutive network errors (suspected IP block/ban).\n")
     print_stats(conn)
     conn.close()
