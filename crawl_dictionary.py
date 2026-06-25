@@ -910,7 +910,9 @@ def process_word(
         return "not_found"
 
     if code != 200:
-        write_queue.put((word_id, [], "error", f"HTTP Error status: {code}", None))
+        # Transient network errors (like 403, 429, or server errors) are not word issues.
+        # We record the error message but keep status as 'pending' so they will be retried on next run.
+        write_queue.put((word_id, [], "pending", f"HTTP Error status: {code}", None))
         with state_lock:
             consecutive_errors += 1
             if consecutive_errors >= 5:
