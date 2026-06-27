@@ -94,17 +94,11 @@ def db_writer_worker(db_path):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             word TEXT NOT NULL,
             pos TEXT NOT NULL,
-            definition TEXT NOT NULL
+            definition TEXT NOT NULL,
+            cambridge_sense_id INTEGER
         )
     """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS unified_sense_cambridge_links (
-            unified_sense_id INTEGER NOT NULL,
-            cambridge_sense_id INTEGER NOT NULL,
-            PRIMARY KEY (unified_sense_id, cambridge_sense_id),
-            FOREIGN KEY (unified_sense_id) REFERENCES unified_senses(id)
-        )
-    """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_unified_senses_cambridge_id ON unified_senses(cambridge_sense_id)")
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS unified_sense_wordnet_links (
             unified_sense_id INTEGER NOT NULL,
@@ -142,7 +136,6 @@ def db_writer_worker(db_path):
             old_ids = [r[0] for r in cursor.fetchall()]
             if old_ids:
                 placeholders = ",".join("?" for _ in old_ids)
-                cursor.execute(f"DELETE FROM unified_sense_cambridge_links WHERE unified_sense_id IN ({placeholders})", old_ids)
                 cursor.execute(f"DELETE FROM unified_sense_wordnet_links WHERE unified_sense_id IN ({placeholders})", old_ids)
                 cursor.execute(f"DELETE FROM unified_senses WHERE id IN ({placeholders})", old_ids)
             
@@ -150,19 +143,15 @@ def db_writer_worker(db_path):
             for sense in unified_senses:
                 definition = sense['definition']
                 cam_ids = sense['cambridge_sense_ids']
+                cam_id = cam_ids[0] if cam_ids else None
                 wn_ids = sense['wordnet_synset_ids']
                 
                 cursor.execute(
-                    "INSERT INTO unified_senses (word, pos, definition) VALUES (?, ?, ?)",
-                    (word, pos_char, definition)
+                    "INSERT INTO unified_senses (word, pos, definition, cambridge_sense_id) VALUES (?, ?, ?, ?)",
+                    (word, pos_char, definition, cam_id)
                 )
                 u_id = cursor.lastrowid
                 
-                for cam_id in cam_ids:
-                    cursor.execute(
-                        "INSERT INTO unified_sense_cambridge_links (unified_sense_id, cambridge_sense_id) VALUES (?, ?)",
-                        (u_id, int(cam_id))
-                    )
                 for wn_id in wn_ids:
                     cursor.execute(
                         "INSERT INTO unified_sense_wordnet_links (unified_sense_id, wordnet_id) VALUES (?, ?)",
@@ -542,14 +531,13 @@ def align_database(
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
-        cursor.execute("SELECT id, word, pos, definition FROM unified_senses")
+        cursor.execute("SELECT id, word, pos, definition, cambridge_sense_id FROM unified_senses")
         u_senses = cursor.fetchall()
         
         export_data = {}
-        for u_id, word, pos, definition in u_senses:
+        for u_id, word, pos, definition, cam_id in u_senses:
             # Fetch links
-            cursor.execute("SELECT cambridge_sense_id FROM unified_sense_cambridge_links WHERE unified_sense_id = ?", (u_id,))
-            cam_ids = [r[0] for r in cursor.fetchall()]
+            cam_ids = [cam_id] if cam_id is not None else []
             
             cursor.execute("SELECT wordnet_id FROM unified_sense_wordnet_links WHERE unified_sense_id = ?", (u_id,))
             wn_ids = [r[0] for r in cursor.fetchall()]
