@@ -700,7 +700,7 @@ def align_database(
         total_completion_tokens = 0
         
         with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = {}
+            futures = []
             for b_task in batches_data:
                 f = executor.submit(
                     thread_call_llm,
@@ -712,10 +712,9 @@ def align_database(
                     b_task['user_pr'],
                     b_task['batch_lookups']
                 )
-                futures[f] = b_task['chunk']
+                futures.append((f, b_task['chunk']))
                 
-            for fut in tqdm(as_completed(futures), total=len(futures), desc="Aligning Senses"):
-                chunk = futures[fut]
+            for fut, chunk in tqdm(futures, desc="Aligning Senses"):
                 try:
                     batch_mappings, p_tokens, c_tokens, err = fut.result()
                     if err:
@@ -725,7 +724,9 @@ def align_database(
                     total_prompt_tokens += p_tokens
                     total_completion_tokens += c_tokens
                     
-                    for task_id, unified_list in batch_mappings.items():
+                    # Sort the batch mappings by task_id before writing to ensure deterministic queueing
+                    for task_id in sorted(batch_mappings.keys()):
+                        unified_list = batch_mappings[task_id]
                         word, pos_char = task_id.rsplit("_", 1)
                         db_write_queue.put({
                             'word': word,
@@ -756,7 +757,8 @@ def align_database(
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
-        cursor.execute("SELECT id, word, pos, definition, cambridge_sense_id FROM unified_senses")
+        # Order by word, pos, id to guarantee 100% deterministic JSON output
+        cursor.execute("SELECT id, word, pos, definition, cambridge_sense_id FROM unified_senses ORDER BY word, pos, id")
         u_senses = cursor.fetchall()
         
         export_data = {}
@@ -764,7 +766,7 @@ def align_database(
             # Fetch links
             cam_ids = [cam_id] if cam_id is not None else []
             
-            cursor.execute("SELECT wordnet_id FROM unified_sense_wordnet_links WHERE unified_sense_id = ?", (u_id,))
+            cursor.execute("SELECT wordnet_id FROM unified_sense_wordnet_links WHERE unified_sense_id = ? ORDER BY wordnet_id", (u_id,))
             wn_ids = [r[0] for r in cursor.fetchall()]
             
             task_key = f"{word}_{pos}"
