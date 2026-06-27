@@ -249,6 +249,8 @@ def align_database(
             'past simple of %',
             'past simple and past participle of %',
             'past participle of %',
+            'past participle, past simple of %',
+            'present participle of %',
             'plural of %',
             'pl of %',
             'comparative of %',
@@ -257,7 +259,13 @@ def align_database(
             'UK spelling of %',
             'another spelling of %',
             'another word for %',
-            '→ %'
+            '→ %',
+            'mainly US spelling of %',
+            'another US spelling of %',
+            'a US spelling of %',
+            'short form of %',
+            'written abbreviation for %',
+            'abbreviation for %'
         ]
         
         # Get list of sense IDs matching these patterns using SQL LIKE logic locally
@@ -265,19 +273,57 @@ def align_database(
         def matches_any_pattern(defn):
             if not defn:
                 return False
-            # Convert SQL LIKE % to fnmatch *
             for pat in invalid_patterns:
                 fn_pat = pat.replace('%', '*')
                 if fnmatch.fnmatch(defn.lower(), fn_pat.lower()):
                     return True
             return False
             
+        # Build UK to US spelling mapping first
+        # We look for: A (US spelling of B)
+        us_patterns = [
+            'US spelling of %',
+            'mainly US spelling of %',
+            'another US spelling of %',
+            'a US spelling of %'
+        ]
+        
+        uk_to_us = {} # (UK_word, pos_char) -> US_word
+        import re
+        def clean_target(text, prefix):
+            target = text[len(prefix):].strip()
+            target = re.split(r'[,;]|\bor\b', target)[0].strip()
+            return target
+            
+        for p in us_patterns:
+            cursor_cam.execute("""
+                SELECT w.display_form, e.pos, s.definition
+                FROM senses s
+                JOIN entries e ON e.id = s.entry_id
+                JOIN words w ON w.id = e.word_id
+                WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
+                  AND (s.phrase_title IS NULL OR s.phrase_title = '')
+                  AND s.definition LIKE ?
+                ORDER BY w.display_form, e.pos, s.id
+            """, (p,))
+            for us_word, pos, definition in cursor_cam.fetchall():
+                pos_char = map_pos(pos)
+                if not pos_char:
+                    continue
+                prefix = p.replace('%', '')
+                uk_word = clean_target(definition, prefix)
+                if uk_word:
+                    uk_to_us[(uk_word, pos_char)] = us_word
+                    
+        # Group senses by word_pos, redirecting UK words to US words
         from collections import defaultdict
         word_pos_senses = defaultdict(list)
         for word, pos, s_id, defn in rows:
             pos_char = map_pos(pos)
             if pos_char:
-                word_pos_senses[(word, pos_char)].append((s_id, defn))
+                # Redirect UK to US
+                target_word = uk_to_us.get((word, pos_char), word)
+                word_pos_senses[(target_word, pos_char)].append((s_id, defn))
                 
         # Only insert tasks where at least one sense is NOT an inflection or spelling variant
         batch_insert = []
@@ -290,23 +336,23 @@ def align_database(
             batch_insert
         )
         
-        # Also populate word_alternatives table on first-time initialization
-        print("Populating word_alternatives table...")
+        # Populate word_alternatives table on first-time initialization
+        print("Populating word_alternatives table (US-first)...")
         alternative_patterns = {
-            'US spelling of %': 'US spelling',
+            'US spelling of %': 'UK spelling', # We swap: Alt is UK spelling of Base (US)
+            'mainly US spelling of %': 'UK spelling',
+            'another US spelling of %': 'UK spelling',
+            'a US spelling of %': 'UK spelling',
             'UK spelling of %': 'UK spelling',
             'another spelling of %': 'another spelling',
             'another word for %': 'another word',
-            '→ %': 'arrow'
+            '→ %': 'arrow',
+            'short form of %': 'short form',
+            'written abbreviation for %': 'abbreviation',
+            'abbreviation for %': 'abbreviation'
         }
         
         alternatives_to_insert = []
-        import re
-        def clean_target(text, prefix):
-            target = text[len(prefix):].strip()
-            target = re.split(r'[,;]|\bor\b', target)[0].strip()
-            return target
-            
         for p, alt_type in alternative_patterns.items():
             cursor_cam.execute("""
                 SELECT w.display_form, e.pos, s.definition
@@ -325,7 +371,14 @@ def align_database(
                 prefix = p.replace('%', '')
                 target_word = clean_target(definition, prefix)
                 if target_word:
-                    alternatives_to_insert.append((target_word, pos_char, word, alt_type))
+                    # If it was a US spelling variant, target_word is UK, word is US.
+                    # We want: Base = US_word (word), Alt = UK_word (target_word)
+                    if 'US spelling' in p:
+                        alternatives_to_insert.append((word, pos_char, target_word, 'UK spelling'))
+                    else:
+                        # For other types, check if their base word needs to be renamed to US
+                        base_word = uk_to_us.get((target_word, pos_char), target_word)
+                        alternatives_to_insert.append((base_word, pos_char, word, alt_type))
                     
         cursor_align.executemany(
             "INSERT OR IGNORE INTO word_alternatives (word, pos, alternative_word, alternative_type) VALUES (?, ?, ?, ?)",
@@ -372,6 +425,8 @@ def align_database(
         'past simple of %',
         'past simple and past participle of %',
         'past participle of %',
+        'past participle, past simple of %',
+        'present participle of %',
         'plural of %',
         'pl of %',
         'comparative of %',
@@ -380,7 +435,13 @@ def align_database(
         'UK spelling of %',
         'another spelling of %',
         'another word for %',
-        '→ %'
+        '→ %',
+        'mainly US spelling of %',
+        'another US spelling of %',
+        'a US spelling of %',
+        'short form of %',
+        'written abbreviation for %',
+        'abbreviation for %'
     ]
     
     import fnmatch
@@ -393,14 +454,56 @@ def align_database(
                 return True
         return False
 
+    # Build UK to US spelling mapping for memory loading redirection
+    conn_cam = sqlite3.connect(cambridge_db_path)
+    cursor_cam = conn_cam.cursor()
+    
+    us_patterns = [
+        'US spelling of %',
+        'mainly US spelling of %',
+        'another US spelling of %',
+        'a US spelling of %'
+    ]
+    
+    uk_to_us = {}
+    import re
+    def clean_target(text, prefix):
+        target = text[len(prefix):].strip()
+        target = re.split(r'[,;]|\bor\b', target)[0].strip()
+        return target
+        
+    for p in us_patterns:
+        cursor_cam.execute("""
+            SELECT w.display_form, e.pos, s.definition
+            FROM senses s
+            JOIN entries e ON e.id = s.entry_id
+            JOIN words w ON w.id = e.word_id
+            WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
+              AND (s.phrase_title IS NULL OR s.phrase_title = '')
+              AND s.definition LIKE ?
+            ORDER BY w.display_form, e.pos, s.id
+        """, (p,))
+        for us_word, pos, definition in cursor_cam.fetchall():
+            pos_char = map_pos(pos)
+            if not pos_char:
+                continue
+            prefix = p.replace('%', '')
+            uk_word = clean_target(definition, prefix)
+            if uk_word:
+                uk_to_us[(uk_word, pos_char)] = us_word
+    conn_cam.close()
+
     from collections import defaultdict
     cam_data = defaultdict(list)
     for word, s_id, pos, definition in rows:
         pos_char = map_pos(pos)
-        if pos_char and (word, pos_char) in pending_set:
-            # Skip inflected or spelling variant senses
-            if not matches_any_pattern(definition):
-                cam_data[(word, pos_char)].append((s_id, pos, definition))
+        if pos_char:
+            # Redirect UK word to US word
+            target_word = uk_to_us.get((word, pos_char), word)
+            if (target_word, pos_char) in pending_set:
+                # Skip inflected or spelling variant senses
+                if not matches_any_pattern(definition):
+                    cam_data[(target_word, pos_char)].append((s_id, pos, definition))
             
     tasks_to_process = sorted(list(cam_data.keys()))
     
