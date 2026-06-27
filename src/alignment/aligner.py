@@ -115,6 +115,16 @@ def db_writer_worker(db_path):
             PRIMARY KEY (word, pos)
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS word_alternatives (
+            word TEXT NOT NULL,
+            pos TEXT NOT NULL,
+            alternative_word TEXT NOT NULL,
+            alternative_type TEXT NOT NULL,
+            PRIMARY KEY (word, pos, alternative_word, alternative_type)
+        )
+    """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_word_alternatives_alt ON word_alternatives(alternative_word)")
     conn.commit()
     
     print("Database writer worker started.")
@@ -221,31 +231,114 @@ def align_database(
         print("Initializing status tracking table from Cambridge database...")
         conn_cam = sqlite3.connect(cambridge_db_path)
         cursor_cam = conn_cam.cursor()
+        
+        # Query all senses to filter out grammatical inflections and spelling variants
         cursor_cam.execute("""
-            SELECT DISTINCT w.display_form, e.pos
+            SELECT w.display_form, e.pos, s.id, s.definition
             FROM words w
             JOIN entries e ON w.id = e.word_id
             JOIN senses s ON e.id = s.entry_id
             WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
               AND (s.phrase_title IS NULL OR s.phrase_title = '')
+            ORDER BY w.display_form, e.pos, s.id
         """)
         rows = cursor_cam.fetchall()
-        conn_cam.close()
         
-        batch_insert = []
-        for word, pos in rows:
+        # Define patterns for inflections and spelling/alternative variants
+        invalid_patterns = [
+            'past simple of %',
+            'past simple and past participle of %',
+            'past participle of %',
+            'plural of %',
+            'pl of %',
+            'comparative of %',
+            'superlative of %',
+            'US spelling of %',
+            'UK spelling of %',
+            'another spelling of %',
+            'another word for %',
+            '→ %'
+        ]
+        
+        # Get list of sense IDs matching these patterns using SQL LIKE logic locally
+        import fnmatch
+        def matches_any_pattern(defn):
+            if not defn:
+                return False
+            # Convert SQL LIKE % to fnmatch *
+            for pat in invalid_patterns:
+                fn_pat = pat.replace('%', '*')
+                if fnmatch.fnmatch(defn.lower(), fn_pat.lower()):
+                    return True
+            return False
+            
+        from collections import defaultdict
+        word_pos_senses = defaultdict(list)
+        for word, pos, s_id, defn in rows:
             pos_char = map_pos(pos)
             if pos_char:
+                word_pos_senses[(word, pos_char)].append((s_id, defn))
+                
+        # Only insert tasks where at least one sense is NOT an inflection or spelling variant
+        batch_insert = []
+        for (word, pos_char), senses in word_pos_senses.items():
+            if not all(matches_any_pattern(defn) for _, defn in senses):
                 batch_insert.append((word, pos_char, "pending"))
+                
         cursor_align.executemany(
             "INSERT OR IGNORE INTO word_pos_alignment_status (word, pos, status) VALUES (?, ?, ?)",
             batch_insert
         )
+        
+        # Also populate word_alternatives table on first-time initialization
+        print("Populating word_alternatives table...")
+        alternative_patterns = {
+            'US spelling of %': 'US spelling',
+            'UK spelling of %': 'UK spelling',
+            'another spelling of %': 'another spelling',
+            'another word for %': 'another word',
+            '→ %': 'arrow'
+        }
+        
+        alternatives_to_insert = []
+        import re
+        def clean_target(text, prefix):
+            target = text[len(prefix):].strip()
+            target = re.split(r'[,;]|\bor\b', target)[0].strip()
+            return target
+            
+        for p, alt_type in alternative_patterns.items():
+            cursor_cam.execute("""
+                SELECT w.display_form, e.pos, s.definition
+                FROM senses s
+                JOIN entries e ON e.id = s.entry_id
+                JOIN words w ON w.id = e.word_id
+                WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
+                  AND (s.phrase_title IS NULL OR s.phrase_title = '')
+                  AND s.definition LIKE ?
+                ORDER BY w.display_form, e.pos, s.id
+            """, (p,))
+            for word, pos, definition in cursor_cam.fetchall():
+                pos_char = map_pos(pos)
+                if not pos_char:
+                    continue
+                prefix = p.replace('%', '')
+                target_word = clean_target(definition, prefix)
+                if target_word:
+                    alternatives_to_insert.append((target_word, pos_char, word, alt_type))
+                    
+        cursor_align.executemany(
+            "INSERT OR IGNORE INTO word_alternatives (word, pos, alternative_word, alternative_type) VALUES (?, ?, ?, ?)",
+            alternatives_to_insert
+        )
+        
+        conn_cam.close()
         conn_align.commit()
         print(f"Tracking status initialized for {len(batch_insert)} word-POS tasks.")
+        print(f"Word alternatives populated with {len(alternatives_to_insert)} records.")
 
-    # 2. Query pending tasks from status table
-    cursor_align.execute("SELECT word, pos FROM word_pos_alignment_status WHERE status = 'pending'")
+    # 2. Query pending tasks from status table in deterministic order
+    cursor_align.execute("SELECT word, pos FROM word_pos_alignment_status WHERE status = 'pending' ORDER BY word, pos")
     pending_tasks = cursor_align.fetchall()
     pending_set = {(word, pos) for word, pos in pending_tasks}
     
@@ -260,7 +353,7 @@ def align_database(
     """)
     total_cald_senses = cursor_cam.fetchone()[0]
 
-    # Fetch all Cambridge senses to group them in memory
+    # Fetch all Cambridge senses in deterministic order to group them in memory
     print("Reading Cambridge senses in memory...")
     cursor_cam.execute("""
         SELECT w.display_form, s.id, e.pos, s.definition
@@ -269,18 +362,47 @@ def align_database(
         JOIN senses s ON e.id = s.entry_id
         WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
           AND (s.phrase_title IS NULL OR s.phrase_title = '')
+        ORDER BY w.display_form, e.pos, s.id
     """)
     rows = cursor_cam.fetchall()
     conn_cam.close()
     
+    # Define patterns to skip during memory loading
+    invalid_patterns = [
+        'past simple of %',
+        'past simple and past participle of %',
+        'past participle of %',
+        'plural of %',
+        'pl of %',
+        'comparative of %',
+        'superlative of %',
+        'US spelling of %',
+        'UK spelling of %',
+        'another spelling of %',
+        'another word for %',
+        '→ %'
+    ]
+    
+    import fnmatch
+    def matches_any_pattern(defn):
+        if not defn:
+            return False
+        for pat in invalid_patterns:
+            fn_pat = pat.replace('%', '*')
+            if fnmatch.fnmatch(defn.lower(), fn_pat.lower()):
+                return True
+        return False
+
     from collections import defaultdict
     cam_data = defaultdict(list)
     for word, s_id, pos, definition in rows:
         pos_char = map_pos(pos)
         if pos_char and (word, pos_char) in pending_set:
-            cam_data[(word, pos_char)].append((s_id, pos, definition))
+            # Skip inflected or spelling variant senses
+            if not matches_any_pattern(definition):
+                cam_data[(word, pos_char)].append((s_id, pos, definition))
             
-    tasks_to_process = list(cam_data.keys())
+    tasks_to_process = sorted(list(cam_data.keys()))
     
     print(f"Total Cambridge senses: {total_cald_senses}.")
     print(f"Pending tasks remaining: {len(pending_set)}.")
