@@ -1,0 +1,1926 @@
+{
+  "jemmy_v": [
+    {
+      "definition": "to force a window or lock open with a jemmy",
+      "cambridge_sense_ids": [
+        102077
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "aneroid_a": [
+    {
+      "definition": "Operating without using any liquid.",
+      "cambridge_sense_ids": [
+        6109
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03054175-a"
+      ]
+    }
+  ],
+  "frumenty_n": [
+    {
+      "definition": "A sweet, spiced porridge made from hulled wheat, often with milk.",
+      "cambridge_sense_ids": [
+        76309
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07720401-n"
+      ]
+    }
+  ],
+  "aneroid_n": [
+    {
+      "definition": "A barometer that measures air pressure without using liquid.",
+      "cambridge_sense_ids": [
+        6110
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02713459-n"
+      ]
+    }
+  ],
+  "bullying_n": [
+    {
+      "definition": "Bullying is hurting or frightening a weaker person to make them do something.",
+      "cambridge_sense_ids": [
+        24553
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01224966-n"
+      ]
+    }
+  ],
+  "polyunsaturated fat_n": [
+    {
+      "definition": "A type of fat or oil that is linked with lower blood cholesterol.",
+      "cambridge_sense_ids": [
+        144199
+      ],
+      "wordnet_synset_ids": [
+        "oewn-15019391-n"
+      ]
+    }
+  ],
+  "anapest_n": [
+    {
+      "definition": "A metrical unit in poetry with two unstressed syllables followed by one stressed syllable.",
+      "cambridge_sense_ids": [
+        5810
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07110056-n"
+      ]
+    }
+  ],
+  "breaststroke_n": [
+    {
+      "definition": "A swimming style in which the arms move forward and around while the legs kick like a frog.",
+      "cambridge_sense_ids": [
+        22769
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00572097-n"
+      ]
+    }
+  ],
+  "tumor_n": [
+    {
+      "definition": "An abnormal mass of diseased tissue that may form a lump or cause illness.",
+      "cambridge_sense_ids": [
+        201247
+      ],
+      "wordnet_synset_ids": [
+        "oewn-14258682-n"
+      ]
+    }
+  ],
+  "machination_n": [
+    {
+      "definition": "A secret and complicated plan to gain power or an advantage, often by dishonest means.",
+      "cambridge_sense_ids": [
+        112688
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05917114-n"
+      ]
+    }
+  ],
+  "prodigious_a": [
+    {
+      "definition": "Extremely great in size, ability, amount, strength, or degree.",
+      "cambridge_sense_ids": [
+        148383
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01387664-s",
+        "oewn-01680620-s"
+      ]
+    },
+    {
+      "definition": "Having very important, often worrying, meaning for the future.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-02171721-s"
+      ]
+    }
+  ],
+  "Rioja_n": [
+    {
+      "definition": "A dry Spanish red wine from the Rioja region of northern Spain.",
+      "cambridge_sense_ids": [
+        162157
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07913840-n"
+      ]
+    }
+  ],
+  "Somaliland_n": [
+    {
+      "definition": "A self-declared state in northeast Africa that is generally treated internationally as part of Somalia.",
+      "cambridge_sense_ids": [
+        178809
+      ],
+      "wordnet_synset_ids": [
+        "oewn-85353705-n"
+      ]
+    },
+    {
+      "definition": "A historical territory in East Africa whose borders and rulers changed over time.",
+      "cambridge_sense_ids": [
+        178810
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "constraint_n": [
+    {
+      "definition": "A force, rule, or action that limits or controls what someone can do.",
+      "cambridge_sense_ids": [
+        39924
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01152116-n"
+      ]
+    },
+    {
+      "definition": "The state of being held so that movement is limited.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-14022266-n"
+      ]
+    },
+    {
+      "definition": "A device that slows or limits the movement of something.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-04088956-n"
+      ]
+    },
+    {
+      "definition": "Awkward or unnatural behavior caused by forcing yourself to act in a certain way.",
+      "cambridge_sense_ids": [
+        39925
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "Celtic_a": [
+    {
+      "definition": "Relating to the Celts, their languages, or their cultures.",
+      "cambridge_sense_ids": [
+        29670
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02969369-a"
+      ]
+    }
+  ],
+  "outlook_n": [
+    {
+      "definition": "The likely situation in the future.",
+      "cambridge_sense_ids": [
+        133434
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05953807-n"
+      ]
+    },
+    {
+      "definition": "A person's usual way of thinking about and reacting to things.",
+      "cambridge_sense_ids": [
+        133435
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06205574-n"
+      ]
+    },
+    {
+      "definition": "The view that you can see from a particular place.",
+      "cambridge_sense_ids": [
+        133436
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "The act of looking out from a place.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-00883223-n"
+      ]
+    }
+  ],
+  "beardless_a": [
+    {
+      "definition": "Having no beard or facial hair.",
+      "cambridge_sense_ids": [
+        15731
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02161035-s",
+        "oewn-00212684-s"
+      ]
+    }
+  ],
+  "unmechanized_a": [
+    {
+      "definition": "Not done or operated with machines.",
+      "cambridge_sense_ids": [
+        205140
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01504631-s"
+      ]
+    }
+  ],
+  "disinfect_v": [
+    {
+      "definition": "To clean something with chemicals that kill germs that can cause disease.",
+      "cambridge_sense_ids": [
+        53589
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00089076-v"
+      ]
+    }
+  ],
+  "category_n": [
+    {
+      "definition": "A group or type of things or ideas that share features in a classification system.",
+      "cambridge_sense_ids": [
+        29166
+      ],
+      "wordnet_synset_ids": [
+        "oewn-08014145-n",
+        "oewn-05847274-n"
+      ]
+    }
+  ],
+  "roller blind_n": [
+    {
+      "definition": "A window covering made of material that rolls up and down on a roller.",
+      "cambridge_sense_ids": [
+        162707
+      ],
+      "wordnet_synset_ids": [
+        "oewn-04109379-n"
+      ]
+    }
+  ],
+  "expressway_n": [
+    {
+      "definition": "A wide road designed for fast-moving traffic, with limited places to enter and leave.",
+      "cambridge_sense_ids": [
+        65901
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03311555-n"
+      ]
+    }
+  ],
+  "maidenly_a": [
+    {
+      "definition": "Typical of or suitable for a young unmarried woman, especially in a traditionally modest way.",
+      "cambridge_sense_ids": [
+        113082
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01487958-s"
+      ]
+    }
+  ],
+  "dwelling_n": [
+    {
+      "definition": "A place where someone lives.",
+      "cambridge_sense_ids": [
+        58513
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03264208-n"
+      ]
+    }
+  ],
+  "gravy_n": [
+    {
+      "definition": "A thick sauce made from meat juices, flour, or stock, usually served with meat and vegetables.",
+      "cambridge_sense_ids": [
+        83149
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07854049-n"
+      ]
+    },
+    {
+      "definition": "The seasoned juices that come from meat while it is cooking.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-07853888-n"
+      ]
+    },
+    {
+      "definition": "A sudden piece of good luck, especially a chance to make money.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-07492727-n"
+      ]
+    }
+  ],
+  "testily_r": [
+    {
+      "definition": "In a way that shows annoyance and impatience.",
+      "cambridge_sense_ids": [
+        194091
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00218072-r"
+      ]
+    }
+  ],
+  "landlord_n": [
+    {
+      "definition": "A person or organization that owns property and rents it to others.",
+      "cambridge_sense_ids": [
+        105920
+      ],
+      "wordnet_synset_ids": [
+        "oewn-10264933-n"
+      ]
+    },
+    {
+      "definition": "A man who runs a pub or bar.",
+      "cambridge_sense_ids": [
+        105921
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "Zoroastrianism_n": [
+    {
+      "definition": "A religion from ancient Persia based on a struggle between good and evil.",
+      "cambridge_sense_ids": [
+        216869
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06254279-n"
+      ]
+    }
+  ],
+  "cappelletti_n": [
+    {
+      "definition": "Small folded pieces of pasta filled with meat, cheese, vegetables, or other savory foods.",
+      "cambridge_sense_ids": [
+        27457
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07716989-n"
+      ]
+    }
+  ],
+  "rateable_a": [
+    {
+      "definition": "Calculated as a fair share of an amount owed or paid.",
+      "cambridge_sense_ids": [
+        154072
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "Able to be taxed as property by a local authority.",
+      "cambridge_sense_ids": [
+        154073
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02409448-s"
+      ]
+    },
+    {
+      "definition": "Able to be judged or given a value or quality rating.",
+      "cambridge_sense_ids": [
+        154074
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "Belarusian_n": [
+    {
+      "definition": "A person from Belarus.",
+      "cambridge_sense_ids": [
+        16445
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "The Slavic language spoken in Belarus.",
+      "cambridge_sense_ids": [
+        16446
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06957242-n"
+      ]
+    }
+  ],
+  "refractory_a": [
+    {
+      "definition": "Not improving or changing when given a treatment.",
+      "cambridge_sense_ids": [
+        156822
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02461635-s"
+      ]
+    },
+    {
+      "definition": "Temporarily not reacting fully to a process or stimulus.",
+      "cambridge_sense_ids": [
+        156822
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02007041-s"
+      ]
+    },
+    {
+      "definition": "Difficult to control because unwilling to obey.",
+      "cambridge_sense_ids": [
+        156823
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01618681-s"
+      ]
+    }
+  ],
+  "Belarusian_a": [
+    {
+      "definition": "Something Belarusian relates to Belarus, its people, culture, or language.",
+      "cambridge_sense_ids": [
+        16444
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02671645-a"
+      ]
+    }
+  ],
+  "surpassingly_r": [
+    {
+      "definition": "It means to an extremely high or unusual degree.",
+      "cambridge_sense_ids": [
+        189166
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00473918-r"
+      ]
+    }
+  ],
+  "hypophyseal_a": [
+    {
+      "definition": "Relating to the hypophysis, a small hormone-producing gland at the base of the brain.",
+      "cambridge_sense_ids": [
+        92952
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03023100-a"
+      ]
+    }
+  ],
+  "flip out_v": [
+    {
+      "definition": "To react with uncontrolled excitement, surprise, or shock.",
+      "cambridge_sense_ids": [
+        72101
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00719845-v"
+      ]
+    },
+    {
+      "definition": "To become extremely angry or mentally out of control.",
+      "cambridge_sense_ids": [
+        72101
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00585887-v"
+      ]
+    }
+  ],
+  "unsolvable_a": [
+    {
+      "definition": "An unsolvable problem or mystery is impossible or very difficult to solve or explain.",
+      "cambridge_sense_ids": [
+        205879
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02274527-s"
+      ]
+    }
+  ],
+  "misperceive_v": [
+    {
+      "definition": "To understand or judge someone or something incorrectly.",
+      "cambridge_sense_ids": [
+        119571
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02122323-v"
+      ]
+    }
+  ],
+  "standpoint_n": [
+    {
+      "definition": "A point of view based on the beliefs and ideas used to judge something.",
+      "cambridge_sense_ids": [
+        182907
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06220098-n"
+      ]
+    }
+  ],
+  "castigate_v": [
+    {
+      "definition": "To criticize someone or something very severely.",
+      "cambridge_sense_ids": [
+        28822
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00825981-v"
+      ]
+    },
+    {
+      "definition": "To punish someone very severely.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-02505793-v"
+      ]
+    }
+  ],
+  "quid_n": [
+    {
+      "definition": "A pound, the basic unit of money in the United Kingdom.",
+      "cambridge_sense_ids": [
+        152687
+      ],
+      "wordnet_synset_ids": [
+        "oewn-13708765-n"
+      ]
+    },
+    {
+      "definition": "Something received or promised in return for something given or done.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-13344482-n"
+      ]
+    },
+    {
+      "definition": "A small wad of chewable material, especially tobacco.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-07594964-n"
+      ]
+    }
+  ],
+  "hedonism_n": [
+    {
+      "definition": "The belief or practice that pleasure is the most important goal in life.",
+      "cambridge_sense_ids": [
+        88132
+      ],
+      "wordnet_synset_ids": [
+        "oewn-09206868-n",
+        "oewn-06170312-n"
+      ]
+    }
+  ],
+  "Lucifer_n": [
+    {
+      "definition": "Lucifer is another name for Satan, the chief evil spirit and enemy of God.",
+      "cambridge_sense_ids": [
+        112139
+      ],
+      "wordnet_synset_ids": [
+        "oewn-09566482-n"
+      ]
+    },
+    {
+      "definition": "Lucifer can mean the planet Venus when it is seen in the eastern sky before sunrise.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-09382368-n"
+      ]
+    }
+  ],
+  "pachysandra_n": [
+    {
+      "definition": "A low-growing evergreen plant used as ground cover in gardens.",
+      "cambridge_sense_ids": [
+        135056
+      ],
+      "wordnet_synset_ids": [
+        "oewn-12767644-n"
+      ]
+    }
+  ],
+  "capital offense_n": [
+    {
+      "definition": "A very serious crime that can be punished by death.",
+      "cambridge_sense_ids": [
+        27365
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00769842-n"
+      ]
+    }
+  ],
+  "understanding_a": [
+    {
+      "definition": "Able to understand other people's feelings and be kind or forgiving.",
+      "cambridge_sense_ids": [
+        203851
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01750195-s"
+      ]
+    }
+  ],
+  "skinhead_n": [
+    {
+      "definition": "a young person , especially a man, who has very short hair or no hair and is part of a group , often a violent group",
+      "cambridge_sense_ids": [
+        175418
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "a hairstyle in which the hair is so short that the skin on the head can be seen",
+      "cambridge_sense_ids": [
+        175419
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "hip-hop_n": [
+    {
+      "definition": "A style of popular music with a strong beat and spoken rhyming words.",
+      "cambridge_sense_ids": [
+        89461
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07078095-n"
+      ]
+    },
+    {
+      "definition": "An urban youth culture connected with rap music, fashion, and African-American city life.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-08306203-n"
+      ]
+    }
+  ],
+  "entrance_v": [
+    {
+      "definition": "To fascinate someone so much that they keep watching or listening.",
+      "cambridge_sense_ids": [
+        62422
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01810472-v"
+      ]
+    },
+    {
+      "definition": "To put someone into a trance.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-00020919-v"
+      ]
+    }
+  ],
+  "shiitake mushroom_n": [
+    {
+      "definition": "An edible East Asian mushroom used in cooking.",
+      "cambridge_sense_ids": [
+        172232
+      ],
+      "wordnet_synset_ids": [
+        "oewn-13022690-n"
+      ]
+    }
+  ],
+  "actual damages_n": [
+    {
+      "definition": "Money paid as legal compensation for losses that can be clearly proved.",
+      "cambridge_sense_ids": [
+        1904
+      ],
+      "wordnet_synset_ids": [
+        "oewn-13312379-n"
+      ]
+    }
+  ],
+  "jemmy_n": [
+    {
+      "definition": "A short strong metal bar used to force things open.",
+      "cambridge_sense_ids": [
+        102076
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03604544-n"
+      ]
+    }
+  ],
+  "loon_n": [
+    {
+      "definition": "A large fish-eating diving bird of the Northern Hemisphere.",
+      "cambridge_sense_ids": [
+        111332
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02051742-n"
+      ]
+    },
+    {
+      "definition": "A crazy, silly, or confused person.",
+      "cambridge_sense_ids": [
+        111333
+      ],
+      "wordnet_synset_ids": [
+        "oewn-10618312-n"
+      ]
+    },
+    {
+      "definition": "A worthless or lazy man.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-10291148-n"
+      ]
+    }
+  ],
+  "understanding_n": [
+    {
+      "definition": "Knowledge about a subject, situation, or how something works.",
+      "cambridge_sense_ids": [
+        203846
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05813483-n"
+      ]
+    },
+    {
+      "definition": "A particular way of interpreting something or a particular piece of knowledge.",
+      "cambridge_sense_ids": [
+        203847
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "A friendly feeling of sympathy, support, or agreement with someone or something.",
+      "cambridge_sense_ids": [
+        203848
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06208877-n"
+      ]
+    },
+    {
+      "definition": "An agreement between people, often made informally.",
+      "cambridge_sense_ids": [
+        203849
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06783066-n"
+      ]
+    },
+    {
+      "definition": "The ability to think, reason, and judge clearly.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-05659525-n"
+      ]
+    }
+  ],
+  "aperitif_n": [
+    {
+      "definition": "An alcoholic drink taken before a meal to stimulate the appetite.",
+      "cambridge_sense_ids": [
+        7504
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07902438-n"
+      ]
+    }
+  ],
+  "walleye_n": [
+    {
+      "definition": "A North American freshwater fish, or its flesh eaten as food.",
+      "cambridge_sense_ids": [
+        210183
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02560380-n"
+      ]
+    },
+    {
+      "definition": "A condition in which one or both eyes turn outward.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-14581165-n"
+      ]
+    }
+  ],
+  "speculative_a": [
+    {
+      "definition": "Based on guesses rather than facts or careful study.",
+      "cambridge_sense_ids": [
+        180222
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00865005-s"
+      ]
+    },
+    {
+      "definition": "Involving financial risk in the hope of future profit.",
+      "cambridge_sense_ids": [
+        180223
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02282286-s"
+      ]
+    },
+    {
+      "definition": "Sent or done in the hope of getting a job that has not been advertised.",
+      "cambridge_sense_ids": [
+        180224
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "Showing curiosity or a questioning interest.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-00668084-s"
+      ]
+    }
+  ],
+  "precession_n": [
+    {
+      "definition": "A slow wobbling change in the direction of the axis of a spinning body.",
+      "cambridge_sense_ids": [
+        146472
+      ],
+      "wordnet_synset_ids": [
+        "oewn-14029213-n"
+      ]
+    },
+    {
+      "definition": "The act of coming before something else in time, order, or rank.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-01259825-n"
+      ]
+    }
+  ],
+  "programming language_n": [
+    {
+      "definition": "A formal computer language used to write programs.",
+      "cambridge_sense_ids": [
+        148789
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06911128-n"
+      ]
+    }
+  ],
+  "sway_n": [
+    {
+      "definition": "Power or influence over someone or something.",
+      "cambridge_sense_ids": [
+        189698
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05201311-n"
+      ]
+    },
+    {
+      "definition": "A dangerous leaning or movement to one side.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-00348834-n"
+      ]
+    }
+  ],
+  "corral_n": [
+    {
+      "definition": "A fenced area for keeping horses or cattle.",
+      "cambridge_sense_ids": [
+        41670
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03129241-n"
+      ]
+    }
+  ],
+  "coursework_n": [
+    {
+      "definition": "Work assigned to students as part of an educational course.",
+      "cambridge_sense_ids": [
+        42689
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00886766-n"
+      ]
+    }
+  ],
+  "exceed_v": [
+    {
+      "definition": "To be greater than a number, amount, size, or allowed limit.",
+      "cambridge_sense_ids": [
+        64490
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02675266-v",
+        "oewn-01108050-v"
+      ]
+    },
+    {
+      "definition": "To be better than a standard or expectation.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-02674870-v"
+      ]
+    }
+  ],
+  "unsupportable_a": [
+    {
+      "definition": "An idea, argument, or statement that is unsupportable cannot be proved or defended with evidence.",
+      "cambridge_sense_ids": [
+        206018
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02445449-s"
+      ]
+    },
+    {
+      "definition": "A bad situation that is unsupportable is too unacceptable to be allowed to continue.",
+      "cambridge_sense_ids": [
+        206019
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "corporatism_n": [
+    {
+      "definition": "Control of a country or organization by large groups with shared interests.",
+      "cambridge_sense_ids": [
+        41634
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05204311-n"
+      ]
+    }
+  ],
+  "binomial_a": [
+    {
+      "definition": "Relating to or consisting of two mathematical terms.",
+      "cambridge_sense_ids": [
+        18010
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03059944-a"
+      ]
+    },
+    {
+      "definition": "Having two names, especially a genus and species name in biological classification.",
+      "cambridge_sense_ids": [
+        18011
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00121993-s"
+      ]
+    }
+  ],
+  "binomial_n": [
+    {
+      "definition": "A mathematical expression made of two terms joined by addition or subtraction.",
+      "cambridge_sense_ids": [
+        18012
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06046036-n"
+      ]
+    },
+    {
+      "definition": "A fixed pair of words joined by a conjunction and usually used in the same order.",
+      "cambridge_sense_ids": [
+        18013
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "epicondyle_n": [
+    {
+      "definition": "A bony projection near the end of a bone where muscles, tendons, or ligaments attach.",
+      "cambridge_sense_ids": [
+        62710
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05480333-n"
+      ]
+    }
+  ],
+  "relief pitcher_n": [
+    {
+      "definition": "A baseball pitcher who enters the game after another pitcher has left.",
+      "cambridge_sense_ids": [
+        157885
+      ],
+      "wordnet_synset_ids": [
+        "oewn-10537787-n"
+      ]
+    }
+  ],
+  "ecclesiastically_r": [
+    {
+      "definition": "In a way that relates to the Christian church or its clergy.",
+      "cambridge_sense_ids": [
+        59342
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00326234-r"
+      ]
+    }
+  ],
+  "tuba_n": [
+    {
+      "definition": "A large brass wind instrument that produces very low notes.",
+      "cambridge_sense_ids": [
+        201097
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02807418-n"
+      ]
+    }
+  ],
+  "electronic mail_n": [
+    {
+      "definition": "A system for sending messages electronically between computers or devices.",
+      "cambridge_sense_ids": [
+        60328
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06289979-n"
+      ]
+    }
+  ],
+  "sway_v": [
+    {
+      "definition": "To move or walk slowly from side to side or back and forth.",
+      "cambridge_sense_ids": [
+        189695
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01879288-v",
+        "oewn-01881348-v"
+      ]
+    },
+    {
+      "definition": "To make something move from side to side or back and forth.",
+      "cambridge_sense_ids": [
+        189696
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01880021-v"
+      ]
+    },
+    {
+      "definition": "To influence or persuade someone to change their opinion, choice, or support.",
+      "cambridge_sense_ids": [
+        189696,
+        189697
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02592213-v"
+      ]
+    }
+  ],
+  "entrance_n": [
+    {
+      "definition": "A door, gate, or other opening used to enter a place.",
+      "cambridge_sense_ids": [
+        62418
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03295682-n"
+      ]
+    },
+    {
+      "definition": "The act or movement of coming into a place, such as a room or onto a stage.",
+      "cambridge_sense_ids": [
+        62419,
+        62420
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07384725-n",
+        "oewn-00049744-n"
+      ]
+    },
+    {
+      "definition": "The right or permission to enter a place.",
+      "cambridge_sense_ids": [
+        62421
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "spleen_n": [
+    {
+      "definition": "An organ near the stomach that helps clean blood and support the immune system.",
+      "cambridge_sense_ids": [
+        180881
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05341015-n"
+      ]
+    },
+    {
+      "definition": "A feeling of resentful anger or strong disagreement.",
+      "cambridge_sense_ids": [
+        180882
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07568015-n"
+      ]
+    }
+  ],
+  "hour hand_n": [
+    {
+      "definition": "The shorter hand on a clock or watch that points to the hours.",
+      "cambridge_sense_ids": [
+        91572
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03549418-n"
+      ]
+    }
+  ],
+  "corral_v": [
+    {
+      "definition": "To move horses or cattle into a fenced pen.",
+      "cambridge_sense_ids": [
+        41671
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01603399-v"
+      ]
+    },
+    {
+      "definition": "To bring people together and keep them in one place, often to control them.",
+      "cambridge_sense_ids": [
+        41672
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01384450-v"
+      ]
+    },
+    {
+      "definition": "To arrange wagons in a circle to make a temporary enclosure.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-01468827-v"
+      ]
+    }
+  ],
+  "switchboard_n": [
+    {
+      "definition": "A device or place where telephone calls are connected and directed.",
+      "cambridge_sense_ids": [
+        190188
+      ],
+      "wordnet_synset_ids": [
+        "oewn-04380351-n"
+      ]
+    }
+  ],
+  "butter bean_n": [
+    {
+      "definition": "A flat pale yellow or green edible bean similar to a lima bean.",
+      "cambridge_sense_ids": [
+        25439
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07745201-n"
+      ]
+    },
+    {
+      "definition": "A bush bean plant grown for its small flat edible seeds.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-12578930-n"
+      ]
+    }
+  ],
+  "ruination_n": [
+    {
+      "definition": "A state of complete destruction or devastation.",
+      "cambridge_sense_ids": [
+        163758
+      ],
+      "wordnet_synset_ids": [
+        "oewn-14585916-n"
+      ]
+    },
+    {
+      "definition": "An event or action that causes something to be destroyed or ruined.",
+      "cambridge_sense_ids": [
+        163758
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07349843-n",
+        "oewn-00218640-n"
+      ]
+    },
+    {
+      "definition": "A serious failure that causes someone to lose their position or reputation.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-07332733-n"
+      ]
+    }
+  ],
+  "slouch_n": [
+    {
+      "definition": "A way of standing, sitting, or walking with the shoulders bent forward.",
+      "cambridge_sense_ids": [
+        176472
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05010438-n"
+      ]
+    },
+    {
+      "definition": "A person who is not skilled or capable, often used in negative phrases.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-10632161-n"
+      ]
+    }
+  ],
+  "ferment_n": [
+    {
+      "definition": "A state of confusion, unrest, and rapid change.",
+      "cambridge_sense_ids": [
+        68908
+      ],
+      "wordnet_synset_ids": [
+        "oewn-14002988-n"
+      ]
+    },
+    {
+      "definition": "A substance that can cause fermentation.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-14762931-n"
+      ]
+    },
+    {
+      "definition": "The process in which an organic substance breaks down, often producing alcohol.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-13596636-n"
+      ]
+    }
+  ],
+  "compressor_n": [
+    {
+      "definition": "A machine or machine part that presses gas or air into a smaller space.",
+      "cambridge_sense_ids": [
+        38253
+      ],
+      "wordnet_synset_ids": [
+        "oewn-03086811-n"
+      ]
+    },
+    {
+      "definition": "An electronic device that reduces the difference between loud and soft sounds in audio.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-92461567-n"
+      ]
+    }
+  ],
+  "slouch_v": [
+    {
+      "definition": "To stand or sit with your shoulders drooping and your head bent forward.",
+      "cambridge_sense_ids": [
+        176471
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01993734-v"
+      ]
+    },
+    {
+      "definition": "To walk in a lazy, careless way with a drooping posture.",
+      "cambridge_sense_ids": [
+        176471
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01933777-v"
+      ]
+    }
+  ],
+  "horsemint_n": [
+    {
+      "definition": "A North American annual mint plant found in the central and western United States and northern Mexico.",
+      "cambridge_sense_ids": [
+        91258
+      ],
+      "wordnet_synset_ids": [
+        "oewn-12879747-n"
+      ]
+    },
+    {
+      "definition": "A tall North American mint plant with spear-shaped leaves and creamy flowers spotted with purple.",
+      "cambridge_sense_ids": [
+        91258
+      ],
+      "wordnet_synset_ids": [
+        "oewn-12879378-n"
+      ]
+    },
+    {
+      "definition": "A wild European mint plant with long leaves and pale purple flower clusters.",
+      "cambridge_sense_ids": [
+        91259
+      ],
+      "wordnet_synset_ids": [
+        "oewn-12876646-n"
+      ]
+    }
+  ],
+  "effervesce_v": [
+    {
+      "definition": "If a liquid effervesces, it produces many small bubbles.",
+      "cambridge_sense_ids": [
+        59786
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00520443-v"
+      ]
+    }
+  ],
+  "ferment_v": [
+    {
+      "definition": "To make food or drink, or to let it, change chemically through yeast or bacteria.",
+      "cambridge_sense_ids": [
+        68907
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00459709-v"
+      ]
+    },
+    {
+      "definition": "To become sour or spoiled through a chemical change.",
+      "cambridge_sense_ids": [
+        68907
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00459426-v"
+      ]
+    },
+    {
+      "definition": "To be in a very excited or disturbed state.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-01767155-v"
+      ]
+    },
+    {
+      "definition": "To make people feel excited, angry, or disturbed.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-01765377-v"
+      ]
+    }
+  ],
+  "localized_a": [
+    {
+      "definition": "Limited to or happening in one particular area.",
+      "cambridge_sense_ids": [
+        110573
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01428581-s"
+      ]
+    },
+    {
+      "definition": "Made or organized to serve a particular local area.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-01111969-s"
+      ]
+    }
+  ],
+  "antifreeze_n": [
+    {
+      "definition": "A liquid added to water, especially in a car radiator, to lower its freezing point.",
+      "cambridge_sense_ids": [
+        7209
+      ],
+      "wordnet_synset_ids": [
+        "oewn-14790543-n"
+      ]
+    }
+  ],
+  "registered bond_n": [
+    {
+      "definition": "A registered bond is a bond whose owner's name is officially recorded by the issuer and can be transferred only with the owner's approval.",
+      "cambridge_sense_ids": [
+        157253
+      ],
+      "wordnet_synset_ids": [
+        "oewn-13360340-n"
+      ]
+    }
+  ],
+  "burglary_n": [
+    {
+      "definition": "The crime of illegally entering a building to steal or commit another serious crime.",
+      "cambridge_sense_ids": [
+        24873
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00786699-n"
+      ]
+    }
+  ],
+  "caddish_a": [
+    {
+      "definition": "Rude, dishonest, or dishonourable in the way a man treats others, especially women.",
+      "cambridge_sense_ids": [
+        26017
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00643953-s"
+      ]
+    }
+  ],
+  "stink_v": [
+    {
+      "definition": "To smell very bad and unpleasant.",
+      "cambridge_sense_ids": [
+        184505
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02128571-v"
+      ]
+    },
+    {
+      "definition": "To be very bad, unpleasant, or unacceptable.",
+      "cambridge_sense_ids": [
+        184506
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02680129-v"
+      ]
+    }
+  ],
+  "unstable_a": [
+    {
+      "definition": "Not secure, firm, or safe, so something may fail or cause worry.",
+      "cambridge_sense_ids": [
+        205940
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02299575-a",
+        "oewn-00826760-s"
+      ]
+    },
+    {
+      "definition": "Likely to change and not stay the same.",
+      "cambridge_sense_ids": [
+        205940
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00346411-s"
+      ]
+    },
+    {
+      "definition": "Reacting or changing very easily and sometimes violently.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-01935855-s"
+      ]
+    },
+    {
+      "definition": "Having serious mental or emotional problems that cause sudden extreme changes.",
+      "cambridge_sense_ids": [
+        205941
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02083947-s",
+        "oewn-01999794-s"
+      ]
+    }
+  ],
+  "deadly nightshade_n": [
+    {
+      "definition": "A very poisonous Eurasian plant with dark shiny berries whose leaves and roots yield atropine.",
+      "cambridge_sense_ids": [
+        47430
+      ],
+      "wordnet_synset_ids": [
+        "oewn-12919102-n"
+      ]
+    },
+    {
+      "definition": "A poisonous Old World vine with violet flowers and red berries, often growing as a weed.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-12915367-n"
+      ]
+    }
+  ],
+  "stink_n": [
+    {
+      "definition": "A strong unpleasant smell.",
+      "cambridge_sense_ids": [
+        184507
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05722841-n"
+      ]
+    }
+  ],
+  "swede_n": [
+    {
+      "definition": "An edible yellow root vegetable with brown or purple skin.",
+      "cambridge_sense_ids": [
+        189782
+      ],
+      "wordnet_synset_ids": [
+        "oewn-07752063-n"
+      ]
+    },
+    {
+      "definition": "A plant grown for its thick edible yellow root.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-11898329-n"
+      ]
+    },
+    {
+      "definition": "A person from or living in Sweden.",
+      "cambridge_sense_ids": [
+        189783
+      ],
+      "wordnet_synset_ids": [
+        "oewn-09751855-n"
+      ]
+    }
+  ],
+  "eccentric_a": [
+    {
+      "definition": "Very unusual or unconventional, sometimes in a funny way.",
+      "cambridge_sense_ids": [
+        59212
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00611168-s"
+      ]
+    },
+    {
+      "definition": "Not sharing the same center point as another circle or body.",
+      "cambridge_sense_ids": [
+        59213
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00545420-a"
+      ]
+    },
+    {
+      "definition": "Having or forming an oval rather than a round shape.",
+      "cambridge_sense_ids": [
+        59214
+      ],
+      "wordnet_synset_ids": []
+    }
+  ],
+  "pertinent_a": [
+    {
+      "definition": "Relevant in a clear and logical way to the subject being discussed.",
+      "cambridge_sense_ids": [
+        139786
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01982897-s"
+      ]
+    },
+    {
+      "definition": "Especially suitable or appropriate to a particular subject or situation.",
+      "cambridge_sense_ids": [
+        139786
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00139582-s"
+      ]
+    }
+  ],
+  "skin flick_n": [
+    {
+      "definition": "A pornographic film intended to cause sexual excitement.",
+      "cambridge_sense_ids": [
+        175397
+      ],
+      "wordnet_synset_ids": [
+        "oewn-06629920-n"
+      ]
+    }
+  ],
+  "flimflam_n": [
+    {
+      "definition": "Confusing talk intended to deceive someone.",
+      "cambridge_sense_ids": [
+        72030
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "A dishonest trick or scam used to cheat someone.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-00780744-n"
+      ]
+    }
+  ],
+  "prep school_n": [
+    {
+      "definition": "In the UK, a private school for children aged about seven to thirteen that prepares them for public school.",
+      "cambridge_sense_ids": [
+        146778
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "In the US, a private secondary school that prepares students for college.",
+      "cambridge_sense_ids": [
+        146779
+      ],
+      "wordnet_synset_ids": [
+        "oewn-08426926-n"
+      ]
+    }
+  ],
+  "trial balance_n": [
+    {
+      "definition": "A check in double-entry bookkeeping that totals debits and credits to see if they are equal.",
+      "cambridge_sense_ids": [
+        200083
+      ],
+      "wordnet_synset_ids": [
+        "oewn-13432178-n"
+      ]
+    }
+  ],
+  "inefficacy_n": [
+    {
+      "definition": "The failure of something, such as a medicine or method, to produce the intended result.",
+      "cambridge_sense_ids": [
+        97102
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05215559-n"
+      ]
+    }
+  ],
+  "major leaguer_n": [
+    {
+      "definition": "A player who plays for a major-league team, especially in baseball.",
+      "cambridge_sense_ids": [
+        113300
+      ],
+      "wordnet_synset_ids": [
+        "oewn-10303628-n"
+      ]
+    }
+  ],
+  "eccentric_n": [
+    {
+      "definition": "A person whose behavior or personality is unusual or odd.",
+      "cambridge_sense_ids": [
+        59215
+      ],
+      "wordnet_synset_ids": [
+        "oewn-10062653-n",
+        "oewn-09928518-n"
+      ]
+    }
+  ],
+  "polypectomy_n": [
+    {
+      "definition": "A medical operation to remove a polyp from the body.",
+      "cambridge_sense_ids": [
+        144168
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00692101-n"
+      ]
+    }
+  ],
+  "fresh water_n": [
+    {
+      "definition": "Water that is not salty, such as water in lakes and rivers.",
+      "cambridge_sense_ids": [
+        75626
+      ],
+      "wordnet_synset_ids": [
+        "oewn-15033893-n"
+      ]
+    }
+  ],
+  "gang_n": [
+    {
+      "definition": "A group of young people who spend time together and often cause trouble or fight with others.",
+      "cambridge_sense_ids": [
+        77673
+      ],
+      "wordnet_synset_ids": []
+    },
+    {
+      "definition": "A group of criminals who work together.",
+      "cambridge_sense_ids": [
+        77674
+      ],
+      "wordnet_synset_ids": [
+        "oewn-08260983-n"
+      ]
+    },
+    {
+      "definition": "An informal group of friends.",
+      "cambridge_sense_ids": [
+        77675
+      ],
+      "wordnet_synset_ids": [
+        "oewn-08290764-n"
+      ]
+    },
+    {
+      "definition": "A group of workers or prisoners who work together on a job.",
+      "cambridge_sense_ids": [
+        77676
+      ],
+      "wordnet_synset_ids": [
+        "oewn-08259720-n"
+      ]
+    },
+    {
+      "definition": "A set of tools or parts arranged to work together.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-03420273-n"
+      ]
+    }
+  ],
+  "commercial traveller_n": [
+    {
+      "definition": "A salesperson who travels to visit customers and sell a company's products or services.",
+      "cambridge_sense_ids": [
+        37170
+      ],
+      "wordnet_synset_ids": [
+        "oewn-10746438-n"
+      ]
+    }
+  ],
+  "fucking_a": [
+    {
+      "definition": "A very rude word used to strongly emphasize what you are saying, often when angry.",
+      "cambridge_sense_ids": [
+        76399
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01524775-s"
+      ]
+    }
+  ],
+  "seed_v": [
+    {
+      "definition": "To produce or release seeds.",
+      "cambridge_sense_ids": [
+        168864
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01544838-v",
+        "oewn-01655971-v"
+      ]
+    },
+    {
+      "definition": "To remove the seeds from a fruit or vegetable.",
+      "cambridge_sense_ids": [
+        168865
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00179863-v"
+      ]
+    },
+    {
+      "definition": "To plant seeds in the ground.",
+      "cambridge_sense_ids": [
+        168866
+      ],
+      "wordnet_synset_ids": [
+        "oewn-01503512-v"
+      ]
+    },
+    {
+      "definition": "To help something begin and develop, often by giving money.",
+      "cambridge_sense_ids": [
+        168867
+      ],
+      "wordnet_synset_ids": [
+        "oewn-02222328-v"
+      ]
+    },
+    {
+      "definition": "To arrange players or teams in a competition according to their ranking.",
+      "cambridge_sense_ids": [
+        168868
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00660584-v"
+      ]
+    },
+    {
+      "definition": "To put chemicals into clouds to try to make rain.",
+      "cambridge_sense_ids": [
+        168869
+      ],
+      "wordnet_synset_ids": [
+        "oewn-00517505-v"
+      ]
+    },
+    {
+      "definition": "To add microorganisms to a substance or place.",
+      "cambridge_sense_ids": [],
+      "wordnet_synset_ids": [
+        "oewn-00188707-v"
+      ]
+    }
+  ],
+  "seed_n": [
+    {
+      "definition": "A small plant part or hard fruit that can grow into a new plant.",
+      "cambridge_sense_ids": [
+        168858
+      ],
+      "wordnet_synset_ids": [
+        "oewn-13156591-n",
+        "oewn-11704458-n"
+      ]
+    },
+    {
+      "definition": "The thick fluid from a male body that contains sperm.",
+      "cambridge_sense_ids": [
+        168859
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05411679-n"
+      ]
+    },
+    {
+      "definition": "The beginning, cause, or inspiration for a later feeling, situation, or work.",
+      "cambridge_sense_ids": [
+        168862
+      ],
+      "wordnet_synset_ids": [
+        "oewn-05843082-n"
+      ]
+    },
+    {
+      "definition": "A strong player in a tournament who is expected to do well.",
+      "cambridge_sense_ids": [
+        168863
+      ],
+      "wordnet_synset_ids": [
+        "oewn-10594907-n"
+      ]
+    }
+  ]
+}
