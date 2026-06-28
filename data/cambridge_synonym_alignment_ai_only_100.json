@@ -1,0 +1,3522 @@
+[
+    {
+        "src_sense_id": 37075,
+        "src_word": "commentary",
+        "src_defn": "a spoken description of an event on the radio or television that is broadcast as the event happens , or the action of providing this description",
+        "pos": "n",
+        "tgt_word": "statement",
+        "tgt_senses": [
+            {
+                "sense_id": 97969,
+                "defn": "Something said or written to give facts, details, or an opinion.",
+                "cam_sense_id": 183339
+            },
+            {
+                "sense_id": 97970,
+                "defn": "An action or other nonverbal sign that expresses an opinion or message.",
+                "cam_sense_id": 183339
+            },
+            {
+                "sense_id": 97971,
+                "defn": "The act of saying or asserting something.",
+                "cam_sense_id": 183339
+            },
+            {
+                "sense_id": 97972,
+                "defn": "A document showing money paid into and taken out of an account.",
+                "cam_sense_id": 183340
+            },
+            {
+                "sense_id": 97973,
+                "defn": "A document describing a disabled child's special educational needs and support.",
+                "cam_sense_id": 183341
+            },
+            {
+                "sense_id": 97974,
+                "defn": "The playing or presentation of a musical theme.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 97975,
+                "defn": "A line of code in a computer program.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 119411,
+        "src_word": "miserable",
+        "src_defn": "very unhappy",
+        "pos": "a",
+        "tgt_word": "upset",
+        "tgt_senses": [
+            {
+                "sense_id": 50029,
+                "defn": "Worried, unhappy, angry, or troubled.",
+                "cam_sense_id": 206720
+            },
+            {
+                "sense_id": 50030,
+                "defn": "Confused or in disorder.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 50031,
+                "defn": "Describing an unexpected defeat of a team or player expected to win.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 50032,
+                "defn": "Slightly physically ill, especially in the stomach.",
+                "cam_sense_id": 206721
+            },
+            {
+                "sense_id": 50033,
+                "defn": "Turned over so that the bottom is no longer underneath.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 194749,
+        "src_word": "thick",
+        "src_defn": "having a large distance between two sides",
+        "pos": "a",
+        "tgt_word": "squat",
+        "tgt_senses": [
+            {
+                "sense_id": 152581,
+                "defn": "Short and thick or wide in shape.",
+                "cam_sense_id": 181850
+            },
+            {
+                "sense_id": 152582,
+                "defn": "Built low to the ground.",
+                "cam_sense_id": 181850
+            }
+        ]
+    },
+    {
+        "src_sense_id": 199899,
+        "src_word": "treble",
+        "src_defn": "being or relating to a boy's voice that sings the highest notes , or an instrument that plays the highest notes",
+        "pos": "r",
+        "tgt_word": "high",
+        "tgt_senses": [
+            {
+                "sense_id": 164013,
+                "defn": "At or to a great distance above the ground.",
+                "cam_sense_id": 88985
+            },
+            {
+                "sense_id": 164014,
+                "defn": "In or to a high position, amount, or degree.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 164015,
+                "defn": "In a rich or luxurious way.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 164016,
+                "defn": "Far upstream toward the source of a river.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 33288,
+        "src_word": "clamber",
+        "src_defn": "to climb up, across , or into somewhere with difficulty , using the hands and the feet",
+        "pos": "v",
+        "tgt_word": "scale",
+        "tgt_senses": [
+            {
+                "sense_id": 156588,
+                "defn": "To climb a steep surface or reach the top of something.",
+                "cam_sense_id": 166198
+            },
+            {
+                "sense_id": 156589,
+                "defn": "To get over or take something by climbing it with ladders.",
+                "cam_sense_id": 166198
+            },
+            {
+                "sense_id": 156590,
+                "defn": "To clean teeth by removing tartar and plaque.",
+                "cam_sense_id": 166199
+            },
+            {
+                "sense_id": 156591,
+                "defn": "To measure something using a scale or scales.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 156592,
+                "defn": "To set, measure, or adjust something according to a rate or standard.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 156593,
+                "defn": "To remove scales from a fish or other animal.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 76285,
+        "src_word": "fruitful",
+        "src_defn": "producing good results",
+        "pos": "a",
+        "tgt_word": "effective",
+        "tgt_senses": [
+            {
+                "sense_id": 114873,
+                "defn": "Successful in producing the result you want.",
+                "cam_sense_id": 59724
+            },
+            {
+                "sense_id": 114874,
+                "defn": "Working well as a treatment, drug, or remedy in normal use.",
+                "cam_sense_id": 59725
+            },
+            {
+                "sense_id": 114875,
+                "defn": "Having real force, power, or influence.",
+                "cam_sense_id": 59724
+            },
+            {
+                "sense_id": 114876,
+                "defn": "Existing in fact, even if not official or only theoretical.",
+                "cam_sense_id": 59726
+            },
+            {
+                "sense_id": 114877,
+                "defn": "In operation or ready to be used.",
+                "cam_sense_id": 59727
+            }
+        ]
+    },
+    {
+        "src_sense_id": 161952,
+        "src_word": "rinsed",
+        "src_defn": "to use water to clean the soap or dirt from something",
+        "pos": "v",
+        "tgt_word": "wash",
+        "tgt_senses": [
+            {
+                "sense_id": 85644,
+                "defn": "To clean something with water, soap, or another cleaning substance.",
+                "cam_sense_id": 210619
+            },
+            {
+                "sense_id": 85645,
+                "defn": "To clean your body or part of it with water and usually soap.",
+                "cam_sense_id": 210620
+            },
+            {
+                "sense_id": 85646,
+                "defn": "To flow to or against a place, usually repeatedly.",
+                "cam_sense_id": 210622
+            },
+            {
+                "sense_id": 85647,
+                "defn": "To be able to be cleaned by washing.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 85648,
+                "defn": "To be accepted as true after testing or checking.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 85649,
+                "defn": "To separate dirt or gravel from precious minerals using water.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 85650,
+                "defn": "To cover a surface with a thin layer of paint, metal, or another substance.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 85651,
+                "defn": "To form something by the wearing action of water.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 85652,
+                "defn": "To make something wet or moist.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 85653,
+                "defn": "For an animal, to clean itself or another animal by licking.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 216081,
+        "src_word": "yelled",
+        "src_defn": "to shout something or make a loud noise , usually when you are angry , in pain , or excited",
+        "pos": "v",
+        "tgt_word": "bellow",
+        "tgt_senses": [
+            {
+                "sense_id": 108697,
+                "defn": "To shout very loudly and strongly.",
+                "cam_sense_id": 16569
+            },
+            {
+                "sense_id": 108698,
+                "defn": "For a large animal, to make a loud deep sound.",
+                "cam_sense_id": 16569
+            }
+        ]
+    },
+    {
+        "src_sense_id": 188807,
+        "src_word": "supplying",
+        "src_defn": "to provide something that is wanted or needed , often in large quantities and over a long period of time",
+        "pos": "v",
+        "tgt_word": "give",
+        "tgt_senses": [
+            {
+                "sense_id": 45391,
+                "defn": "To provide, supply, or transfer something to someone.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45392,
+                "defn": "To give something as a present.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45393,
+                "defn": "To pay money in exchange or as reward.",
+                "cam_sense_id": 79912
+            },
+            {
+                "sense_id": 45394,
+                "defn": "To tell, show, or communicate information, feelings, or signs.",
+                "cam_sense_id": 79915
+            },
+            {
+                "sense_id": 45395,
+                "defn": "To teach or pass knowledge or skills to someone.",
+                "cam_sense_id": 79915
+            },
+            {
+                "sense_id": 45396,
+                "defn": "To punish someone in a particular way or for a particular time.",
+                "cam_sense_id": 79916
+            },
+            {
+                "sense_id": 45397,
+                "defn": "To allow someone time, space, or a chance to do something.",
+                "cam_sense_id": 79917
+            },
+            {
+                "sense_id": 45398,
+                "defn": "To estimate how long something will last or what will happen.",
+                "cam_sense_id": 79918
+            },
+            {
+                "sense_id": 45399,
+                "defn": "To cause, produce, or bring about something.",
+                "cam_sense_id": 79919
+            },
+            {
+                "sense_id": 45400,
+                "defn": "To perform or carry out an action, especially for others.",
+                "cam_sense_id": 79922
+            },
+            {
+                "sense_id": 45401,
+                "defn": "To organize or be responsible for an event.",
+                "cam_sense_id": 79923
+            },
+            {
+                "sense_id": 45402,
+                "defn": "To formally propose a toast or idea.",
+                "cam_sense_id": 79925
+            },
+            {
+                "sense_id": 45403,
+                "defn": "To bend, stretch, break, or become less firm under pressure.",
+                "cam_sense_id": 79926
+            },
+            {
+                "sense_id": 45404,
+                "defn": "To decide and state something officially in a sport or by judgment.",
+                "cam_sense_id": 79927
+            },
+            {
+                "sense_id": 45405,
+                "defn": "To dedicate or devote something to a person, activity, or cause.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45406,
+                "defn": "To leave something with someone for a time.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45407,
+                "defn": "To lose or sacrifice something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45408,
+                "defn": "To give medicine, food, money, or help to someone or something.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45409,
+                "defn": "To officially award or grant something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45410,
+                "defn": "To offer something sincerely or submit it for use or judgment.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45411,
+                "defn": "To influence or direct someone through behavior or persuasion.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45412,
+                "defn": "To agree to have sex with a man.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 170718,
+        "src_word": "set out",
+        "src_defn": "to arrange something, usually a number of things, in an attractive or organized way",
+        "pos": "v",
+        "tgt_word": "sort",
+        "tgt_senses": [
+            {
+                "sense_id": 153121,
+                "defn": "To arrange things in order or divide them into groups.",
+                "cam_sense_id": 179141
+            },
+            {
+                "sense_id": 153122,
+                "defn": "To examine things to decide whether they are suitable.",
+                "cam_sense_id": 179141
+            },
+            {
+                "sense_id": 153123,
+                "defn": "To deal with a problem by repairing or organizing something.",
+                "cam_sense_id": 179142
+            }
+        ]
+    },
+    {
+        "src_sense_id": 84053,
+        "src_word": "grow up",
+        "src_defn": "to gradually become an adult",
+        "pos": "v",
+        "tgt_word": "grow up",
+        "tgt_senses": [
+            {
+                "sense_id": 158091,
+                "defn": "To gradually become an adult.",
+                "cam_sense_id": 84053
+            },
+            {
+                "sense_id": 158092,
+                "defn": "To start behaving in a more sensible and adult way.",
+                "cam_sense_id": 84054
+            },
+            {
+                "sense_id": 158093,
+                "defn": "For a town or city, to develop in a particular place or way.",
+                "cam_sense_id": 84055
+            }
+        ]
+    },
+    {
+        "src_sense_id": 1134,
+        "src_word": "accomplishing",
+        "src_defn": "to finish something successfully or to achieve something",
+        "pos": "v",
+        "tgt_word": "attain",
+        "tgt_senses": [
+            {
+                "sense_id": 172290,
+                "defn": "To get something successfully, especially by effort.",
+                "cam_sense_id": 10641
+            },
+            {
+                "sense_id": 172291,
+                "defn": "To reach a particular time, state, level, or place.",
+                "cam_sense_id": 10641
+            },
+            {
+                "sense_id": 172292,
+                "defn": "To find something unexpectedly.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 24624,
+        "src_word": "bumptious",
+        "src_defn": "unpleasantly confident",
+        "pos": "a",
+        "tgt_word": "ostentatious",
+        "tgt_senses": [
+            {
+                "sense_id": 45750,
+                "defn": "Trying too obviously to impress people by showing wealth, possessions, or power.",
+                "cam_sense_id": 132751
+            },
+            {
+                "sense_id": 45751,
+                "defn": "Showy in a cheap, vulgar, or tasteless way.",
+                "cam_sense_id": 132751
+            }
+        ]
+    },
+    {
+        "src_sense_id": 34816,
+        "src_word": "clunker",
+        "src_defn": "something very bad in quality or completely unsuccessful",
+        "pos": "n",
+        "tgt_word": "failure",
+        "tgt_senses": [
+            {
+                "sense_id": 84141,
+                "defn": "The fact of not succeeding.",
+                "cam_sense_id": 66965
+            },
+            {
+                "sense_id": 84142,
+                "defn": "An act or event that does not achieve its purpose.",
+                "cam_sense_id": 66965
+            },
+            {
+                "sense_id": 84143,
+                "defn": "A person who often does not succeed.",
+                "cam_sense_id": 66965
+            },
+            {
+                "sense_id": 84144,
+                "defn": "The fact of not doing something required or expected.",
+                "cam_sense_id": 66966
+            },
+            {
+                "sense_id": 84145,
+                "defn": "The fact of being unable to pay debts when they are due.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 84146,
+                "defn": "The fact of not working properly or losing normal function.",
+                "cam_sense_id": 66967
+            }
+        ]
+    },
+    {
+        "src_sense_id": 104415,
+        "src_word": "killed",
+        "src_defn": "to cause someone a lot of pain",
+        "pos": "v",
+        "tgt_word": "rub",
+        "tgt_senses": [
+            {
+                "sense_id": 101450,
+                "defn": "To move something against a surface with pressure and repeated movement.",
+                "cam_sense_id": 163552
+            },
+            {
+                "sense_id": 101451,
+                "defn": "To scrape or rub a part of the body to ease an itch.",
+                "cam_sense_id": 163552
+            }
+        ]
+    },
+    {
+        "src_sense_id": 31783,
+        "src_word": "child",
+        "src_defn": "a boy or girl from the time of birth until he or she is an adult , or a son or daughter of any age",
+        "pos": "n",
+        "tgt_word": "child",
+        "tgt_senses": [
+            {
+                "sense_id": 46670,
+                "defn": "A young person who is not yet an adult.",
+                "cam_sense_id": 31783
+            },
+            {
+                "sense_id": 46671,
+                "defn": "Someone's son or daughter of any age.",
+                "cam_sense_id": 31783
+            },
+            {
+                "sense_id": 46672,
+                "defn": "An adult who behaves in an immature or badly behaved way.",
+                "cam_sense_id": 31784
+            },
+            {
+                "sense_id": 46673,
+                "defn": "A person who belongs to a particular clan or tribe.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 173783,
+        "src_word": "sickly",
+        "src_defn": "weak , unhealthy , and often sick",
+        "pos": "a",
+        "tgt_word": "frail",
+        "tgt_senses": [
+            {
+                "sense_id": 106559,
+                "defn": "Physically weak or unhealthy.",
+                "cam_sense_id": 74904
+            },
+            {
+                "sense_id": 106560,
+                "defn": "Easily broken, damaged, or harmed.",
+                "cam_sense_id": 74904
+            },
+            {
+                "sense_id": 106561,
+                "defn": "Weak in moral strength, courage, or will.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 2475,
+        "src_word": "admit",
+        "src_defn": "to agree that something is true , especially unwillingly",
+        "pos": "v",
+        "tgt_word": "acknowledge",
+        "tgt_senses": [
+            {
+                "sense_id": 89003,
+                "defn": "To accept or admit that something is true or exists.",
+                "cam_sense_id": 1530
+            },
+            {
+                "sense_id": 89004,
+                "defn": "To tell someone that you have received something they sent.",
+                "cam_sense_id": 1531
+            },
+            {
+                "sense_id": 89005,
+                "defn": "To show that you have noticed or recognized someone or something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 89006,
+                "defn": "To express thanks or gratitude for something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 89007,
+                "defn": "To accept something as legally valid or binding.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 89008,
+                "defn": "To accept someone as having the position, power, or authority they claim.",
+                "cam_sense_id": 1530
+            }
+        ]
+    },
+    {
+        "src_sense_id": 188758,
+        "src_word": "supplement",
+        "src_defn": "something that is added to something else in order to improve it or complete it; something extra",
+        "pos": "n",
+        "tgt_word": "addition",
+        "tgt_senses": [
+            {
+                "sense_id": 163450,
+                "defn": "The process of adding numbers or amounts together.",
+                "cam_sense_id": 2163
+            },
+            {
+                "sense_id": 163451,
+                "defn": "The act of putting one thing with another thing.",
+                "cam_sense_id": 2167
+            },
+            {
+                "sense_id": 163452,
+                "defn": "A thing or amount that is added to something else.",
+                "cam_sense_id": 2165
+            },
+            {
+                "sense_id": 163453,
+                "defn": "A new person who has joined a group.",
+                "cam_sense_id": 2166
+            },
+            {
+                "sense_id": 163454,
+                "defn": "A part added to something to improve it.",
+                "cam_sense_id": 2165
+            },
+            {
+                "sense_id": 163455,
+                "defn": "A new part added to a house or other building.",
+                "cam_sense_id": 2168
+            },
+            {
+                "sense_id": 163456,
+                "defn": "A planned suburban area with streets and lots for future homes.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 115942,
+        "src_word": "mature",
+        "src_defn": "to become completely grown physically",
+        "pos": "v",
+        "tgt_word": "mature",
+        "tgt_senses": [
+            {
+                "sense_id": 159313,
+                "defn": "To become mentally and emotionally developed and responsible.",
+                "cam_sense_id": 115940
+            },
+            {
+                "sense_id": 159314,
+                "defn": "For ideas or opinions to become fully developed in the mind.",
+                "cam_sense_id": 115941
+            },
+            {
+                "sense_id": 159315,
+                "defn": "To become fully grown physically.",
+                "cam_sense_id": 115942
+            },
+            {
+                "sense_id": 159316,
+                "defn": "To make food or wine develop its full flavour over time.",
+                "cam_sense_id": 115943
+            },
+            {
+                "sense_id": 159317,
+                "defn": "For a financial agreement or investment to become ready to be paid.",
+                "cam_sense_id": 115944
+            },
+            {
+                "sense_id": 159318,
+                "defn": "To grow older.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 159319,
+                "defn": "To cause pus in an infected area to ripen and be released.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 67216,
+        "src_word": "fall",
+        "src_defn": "the fact of the size , amount , or strength of something getting lower",
+        "pos": "n",
+        "tgt_word": "decrease",
+        "tgt_senses": [
+            {
+                "sense_id": 161839,
+                "defn": "A downward change or reduction in something.",
+                "cam_sense_id": 48460
+            },
+            {
+                "sense_id": 161840,
+                "defn": "The process of becoming smaller, shorter, or less.",
+                "cam_sense_id": 48460
+            },
+            {
+                "sense_id": 161841,
+                "defn": "The amount by which something becomes smaller or less.",
+                "cam_sense_id": 48460
+            },
+            {
+                "sense_id": 161842,
+                "defn": "The act of making something smaller or less.",
+                "cam_sense_id": 48460
+            }
+        ]
+    },
+    {
+        "src_sense_id": 156463,
+        "src_word": "reducing",
+        "src_defn": "to become or to make something become smaller in size , amount , degree , importance , etc.",
+        "pos": "v",
+        "tgt_word": "reduce",
+        "tgt_senses": [
+            {
+                "sense_id": 58887,
+                "defn": "To reduce something is to make it smaller, less, or lower in amount, size, degree, or importance.",
+                "cam_sense_id": 156446
+            },
+            {
+                "sense_id": 58888,
+                "defn": "To reduce something is to make it simpler or less complex.",
+                "cam_sense_id": 156446
+            },
+            {
+                "sense_id": 58889,
+                "defn": "To reduce someone or something is to make them weaker, humbler, lower in rank, or less dignified.",
+                "cam_sense_id": 156446
+            },
+            {
+                "sense_id": 58890,
+                "defn": "To reduce an equation or expression is to simplify its form in mathematics.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 58891,
+                "defn": "To reduce something to something else is to show that it is the basic or essential element.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 58892,
+                "defn": "To reduce something is to narrow or limit its range or scope.",
+                "cam_sense_id": 156446
+            },
+            {
+                "sense_id": 58893,
+                "defn": "To reduce a place or people is to defeat or control them by force or intimidation.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 58894,
+                "defn": "To reduce a substance in chemistry is to remove oxygen, add hydrogen, or add electrons.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 58895,
+                "defn": "To reduce is for cells to undergo meiosis.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 58896,
+                "defn": "To reduce a broken bone is to put it back into its correct position.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 58897,
+                "defn": "To reduce a sound is to pronounce it with less stress.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 58898,
+                "defn": "To reduce a liquid is to cook it until it becomes thicker and less in amount.",
+                "cam_sense_id": 156447
+            },
+            {
+                "sense_id": 58899,
+                "defn": "To reduce a mixture is to make it weaker or less strong in flavor.",
+                "cam_sense_id": 156446
+            },
+            {
+                "sense_id": 58900,
+                "defn": "To reduce is to lose body weight.",
+                "cam_sense_id": 156446
+            }
+        ]
+    },
+    {
+        "src_sense_id": 86764,
+        "src_word": "hauled",
+        "src_defn": "to take something or someone somewhere , especially by force",
+        "pos": "v",
+        "tgt_word": "haul",
+        "tgt_senses": [
+            {
+                "sense_id": 111918,
+                "defn": "To pull something heavy slowly and with difficulty.",
+                "cam_sense_id": 86737
+            },
+            {
+                "sense_id": 111919,
+                "defn": "To take someone or something somewhere, especially by force.",
+                "cam_sense_id": 86738
+            },
+            {
+                "sense_id": 111920,
+                "defn": "To transport goods or people in a vehicle, usually by road.",
+                "cam_sense_id": 86739
+            }
+        ]
+    },
+    {
+        "src_sense_id": 132569,
+        "src_word": "originating",
+        "src_defn": "to start something or cause it to happen",
+        "pos": "v",
+        "tgt_word": "commence",
+        "tgt_senses": [
+            {
+                "sense_id": 106616,
+                "defn": "To begin doing something.",
+                "cam_sense_id": 37036
+            },
+            {
+                "sense_id": 106617,
+                "defn": "To cause something to begin.",
+                "cam_sense_id": 37036
+            }
+        ]
+    },
+    {
+        "src_sense_id": 138368,
+        "src_word": "peddle",
+        "src_defn": "to sell things, especially by taking them to different places",
+        "pos": "v",
+        "tgt_word": "retail",
+        "tgt_senses": [
+            {
+                "sense_id": 141290,
+                "defn": "To sell goods directly to the public in shops, online, or similar places.",
+                "cam_sense_id": 160204
+            },
+            {
+                "sense_id": 141291,
+                "defn": "To be sold to the public at a retail price or level.",
+                "cam_sense_id": 160204
+            }
+        ]
+    },
+    {
+        "src_sense_id": 148994,
+        "src_word": "promised",
+        "src_defn": "to tell someone that you will certainly do something",
+        "pos": "v",
+        "tgt_word": "swear",
+        "tgt_senses": [
+            {
+                "sense_id": 159334,
+                "defn": "To use rude or offensive words.",
+                "cam_sense_id": 189715
+            },
+            {
+                "sense_id": 159335,
+                "defn": "To state formally and seriously that something is true.",
+                "cam_sense_id": 189716
+            },
+            {
+                "sense_id": 159336,
+                "defn": "To make a serious promise or oath.",
+                "cam_sense_id": 189716
+            },
+            {
+                "sense_id": 159337,
+                "defn": "To have strong confidence in someone or something.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 200344,
+        "src_word": "trim",
+        "src_defn": "→ trimming",
+        "pos": "n",
+        "tgt_word": "trim",
+        "tgt_senses": [
+            {
+                "sense_id": 158370,
+                "defn": "The act of cutting a small amount from something to make it neat or the right shape.",
+                "cam_sense_id": 200343
+            },
+            {
+                "sense_id": 158372,
+                "defn": "The decorative features and materials inside a vehicle.",
+                "cam_sense_id": 200345
+            },
+            {
+                "sense_id": 158373,
+                "defn": "The general state of arrangement or appearance of something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 158374,
+                "defn": "The balanced position of an aircraft in flight.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 23139,
+        "src_word": "brilliant",
+        "src_defn": "extremely intelligent or skilled",
+        "pos": "a",
+        "tgt_word": "bright",
+        "tgt_senses": [
+            {
+                "sense_id": 160545,
+                "defn": "Producing or reflecting a lot of light.",
+                "cam_sense_id": 23075
+            },
+            {
+                "sense_id": 160546,
+                "defn": "Having a lot of natural or artificial light.",
+                "cam_sense_id": 23075
+            },
+            {
+                "sense_id": 160547,
+                "defn": "Shiny because of being smooth or polished.",
+                "cam_sense_id": 23075
+            },
+            {
+                "sense_id": 160548,
+                "defn": "Not made less bright or clear.",
+                "cam_sense_id": 23075
+            },
+            {
+                "sense_id": 160549,
+                "defn": "Having a strong or striking colour.",
+                "cam_sense_id": 23076
+            },
+            {
+                "sense_id": 160550,
+                "defn": "Intelligent and quick to learn.",
+                "cam_sense_id": 23077
+            },
+            {
+                "sense_id": 160551,
+                "defn": "Likely to be successful or happy in the future.",
+                "cam_sense_id": 23078
+            },
+            {
+                "sense_id": 160552,
+                "defn": "Excellent or impressive.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 160553,
+                "defn": "Clear, sharp, and ringing in sound.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 160554,
+                "defn": "Happy and cheerful.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 129974,
+        "src_word": "offer",
+        "src_defn": "to provide or supply something",
+        "pos": "v",
+        "tgt_word": "give",
+        "tgt_senses": [
+            {
+                "sense_id": 45391,
+                "defn": "To provide, supply, or transfer something to someone.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45392,
+                "defn": "To give something as a present.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45393,
+                "defn": "To pay money in exchange or as reward.",
+                "cam_sense_id": 79912
+            },
+            {
+                "sense_id": 45394,
+                "defn": "To tell, show, or communicate information, feelings, or signs.",
+                "cam_sense_id": 79915
+            },
+            {
+                "sense_id": 45395,
+                "defn": "To teach or pass knowledge or skills to someone.",
+                "cam_sense_id": 79915
+            },
+            {
+                "sense_id": 45396,
+                "defn": "To punish someone in a particular way or for a particular time.",
+                "cam_sense_id": 79916
+            },
+            {
+                "sense_id": 45397,
+                "defn": "To allow someone time, space, or a chance to do something.",
+                "cam_sense_id": 79917
+            },
+            {
+                "sense_id": 45398,
+                "defn": "To estimate how long something will last or what will happen.",
+                "cam_sense_id": 79918
+            },
+            {
+                "sense_id": 45399,
+                "defn": "To cause, produce, or bring about something.",
+                "cam_sense_id": 79919
+            },
+            {
+                "sense_id": 45400,
+                "defn": "To perform or carry out an action, especially for others.",
+                "cam_sense_id": 79922
+            },
+            {
+                "sense_id": 45401,
+                "defn": "To organize or be responsible for an event.",
+                "cam_sense_id": 79923
+            },
+            {
+                "sense_id": 45402,
+                "defn": "To formally propose a toast or idea.",
+                "cam_sense_id": 79925
+            },
+            {
+                "sense_id": 45403,
+                "defn": "To bend, stretch, break, or become less firm under pressure.",
+                "cam_sense_id": 79926
+            },
+            {
+                "sense_id": 45404,
+                "defn": "To decide and state something officially in a sport or by judgment.",
+                "cam_sense_id": 79927
+            },
+            {
+                "sense_id": 45405,
+                "defn": "To dedicate or devote something to a person, activity, or cause.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45406,
+                "defn": "To leave something with someone for a time.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45407,
+                "defn": "To lose or sacrifice something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45408,
+                "defn": "To give medicine, food, money, or help to someone or something.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45409,
+                "defn": "To officially award or grant something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45410,
+                "defn": "To offer something sincerely or submit it for use or judgment.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45411,
+                "defn": "To influence or direct someone through behavior or persuasion.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45412,
+                "defn": "To agree to have sex with a man.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 28277,
+        "src_word": "carry something off",
+        "src_defn": "to succeed in doing or achieving something difficult",
+        "pos": "v",
+        "tgt_word": "triumph",
+        "tgt_senses": [
+            {
+                "sense_id": 64983,
+                "defn": "To win or prove to be better than others.",
+                "cam_sense_id": 200484
+            },
+            {
+                "sense_id": 64984,
+                "defn": "To feel or express very great joy after success.",
+                "cam_sense_id": 200484
+            },
+            {
+                "sense_id": 64985,
+                "defn": "To think about something with satisfaction.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 210114,
+        "src_word": "walked",
+        "src_defn": "to move along by putting one foot in front of the other, allowing each foot to touch the ground before lifting the next",
+        "pos": "v",
+        "tgt_word": "walk",
+        "tgt_senses": [
+            {
+                "sense_id": 52415,
+                "defn": "To move forward on foot by taking steps.",
+                "cam_sense_id": 210026
+            },
+            {
+                "sense_id": 52416,
+                "defn": "To go with someone to a place as a guide or escort.",
+                "cam_sense_id": 210027
+            },
+            {
+                "sense_id": 52417,
+                "defn": "To take an animal, especially a dog, out for exercise on foot.",
+                "cam_sense_id": 210028
+            },
+            {
+                "sense_id": 52418,
+                "defn": "To move across or cover an area by walking.",
+                "cam_sense_id": 210026
+            },
+            {
+                "sense_id": 52419,
+                "defn": "To be allowed to leave court without being punished for a crime.",
+                "cam_sense_id": 210030
+            },
+            {
+                "sense_id": 52420,
+                "defn": "To suddenly leave a job or situation because you are dissatisfied.",
+                "cam_sense_id": 210031
+            },
+            {
+                "sense_id": 52421,
+                "defn": "In cricket, to leave the field voluntarily because you accept that you are out.",
+                "cam_sense_id": 210032
+            },
+            {
+                "sense_id": 52422,
+                "defn": "In baseball, to reach first base after four balls or to give a batter four balls.",
+                "cam_sense_id": 210033
+            },
+            {
+                "sense_id": 52423,
+                "defn": "To pass or win something very easily.",
+                "cam_sense_id": 210034
+            },
+            {
+                "sense_id": 52424,
+                "defn": "To live, behave, or act in a particular way or association.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 107160,
+        "src_word": "leap",
+        "src_defn": "a big change , increase , or improvement",
+        "pos": "n",
+        "tgt_word": "increase",
+        "tgt_senses": [
+            {
+                "sense_id": 143012,
+                "defn": "A rise in the amount, size, number, or importance of something.",
+                "cam_sense_id": 96337
+            },
+            {
+                "sense_id": 143013,
+                "defn": "The amount or quantity by which something becomes greater.",
+                "cam_sense_id": 96337
+            },
+            {
+                "sense_id": 143014,
+                "defn": "The act of making something greater.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 104500,
+        "src_word": "kind",
+        "src_defn": "a group with similar characteristics , or a particular type",
+        "pos": "n",
+        "tgt_word": "category",
+        "tgt_senses": [
+            {
+                "sense_id": 66026,
+                "defn": "A category is a group or type of things that share a common feature.",
+                "cam_sense_id": 29166
+            },
+            {
+                "sense_id": 66027,
+                "defn": "A category is a general idea used to divide and organize concepts in a system.",
+                "cam_sense_id": 29166
+            }
+        ]
+    },
+    {
+        "src_sense_id": 176874,
+        "src_word": "smart",
+        "src_defn": "to hurt with a sharp pain",
+        "pos": "v",
+        "tgt_word": "rub",
+        "tgt_senses": [
+            {
+                "sense_id": 101450,
+                "defn": "To move something against a surface with pressure and repeated movement.",
+                "cam_sense_id": 163552
+            },
+            {
+                "sense_id": 101451,
+                "defn": "To scrape or rub a part of the body to ease an itch.",
+                "cam_sense_id": 163552
+            }
+        ]
+    },
+    {
+        "src_sense_id": 43380,
+        "src_word": "crash",
+        "src_defn": "to suddenly fall to a low level",
+        "pos": "v",
+        "tgt_word": "decrease",
+        "tgt_senses": [
+            {
+                "sense_id": 160495,
+                "defn": "To become smaller or less in amount, size, or range.",
+                "cam_sense_id": 48459
+            },
+            {
+                "sense_id": 160496,
+                "defn": "To make something smaller or less.",
+                "cam_sense_id": 48459
+            }
+        ]
+    },
+    {
+        "src_sense_id": 113972,
+        "src_word": "malpractice",
+        "src_defn": "failure to act correctly or legally when doing your job , often causing injury or loss",
+        "pos": "n",
+        "tgt_word": "negligence",
+        "tgt_senses": [
+            {
+                "sense_id": 92811,
+                "defn": "Failure to give the care or attention that a reasonable person should give.",
+                "cam_sense_id": 124621
+            },
+            {
+                "sense_id": 92812,
+                "defn": "The habit or quality of neglecting responsibilities and not showing enough concern.",
+                "cam_sense_id": 124621
+            }
+        ]
+    },
+    {
+        "src_sense_id": 6290,
+        "src_word": "annihilate",
+        "src_defn": "to defeat completely",
+        "pos": "v",
+        "tgt_word": "conquer",
+        "tgt_senses": [
+            {
+                "sense_id": 171236,
+                "defn": "To take control of land or people by force.",
+                "cam_sense_id": 39644
+            },
+            {
+                "sense_id": 171237,
+                "defn": "To defeat someone in a game, fight, or competition.",
+                "cam_sense_id": 39644
+            },
+            {
+                "sense_id": 171238,
+                "defn": "To successfully deal with a problem or fear.",
+                "cam_sense_id": 39645
+            }
+        ]
+    },
+    {
+        "src_sense_id": 144813,
+        "src_word": "position",
+        "src_defn": "a job",
+        "pos": "n",
+        "tgt_word": "career",
+        "tgt_senses": [
+            {
+                "sense_id": 77631,
+                "defn": "The job or kind of work that someone is trained to do.",
+                "cam_sense_id": 27922
+            },
+            {
+                "sense_id": 77632,
+                "defn": "The development of someone's working life through a series of jobs.",
+                "cam_sense_id": 27922
+            }
+        ]
+    },
+    {
+        "src_sense_id": 142847,
+        "src_word": "pledged",
+        "src_defn": "to make a serious or formal promise to give or do something",
+        "pos": "v",
+        "tgt_word": "swear",
+        "tgt_senses": [
+            {
+                "sense_id": 159334,
+                "defn": "To use rude or offensive words.",
+                "cam_sense_id": 189715
+            },
+            {
+                "sense_id": 159335,
+                "defn": "To state formally and seriously that something is true.",
+                "cam_sense_id": 189716
+            },
+            {
+                "sense_id": 159336,
+                "defn": "To make a serious promise or oath.",
+                "cam_sense_id": 189716
+            },
+            {
+                "sense_id": 159337,
+                "defn": "To have strong confidence in someone or something.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 177910,
+        "src_word": "snug",
+        "src_defn": "(of a person ) feeling warm , comfortable , and protected , or (of a place , especially a small place ) giving feelings of warmth , comfort , and protection",
+        "pos": "a",
+        "tgt_word": "homely",
+        "tgt_senses": [
+            {
+                "sense_id": 75569,
+                "defn": "Plain or ordinary in a pleasant, simple, and unpretentious way.",
+                "cam_sense_id": 90534
+            },
+            {
+                "sense_id": 75570,
+                "defn": "Comfortable and welcoming like a home.",
+                "cam_sense_id": 90534
+            },
+            {
+                "sense_id": 75571,
+                "defn": "Not physically attractive.",
+                "cam_sense_id": 90535
+            }
+        ]
+    },
+    {
+        "src_sense_id": 162236,
+        "src_word": "riveting",
+        "src_defn": "extremely interesting",
+        "pos": "a",
+        "tgt_word": "exciting",
+        "tgt_senses": [
+            {
+                "sense_id": 154503,
+                "defn": "Making people feel excited.",
+                "cam_sense_id": 64680
+            },
+            {
+                "sense_id": 154504,
+                "defn": "Making people interested and causing discussion.",
+                "cam_sense_id": 64680
+            }
+        ]
+    },
+    {
+        "src_sense_id": 28417,
+        "src_word": "cart",
+        "src_defn": "to take something or someone somewhere , especially using a lot of effort",
+        "pos": "v",
+        "tgt_word": "cart",
+        "tgt_senses": [
+            {
+                "sense_id": 96128,
+                "defn": "To move something or someone somewhere, especially with difficulty or effort.",
+                "cam_sense_id": 28417
+            },
+            {
+                "sense_id": 96129,
+                "defn": "To transport something in a cart.",
+                "cam_sense_id": 28417
+            }
+        ]
+    },
+    {
+        "src_sense_id": 157591,
+        "src_word": "rejoin",
+        "src_defn": "to give a quick answer to what someone has said, in an angry or humorous way",
+        "pos": "v",
+        "tgt_word": "respond",
+        "tgt_senses": [
+            {
+                "sense_id": 65210,
+                "defn": "To show a reaction to something that has happened or been said.",
+                "cam_sense_id": 159800
+            },
+            {
+                "sense_id": 65211,
+                "defn": "To answer someone in words.",
+                "cam_sense_id": 159800
+            },
+            {
+                "sense_id": 65212,
+                "defn": "To react in the wanted or hoped-for way.",
+                "cam_sense_id": 159800
+            }
+        ]
+    },
+    {
+        "src_sense_id": 191788,
+        "src_word": "tallness",
+        "src_defn": "the quality of being of more than average height",
+        "pos": "n",
+        "tgt_word": "height",
+        "tgt_senses": [
+            {
+                "sense_id": 69015,
+                "defn": "The distance from the bottom of something to its top.",
+                "cam_sense_id": 88199
+            },
+            {
+                "sense_id": 69016,
+                "defn": "The distance from a standing person's head to their feet.",
+                "cam_sense_id": 88199
+            },
+            {
+                "sense_id": 69017,
+                "defn": "The distance that something is above a surface or sea level.",
+                "cam_sense_id": 88200
+            },
+            {
+                "sense_id": 69018,
+                "defn": "The highest level or stage that something can reach.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 36790,
+        "src_word": "come to",
+        "src_defn": "to be a particular total when numbers or amounts are added together",
+        "pos": "v",
+        "tgt_word": "be",
+        "tgt_senses": [
+            {
+                "sense_id": 56695,
+                "defn": "Used to link a subject with its quality, state, job, or identity.",
+                "cam_sense_id": 14537
+            },
+            {
+                "sense_id": 56696,
+                "defn": "Used to show where or when someone or something is.",
+                "cam_sense_id": 14538
+            },
+            {
+                "sense_id": 56697,
+                "defn": "To exist.",
+                "cam_sense_id": 14544
+            },
+            {
+                "sense_id": 56698,
+                "defn": "To be alive.",
+                "cam_sense_id": 14544
+            },
+            {
+                "sense_id": 56699,
+                "defn": "To be the same as or equal to something.",
+                "cam_sense_id": 14537
+            },
+            {
+                "sense_id": 56700,
+                "defn": "To form or make up something.",
+                "cam_sense_id": 14539
+            },
+            {
+                "sense_id": 56701,
+                "defn": "To work in a particular place, subject, or role.",
+                "cam_sense_id": 14537
+            },
+            {
+                "sense_id": 56702,
+                "defn": "To perform the part of a character.",
+                "cam_sense_id": 14537
+            },
+            {
+                "sense_id": 56703,
+                "defn": "To spend or use time in a particular way.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 56704,
+                "defn": "To remain alone or undisturbed.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 56705,
+                "defn": "To have a particular price.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 56706,
+                "defn": "Used to say that someone should or must do something.",
+                "cam_sense_id": 14540
+            },
+            {
+                "sense_id": 56707,
+                "defn": "Used to talk about something planned or expected to happen in the future.",
+                "cam_sense_id": 14541
+            },
+            {
+                "sense_id": 56708,
+                "defn": "Used in conditional sentences to talk about what might happen.",
+                "cam_sense_id": 14542
+            },
+            {
+                "sense_id": 56709,
+                "defn": "Used to talk about what can happen.",
+                "cam_sense_id": 14543
+            },
+            {
+                "sense_id": 56710,
+                "defn": "Used with a present participle to show that an action is continuing.",
+                "cam_sense_id": 14545
+            },
+            {
+                "sense_id": 56711,
+                "defn": "Used with a past participle to form the passive.",
+                "cam_sense_id": 14546
+            }
+        ]
+    },
+    {
+        "src_sense_id": 164117,
+        "src_word": "run-of-the-mill",
+        "src_defn": "ordinary and not special or exciting in any way",
+        "pos": "a",
+        "tgt_word": "everyday",
+        "tgt_senses": [
+            {
+                "sense_id": 56958,
+                "defn": "Ordinary, usual, or typical in daily life.",
+                "cam_sense_id": 64205
+            },
+            {
+                "sense_id": 56959,
+                "defn": "Suitable for ordinary or routine occasions.",
+                "cam_sense_id": 64205
+            }
+        ]
+    },
+    {
+        "src_sense_id": 196652,
+        "src_word": "tip-top",
+        "src_defn": "excellent ; perfect",
+        "pos": "a",
+        "tgt_word": "outstanding",
+        "tgt_senses": [
+            {
+                "sense_id": 105221,
+                "defn": "Much better than usual or excellent compared with others.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105222,
+                "defn": "Very noticeable because of a strong or special quality.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105223,
+                "defn": "Very important or significant.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105224,
+                "defn": "Still not paid, solved, or done.",
+                "cam_sense_id": 133614
+            }
+        ]
+    },
+    {
+        "src_sense_id": 188807,
+        "src_word": "supplying",
+        "src_defn": "to provide something that is wanted or needed , often in large quantities and over a long period of time",
+        "pos": "v",
+        "tgt_word": "offer",
+        "tgt_senses": [
+            {
+                "sense_id": 144502,
+                "defn": "To ask if someone would like something or would like you to do something.",
+                "cam_sense_id": 129972
+            },
+            {
+                "sense_id": 144503,
+                "defn": "To suggest an idea, plan, or amount for someone to consider.",
+                "cam_sense_id": 129972
+            },
+            {
+                "sense_id": 144504,
+                "defn": "To ask someone to marry you.",
+                "cam_sense_id": 129972
+            },
+            {
+                "sense_id": 144505,
+                "defn": "To present something to a god as worship.",
+                "cam_sense_id": 129973
+            },
+            {
+                "sense_id": 144506,
+                "defn": "To provide, supply, or make something available.",
+                "cam_sense_id": 129974
+            },
+            {
+                "sense_id": 144507,
+                "defn": "To make something available for people to buy.",
+                "cam_sense_id": 129974
+            },
+            {
+                "sense_id": 144508,
+                "defn": "To produce or present a play or performance on stage.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 144509,
+                "defn": "To put up or build something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 144510,
+                "defn": "To say that you may do something harmful.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 157588,
+        "src_word": "rejoinder",
+        "src_defn": "a quick and often angry or humorous answer",
+        "pos": "n",
+        "tgt_word": "answer",
+        "tgt_senses": [
+            {
+                "sense_id": 144858,
+                "defn": "Something said, written, or done in reply to a question, request, or criticism.",
+                "cam_sense_id": 6467
+            },
+            {
+                "sense_id": 144859,
+                "defn": "A statement or idea that solves a problem or explains how to solve it.",
+                "cam_sense_id": 6468
+            },
+            {
+                "sense_id": 144860,
+                "defn": "A defendant's formal legal reply to a complaint or charge.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 205136,
+        "src_word": "unmatched",
+        "src_defn": "having no equal ; better than any other of the same type",
+        "pos": "a",
+        "tgt_word": "best",
+        "tgt_senses": [
+            {
+                "sense_id": 52195,
+                "defn": "Having the highest quality or the most suitable, pleasing, or effective qualities.",
+                "cam_sense_id": 17049
+            },
+            {
+                "sense_id": 52196,
+                "defn": "Most wise, useful, or advisable in a situation.",
+                "cam_sense_id": 17049
+            }
+        ]
+    },
+    {
+        "src_sense_id": 90729,
+        "src_word": "honest",
+        "src_defn": "telling the truth or able to be trusted and not likely to steal , cheat , or lie",
+        "pos": "a",
+        "tgt_word": "sincere",
+        "tgt_senses": [
+            {
+                "sense_id": 67568,
+                "defn": "Honest and genuine, without pretending or trying to deceive.",
+                "cam_sense_id": 174569
+            },
+            {
+                "sense_id": 67569,
+                "defn": "Having a strong and serious belief in your own opinions.",
+                "cam_sense_id": 174569
+            }
+        ]
+    },
+    {
+        "src_sense_id": 161548,
+        "src_word": "ridicule",
+        "src_defn": "to laugh at someone in an unkind way",
+        "pos": "v",
+        "tgt_word": "tease",
+        "tgt_senses": [
+            {
+                "sense_id": 88872,
+                "defn": "To laugh at someone or mock them, often playfully.",
+                "cam_sense_id": 192809
+            },
+            {
+                "sense_id": 88873,
+                "defn": "To annoy or criticize someone again and again.",
+                "cam_sense_id": 192809
+            },
+            {
+                "sense_id": 88874,
+                "defn": "To give only a little information in order to make people curious or interested.",
+                "cam_sense_id": 192810
+            },
+            {
+                "sense_id": 88875,
+                "defn": "To comb hair back toward the head to make it look fuller.",
+                "cam_sense_id": 192811
+            },
+            {
+                "sense_id": 88876,
+                "defn": "To tear something into pieces.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 88877,
+                "defn": "To raise the soft surface of a fabric.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 88878,
+                "defn": "To separate or loosen fibers.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 184935,
+        "src_word": "stony-faced",
+        "src_defn": "not showing any emotion",
+        "pos": "a",
+        "tgt_word": "earnest",
+        "tgt_senses": [
+            {
+                "sense_id": 47814,
+                "defn": "Very serious and sincere, often in a way that is too intense or humorless.",
+                "cam_sense_id": 58852
+            },
+            {
+                "sense_id": 47815,
+                "defn": "Serious and determined, with full attention on a goal.",
+                "cam_sense_id": 58852
+            }
+        ]
+    },
+    {
+        "src_sense_id": 200338,
+        "src_word": "trim",
+        "src_defn": "to make something tidier or more level by cutting a small amount off it",
+        "pos": "v",
+        "tgt_word": "carve",
+        "tgt_senses": [
+            {
+                "sense_id": 90878,
+                "defn": "To make or shape something by cutting a hard material such as wood or stone.",
+                "cam_sense_id": 28468
+            },
+            {
+                "sense_id": 90879,
+                "defn": "To cut marks or designs into a surface by removing small pieces.",
+                "cam_sense_id": 28468
+            },
+            {
+                "sense_id": 90880,
+                "defn": "To cut cooked meat into pieces or slices.",
+                "cam_sense_id": 28469
+            }
+        ]
+    },
+    {
+        "src_sense_id": 201796,
+        "src_word": "tutored",
+        "src_defn": "to teach a child outside of school , especially in order to give the child extra help with a subject he or she finds difficult",
+        "pos": "v",
+        "tgt_word": "teach",
+        "tgt_senses": [
+            {
+                "sense_id": 57277,
+                "defn": "To give someone knowledge or train them in a skill.",
+                "cam_sense_id": 192677
+            },
+            {
+                "sense_id": 57278,
+                "defn": "To make someone gradually become used to an action or attitude.",
+                "cam_sense_id": 192677
+            }
+        ]
+    },
+    {
+        "src_sense_id": 6296,
+        "src_word": "annihilating",
+        "src_defn": "to defeat completely",
+        "pos": "v",
+        "tgt_word": "beat",
+        "tgt_senses": [
+            {
+                "sense_id": 52856,
+                "defn": "To defeat someone or do better than them in a competition or conflict.",
+                "cam_sense_id": 15784
+            },
+            {
+                "sense_id": 52857,
+                "defn": "To defeat someone by being clever or using wit.",
+                "cam_sense_id": 15784
+            },
+            {
+                "sense_id": 52858,
+                "defn": "To be better or more enjoyable than something else.",
+                "cam_sense_id": 15785
+            },
+            {
+                "sense_id": 52859,
+                "defn": "To act before something happens in order to avoid it or deal with it first.",
+                "cam_sense_id": 15786
+            },
+            {
+                "sense_id": 52860,
+                "defn": "To hit someone or something repeatedly.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52861,
+                "defn": "To hit part of your own body repeatedly because of emotion or music.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52862,
+                "defn": "To hit water or bushes repeatedly to drive animals out for hunting.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52863,
+                "defn": "To shape or make something by hitting, pounding, or trampling it.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52864,
+                "defn": "To mix food or liquid by stirring it hard and repeatedly.",
+                "cam_sense_id": 15790
+            },
+            {
+                "sense_id": 52865,
+                "defn": "To move regularly or rhythmically.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52866,
+                "defn": "To make a regular or rhythmic sound.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52867,
+                "defn": "To move with repeated flapping or thrashing motions.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52868,
+                "defn": "To show or produce a rhythm by striking repeatedly.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52869,
+                "defn": "To shine or strike with strong force or intensity.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52870,
+                "defn": "To sail by repeatedly changing direction, especially with difficulty.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52871,
+                "defn": "To avoid paying money that you owe.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52872,
+                "defn": "To be too difficult to understand or explain.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52873,
+                "defn": "To make someone extremely tired.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 76940,
+        "src_word": "funny",
+        "src_defn": "strange , surprising , unexpected , or difficult to explain or understand",
+        "pos": "a",
+        "tgt_word": "weird",
+        "tgt_senses": [
+            {
+                "sense_id": 55853,
+                "defn": "Very strange, unusual, or unexpected.",
+                "cam_sense_id": 211796
+            },
+            {
+                "sense_id": 55854,
+                "defn": "Strange in a way that seems connected with supernatural powers.",
+                "cam_sense_id": 211796
+            }
+        ]
+    },
+    {
+        "src_sense_id": 39994,
+        "src_word": "consulted",
+        "src_defn": "to get information or advice from a person , book , etc. with special knowledge on a particular subject",
+        "pos": "v",
+        "tgt_word": "interview",
+        "tgt_senses": [
+            {
+                "sense_id": 138687,
+                "defn": "To ask someone questions for a news report or broadcast.",
+                "cam_sense_id": 100085
+            },
+            {
+                "sense_id": 138688,
+                "defn": "To ask someone formal questions to judge their suitability for a job, course, or other purpose.",
+                "cam_sense_id": 100085
+            },
+            {
+                "sense_id": 138689,
+                "defn": "To attend an interview and answer questions in the hope of getting a job or place on a course.",
+                "cam_sense_id": 100086
+            }
+        ]
+    },
+    {
+        "src_sense_id": 11622,
+        "src_word": "aware",
+        "src_defn": "knowing that something exists , or having knowledge or experience of a particular thing",
+        "pos": "a",
+        "tgt_word": "conscious",
+        "tgt_senses": [
+            {
+                "sense_id": 113529,
+                "defn": "Awake and aware of what is happening around you.",
+                "cam_sense_id": 39515
+            },
+            {
+                "sense_id": 113530,
+                "defn": "Aware of or recognizing a particular fact or feeling.",
+                "cam_sense_id": 39515
+            },
+            {
+                "sense_id": 113531,
+                "defn": "Done intentionally and with clear purpose.",
+                "cam_sense_id": 39516
+            }
+        ]
+    },
+    {
+        "src_sense_id": 204219,
+        "src_word": "unequalled",
+        "src_defn": "better or more extreme than any other",
+        "pos": "a",
+        "tgt_word": "outstanding",
+        "tgt_senses": [
+            {
+                "sense_id": 105221,
+                "defn": "Much better than usual or excellent compared with others.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105222,
+                "defn": "Very noticeable because of a strong or special quality.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105223,
+                "defn": "Very important or significant.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105224,
+                "defn": "Still not paid, solved, or done.",
+                "cam_sense_id": 133614
+            }
+        ]
+    },
+    {
+        "src_sense_id": 166198,
+        "src_word": "scale",
+        "src_defn": "to climb up a steep surface , such as a wall or the side of a mountain , often using special equipment",
+        "pos": "v",
+        "tgt_word": "ascend",
+        "tgt_senses": [
+            {
+                "sense_id": 99651,
+                "defn": "To move, climb, or travel upward.",
+                "cam_sense_id": 9322
+            },
+            {
+                "sense_id": 99652,
+                "defn": "To go upward along something such as a river toward its source.",
+                "cam_sense_id": 9322
+            },
+            {
+                "sense_id": 99653,
+                "defn": "To rise or appear in the sky.",
+                "cam_sense_id": 9322
+            },
+            {
+                "sense_id": 99654,
+                "defn": "To slope upward.",
+                "cam_sense_id": 9322
+            },
+            {
+                "sense_id": 99655,
+                "defn": "To rise to a higher rank, job, or social position.",
+                "cam_sense_id": 9323
+            },
+            {
+                "sense_id": 99656,
+                "defn": "To become king or queen.",
+                "cam_sense_id": 9323
+            },
+            {
+                "sense_id": 99657,
+                "defn": "To go back through earlier generations in a family line.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 181116,
+        "src_word": "sponsor",
+        "src_defn": "a person or company that supports a person , organization , or activity by giving money",
+        "pos": "n",
+        "tgt_word": "sponsor",
+        "tgt_senses": [
+            {
+                "sense_id": 167938,
+                "defn": "A person or company that gives money to support a person, organization, or activity.",
+                "cam_sense_id": 181116
+            },
+            {
+                "sense_id": 167939,
+                "defn": "A person who promises money to someone doing a charity event.",
+                "cam_sense_id": 181117
+            },
+            {
+                "sense_id": 167940,
+                "defn": "A person who writes and supports a proposed new law.",
+                "cam_sense_id": 181118
+            },
+            {
+                "sense_id": 167941,
+                "defn": "A person who officially accepts responsibility for another person's actions.",
+                "cam_sense_id": 181119
+            },
+            {
+                "sense_id": 167942,
+                "defn": "A person who promises at a baptism to guide a new Christian member.",
+                "cam_sense_id": 181120
+            }
+        ]
+    },
+    {
+        "src_sense_id": 43587,
+        "src_word": "created",
+        "src_defn": "to make something new, or invent something",
+        "pos": "v",
+        "tgt_word": "produce",
+        "tgt_senses": [
+            {
+                "sense_id": 84878,
+                "defn": "To make or create something.",
+                "cam_sense_id": 148399
+            },
+            {
+                "sense_id": 84879,
+                "defn": "To grow crops or other agricultural products.",
+                "cam_sense_id": 148399
+            },
+            {
+                "sense_id": 84880,
+                "defn": "To give birth to young animals.",
+                "cam_sense_id": 148400
+            },
+            {
+                "sense_id": 84881,
+                "defn": "To cause something to happen or exist.",
+                "cam_sense_id": 148401
+            },
+            {
+                "sense_id": 84882,
+                "defn": "To manage the practical and financial work of making a film, play, or broadcast.",
+                "cam_sense_id": 148402
+            },
+            {
+                "sense_id": 84883,
+                "defn": "To direct the making and sound of a musical recording.",
+                "cam_sense_id": 148403
+            },
+            {
+                "sense_id": 84884,
+                "defn": "To take something out and show it.",
+                "cam_sense_id": 148404
+            },
+            {
+                "sense_id": 84885,
+                "defn": "To provide or discover something, especially evidence or proof.",
+                "cam_sense_id": 148405
+            },
+            {
+                "sense_id": 84886,
+                "defn": "To release a product or work so people can buy or use it.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 84887,
+                "defn": "To develop or acquire a physical feature or quality.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 185911,
+        "src_word": "stride",
+        "src_defn": "to walk somewhere quickly with long steps",
+        "pos": "v",
+        "tgt_word": "walk",
+        "tgt_senses": [
+            {
+                "sense_id": 52415,
+                "defn": "To move forward on foot by taking steps.",
+                "cam_sense_id": 210026
+            },
+            {
+                "sense_id": 52416,
+                "defn": "To go with someone to a place as a guide or escort.",
+                "cam_sense_id": 210027
+            },
+            {
+                "sense_id": 52417,
+                "defn": "To take an animal, especially a dog, out for exercise on foot.",
+                "cam_sense_id": 210028
+            },
+            {
+                "sense_id": 52418,
+                "defn": "To move across or cover an area by walking.",
+                "cam_sense_id": 210026
+            },
+            {
+                "sense_id": 52419,
+                "defn": "To be allowed to leave court without being punished for a crime.",
+                "cam_sense_id": 210030
+            },
+            {
+                "sense_id": 52420,
+                "defn": "To suddenly leave a job or situation because you are dissatisfied.",
+                "cam_sense_id": 210031
+            },
+            {
+                "sense_id": 52421,
+                "defn": "In cricket, to leave the field voluntarily because you accept that you are out.",
+                "cam_sense_id": 210032
+            },
+            {
+                "sense_id": 52422,
+                "defn": "In baseball, to reach first base after four balls or to give a batter four balls.",
+                "cam_sense_id": 210033
+            },
+            {
+                "sense_id": 52423,
+                "defn": "To pass or win something very easily.",
+                "cam_sense_id": 210034
+            },
+            {
+                "sense_id": 52424,
+                "defn": "To live, behave, or act in a particular way or association.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 79045,
+        "src_word": "get",
+        "src_defn": "to become or start to be",
+        "pos": "v",
+        "tgt_word": "become",
+        "tgt_senses": [
+            {
+                "sense_id": 64854,
+                "defn": "To start to be in a particular state or condition.",
+                "cam_sense_id": 15991
+            },
+            {
+                "sense_id": 64855,
+                "defn": "To change or develop into something different.",
+                "cam_sense_id": 15991
+            },
+            {
+                "sense_id": 64856,
+                "defn": "To begin to exist.",
+                "cam_sense_id": 15991
+            },
+            {
+                "sense_id": 64857,
+                "defn": "To make someone look attractive or be suitable for them.",
+                "cam_sense_id": 15992
+            }
+        ]
+    },
+    {
+        "src_sense_id": 38089,
+        "src_word": "comply",
+        "src_defn": "to act according to an order , set of rules , or request",
+        "pos": "v",
+        "tgt_word": "observe",
+        "tgt_senses": [
+            {
+                "sense_id": 162950,
+                "defn": "To watch something carefully in order to learn or understand it.",
+                "cam_sense_id": 129295
+            },
+            {
+                "sense_id": 162951,
+                "defn": "To notice or see something.",
+                "cam_sense_id": 129296
+            },
+            {
+                "sense_id": 162952,
+                "defn": "To make a remark about something.",
+                "cam_sense_id": 129297
+            },
+            {
+                "sense_id": 162953,
+                "defn": "To obey a law, rule, or custom.",
+                "cam_sense_id": 129298
+            },
+            {
+                "sense_id": 162954,
+                "defn": "To show respect for a holiday, ceremony, or religious practice by doing what is expected.",
+                "cam_sense_id": 129298
+            }
+        ]
+    },
+    {
+        "src_sense_id": 176749,
+        "src_word": "smacked",
+        "src_defn": "to hit someone or something forcefully with the flat inside part of your hand , producing a short , loud noise , especially as a way of punishing a child",
+        "pos": "v",
+        "tgt_word": "beat",
+        "tgt_senses": [
+            {
+                "sense_id": 52856,
+                "defn": "To defeat someone or do better than them in a competition or conflict.",
+                "cam_sense_id": 15784
+            },
+            {
+                "sense_id": 52857,
+                "defn": "To defeat someone by being clever or using wit.",
+                "cam_sense_id": 15784
+            },
+            {
+                "sense_id": 52858,
+                "defn": "To be better or more enjoyable than something else.",
+                "cam_sense_id": 15785
+            },
+            {
+                "sense_id": 52859,
+                "defn": "To act before something happens in order to avoid it or deal with it first.",
+                "cam_sense_id": 15786
+            },
+            {
+                "sense_id": 52860,
+                "defn": "To hit someone or something repeatedly.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52861,
+                "defn": "To hit part of your own body repeatedly because of emotion or music.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52862,
+                "defn": "To hit water or bushes repeatedly to drive animals out for hunting.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52863,
+                "defn": "To shape or make something by hitting, pounding, or trampling it.",
+                "cam_sense_id": 15788
+            },
+            {
+                "sense_id": 52864,
+                "defn": "To mix food or liquid by stirring it hard and repeatedly.",
+                "cam_sense_id": 15790
+            },
+            {
+                "sense_id": 52865,
+                "defn": "To move regularly or rhythmically.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52866,
+                "defn": "To make a regular or rhythmic sound.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52867,
+                "defn": "To move with repeated flapping or thrashing motions.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52868,
+                "defn": "To show or produce a rhythm by striking repeatedly.",
+                "cam_sense_id": 15791
+            },
+            {
+                "sense_id": 52869,
+                "defn": "To shine or strike with strong force or intensity.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52870,
+                "defn": "To sail by repeatedly changing direction, especially with difficulty.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52871,
+                "defn": "To avoid paying money that you owe.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52872,
+                "defn": "To be too difficult to understand or explain.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 52873,
+                "defn": "To make someone extremely tired.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 180547,
+        "src_word": "spike",
+        "src_defn": "a very high amount , price , or level , usually before a fall",
+        "pos": "n",
+        "tgt_word": "rise",
+        "tgt_senses": [
+            {
+                "sense_id": 158466,
+                "defn": "An increase in amount, number, strength, cost, price, or value.",
+                "cam_sense_id": 162101
+            },
+            {
+                "sense_id": 158467,
+                "defn": "An increase in salary.",
+                "cam_sense_id": 162101
+            },
+            {
+                "sense_id": 158468,
+                "defn": "The process of becoming more famous, powerful, or important.",
+                "cam_sense_id": 162103
+            },
+            {
+                "sense_id": 158469,
+                "defn": "A small hill or upward slope.",
+                "cam_sense_id": 162104
+            },
+            {
+                "sense_id": 158470,
+                "defn": "The act or movement of going upward.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 158471,
+                "defn": "A wave that lifts the surface of water or ground.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 158472,
+                "defn": "In Christian theology, the coming of the Holy Spirit at Pentecost.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 214148,
+        "src_word": "wither",
+        "src_defn": "(to cause ) to become weak and dry and decay",
+        "pos": "v",
+        "tgt_word": "desiccate",
+        "tgt_senses": [
+            {
+                "sense_id": 105210,
+                "defn": "To remove water from something so that it becomes completely dry.",
+                "cam_sense_id": 50683
+            },
+            {
+                "sense_id": 105211,
+                "defn": "To preserve something by removing all its water or liquid.",
+                "cam_sense_id": 50683
+            },
+            {
+                "sense_id": 105212,
+                "defn": "To lose water or moisture and become completely dry.",
+                "cam_sense_id": 50683
+            },
+            {
+                "sense_id": 105213,
+                "defn": "To damage or ruin something by taking away an important quality.",
+                "cam_sense_id": 50684
+            }
+        ]
+    },
+    {
+        "src_sense_id": 86738,
+        "src_word": "haul",
+        "src_defn": "to take something or someone somewhere , especially by force",
+        "pos": "v",
+        "tgt_word": "haul",
+        "tgt_senses": [
+            {
+                "sense_id": 111918,
+                "defn": "To pull something heavy slowly and with difficulty.",
+                "cam_sense_id": 86737
+            },
+            {
+                "sense_id": 111919,
+                "defn": "To take someone or something somewhere, especially by force.",
+                "cam_sense_id": 86738
+            },
+            {
+                "sense_id": 111920,
+                "defn": "To transport goods or people in a vehicle, usually by road.",
+                "cam_sense_id": 86739
+            }
+        ]
+    },
+    {
+        "src_sense_id": 158015,
+        "src_word": "reluctant",
+        "src_defn": "not willing to do something and therefore slow to do it",
+        "pos": "a",
+        "tgt_word": "reluctant",
+        "tgt_senses": [
+            {
+                "sense_id": 64904,
+                "defn": "Not willing or not eager to do something.",
+                "cam_sense_id": 158015
+            },
+            {
+                "sense_id": 64905,
+                "defn": "Not wanting to become involved in something.",
+                "cam_sense_id": 158015
+            }
+        ]
+    },
+    {
+        "src_sense_id": 113315,
+        "src_word": "major",
+        "src_defn": "more important , bigger , or more serious than others of the same type",
+        "pos": "a",
+        "tgt_word": "big",
+        "tgt_senses": [
+            {
+                "sense_id": 108187,
+                "defn": "Large in size, number, amount, or extent.",
+                "cam_sense_id": 17573
+            },
+            {
+                "sense_id": 108188,
+                "defn": "Older or fully grown.",
+                "cam_sense_id": 17574
+            },
+            {
+                "sense_id": 108189,
+                "defn": "Very great or impressive, often used for emphasis.",
+                "cam_sense_id": 17575
+            },
+            {
+                "sense_id": 108190,
+                "defn": "Important or significant because of power, influence, or effect.",
+                "cam_sense_id": 17578
+            },
+            {
+                "sense_id": 108191,
+                "defn": "Serious, severe, or strongly forceful.",
+                "cam_sense_id": 17578
+            },
+            {
+                "sense_id": 108192,
+                "defn": "Extremely popular.",
+                "cam_sense_id": 17580
+            },
+            {
+                "sense_id": 108193,
+                "defn": "Loud and firm in sound or manner.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 108194,
+                "defn": "Behaving or feeling too important.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 108195,
+                "defn": "Generous, understanding, and tolerant.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 108196,
+                "defn": "Giving or given freely.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 108197,
+                "defn": "In a late stage of pregnancy.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 216083,
+        "src_word": "yelling",
+        "src_defn": "to shout something or make a loud noise , usually when you are angry , in pain , or excited",
+        "pos": "v",
+        "tgt_word": "bellow",
+        "tgt_senses": [
+            {
+                "sense_id": 108697,
+                "defn": "To shout very loudly and strongly.",
+                "cam_sense_id": 16569
+            },
+            {
+                "sense_id": 108698,
+                "defn": "For a large animal, to make a loud deep sound.",
+                "cam_sense_id": 16569
+            }
+        ]
+    },
+    {
+        "src_sense_id": 193483,
+        "src_word": "tend",
+        "src_defn": "to care for something or someone",
+        "pos": "v",
+        "tgt_word": "tend",
+        "tgt_senses": [
+            {
+                "sense_id": 50158,
+                "defn": "To be likely or inclined to do or be something.",
+                "cam_sense_id": 193482
+            },
+            {
+                "sense_id": 50159,
+                "defn": "To care for or look after someone or something.",
+                "cam_sense_id": 193483
+            },
+            {
+                "sense_id": 50160,
+                "defn": "To manage or run something.",
+                "cam_sense_id": 193483
+            }
+        ]
+    },
+    {
+        "src_sense_id": 184468,
+        "src_word": "sting",
+        "src_defn": "to cause sharp but usually temporary pain",
+        "pos": "v",
+        "tgt_word": "rub",
+        "tgt_senses": [
+            {
+                "sense_id": 101450,
+                "defn": "To move something against a surface with pressure and repeated movement.",
+                "cam_sense_id": 163552
+            },
+            {
+                "sense_id": 101451,
+                "defn": "To scrape or rub a part of the body to ease an itch.",
+                "cam_sense_id": 163552
+            }
+        ]
+    },
+    {
+        "src_sense_id": 158015,
+        "src_word": "reluctant",
+        "src_defn": "not willing to do something and therefore slow to do it",
+        "pos": "a",
+        "tgt_word": "unwilling",
+        "tgt_senses": [
+            {
+                "sense_id": 72947,
+                "defn": "Not wanting or refusing to do something.",
+                "cam_sense_id": 206291
+            },
+            {
+                "sense_id": 72948,
+                "defn": "Done or involved even though someone does not want it.",
+                "cam_sense_id": 206291
+            }
+        ]
+    },
+    {
+        "src_sense_id": 167269,
+        "src_word": "scratch",
+        "src_defn": "a mark made by scratching",
+        "pos": "n",
+        "tgt_word": "wound",
+        "tgt_senses": [
+            {
+                "sense_id": 139356,
+                "defn": "An injury to the body, especially a cut or break in the skin or flesh.",
+                "cam_sense_id": 215296
+            },
+            {
+                "sense_id": 139357,
+                "defn": "A soldier or other military person injured in combat.",
+                "cam_sense_id": 215296
+            },
+            {
+                "sense_id": 139358,
+                "defn": "An emotional hurt, especially to someone's feelings or pride.",
+                "cam_sense_id": 215297
+            },
+            {
+                "sense_id": 139359,
+                "defn": "The act of causing an injury to someone.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 65606,
+        "src_word": "exploded",
+        "src_defn": "to react suddenly with a strong expression of emotion",
+        "pos": "v",
+        "tgt_word": "explode",
+        "tgt_senses": [
+            {
+                "sense_id": 95596,
+                "defn": "To burst violently into pieces, or make something do this.",
+                "cam_sense_id": 65594
+            },
+            {
+                "sense_id": 95597,
+                "defn": "To destroy something by making it explode.",
+                "cam_sense_id": 65594
+            },
+            {
+                "sense_id": 95598,
+                "defn": "To react suddenly with strong emotion.",
+                "cam_sense_id": 65595
+            },
+            {
+                "sense_id": 95599,
+                "defn": "To suddenly appear or be released with force, noise, or violence.",
+                "cam_sense_id": 65595
+            },
+            {
+                "sense_id": 95600,
+                "defn": "To increase very quickly and without control.",
+                "cam_sense_id": 65596
+            },
+            {
+                "sense_id": 95601,
+                "defn": "To prove that an idea, claim, or theory is wrong.",
+                "cam_sense_id": 65597
+            },
+            {
+                "sense_id": 95602,
+                "defn": "To pronounce a stop consonant by suddenly releasing air pressure.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 95603,
+                "defn": "To force a performer to leave the stage by making loud disapproving noises.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 107950,
+        "src_word": "lessening",
+        "src_defn": "If something lessens or is lessened, it becomes less strong",
+        "pos": "v",
+        "tgt_word": "decrease",
+        "tgt_senses": [
+            {
+                "sense_id": 160495,
+                "defn": "To become smaller or less in amount, size, or range.",
+                "cam_sense_id": 48459
+            },
+            {
+                "sense_id": 160496,
+                "defn": "To make something smaller or less.",
+                "cam_sense_id": 48459
+            }
+        ]
+    },
+    {
+        "src_sense_id": 94475,
+        "src_word": "implored",
+        "src_defn": "to ask someone to do or not do something in a very sincere , emotional , and determined way",
+        "pos": "v",
+        "tgt_word": "adjure",
+        "tgt_senses": [
+            {
+                "sense_id": 141891,
+                "defn": "To ask someone very seriously to do something.",
+                "cam_sense_id": 2417
+            },
+            {
+                "sense_id": 141892,
+                "defn": "To order someone solemnly to do something.",
+                "cam_sense_id": 2417
+            }
+        ]
+    },
+    {
+        "src_sense_id": 2120,
+        "src_word": "adapting",
+        "src_defn": "to change , or to change something, to suit different conditions or uses",
+        "pos": "v",
+        "tgt_word": "transform",
+        "tgt_senses": [
+            {
+                "sense_id": 88541,
+                "defn": "To transform someone or something is to change their form, appearance, or character completely.",
+                "cam_sense_id": 199266
+            },
+            {
+                "sense_id": 88542,
+                "defn": "To transform something is to change it from one form or medium into another.",
+                "cam_sense_id": 199266
+            },
+            {
+                "sense_id": 88543,
+                "defn": "To transform energy is to convert it from one form to another.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 88544,
+                "defn": "To transform an electric current or voltage is to increase or decrease it.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 88545,
+                "defn": "To transform something in mathematics is to change it by a mathematical rule.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 88546,
+                "defn": "To transform a bacterial cell is to change it genetically by introducing DNA from another cell.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 8352,
+        "src_word": "archaic",
+        "src_defn": "of or belonging to an ancient period in history",
+        "pos": "a",
+        "tgt_word": "former",
+        "tgt_senses": [
+            {
+                "sense_id": 145345,
+                "defn": "Belonging to an earlier time or to the past.",
+                "cam_sense_id": 74295
+            },
+            {
+                "sense_id": 145346,
+                "defn": "Having had a particular job, position, or role just before the present one.",
+                "cam_sense_id": 74295
+            },
+            {
+                "sense_id": 145347,
+                "defn": "Referring to the first of two people or things that have been mentioned.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 47200,
+        "src_word": "day-to-day",
+        "src_defn": "happening every day as a regular part of your job or life",
+        "pos": "a",
+        "tgt_word": "everyday",
+        "tgt_senses": [
+            {
+                "sense_id": 56958,
+                "defn": "Ordinary, usual, or typical in daily life.",
+                "cam_sense_id": 64205
+            },
+            {
+                "sense_id": 56959,
+                "defn": "Suitable for ordinary or routine occasions.",
+                "cam_sense_id": 64205
+            }
+        ]
+    },
+    {
+        "src_sense_id": 177011,
+        "src_word": "smell",
+        "src_defn": "the characteristic of something that can be recognized or noticed using the nose",
+        "pos": "n",
+        "tgt_word": "aroma",
+        "tgt_senses": [
+            {
+                "sense_id": 77745,
+                "defn": "A smell that is strong, distinctive, and pleasant, especially from food or drink.",
+                "cam_sense_id": 8739
+            },
+            {
+                "sense_id": 77746,
+                "defn": "Any quality of something that can be noticed by the sense of smell.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 204218,
+        "src_word": "unequaled",
+        "src_defn": "better or more extreme than any other",
+        "pos": "a",
+        "tgt_word": "best",
+        "tgt_senses": [
+            {
+                "sense_id": 52195,
+                "defn": "Having the highest quality or the most suitable, pleasing, or effective qualities.",
+                "cam_sense_id": 17049
+            },
+            {
+                "sense_id": 52196,
+                "defn": "Most wise, useful, or advisable in a situation.",
+                "cam_sense_id": 17049
+            }
+        ]
+    },
+    {
+        "src_sense_id": 188419,
+        "src_word": "superb",
+        "src_defn": "of excellent quality ; very great",
+        "pos": "a",
+        "tgt_word": "outstanding",
+        "tgt_senses": [
+            {
+                "sense_id": 105221,
+                "defn": "Much better than usual or excellent compared with others.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105222,
+                "defn": "Very noticeable because of a strong or special quality.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105223,
+                "defn": "Very important or significant.",
+                "cam_sense_id": 133613
+            },
+            {
+                "sense_id": 105224,
+                "defn": "Still not paid, solved, or done.",
+                "cam_sense_id": 133614
+            }
+        ]
+    },
+    {
+        "src_sense_id": 140227,
+        "src_word": "philanthropist",
+        "src_defn": "a person who helps the poor , especially by giving them money",
+        "pos": "n",
+        "tgt_word": "sponsor",
+        "tgt_senses": [
+            {
+                "sense_id": 167938,
+                "defn": "A person or company that gives money to support a person, organization, or activity.",
+                "cam_sense_id": 181116
+            },
+            {
+                "sense_id": 167939,
+                "defn": "A person who promises money to someone doing a charity event.",
+                "cam_sense_id": 181117
+            },
+            {
+                "sense_id": 167940,
+                "defn": "A person who writes and supports a proposed new law.",
+                "cam_sense_id": 181118
+            },
+            {
+                "sense_id": 167941,
+                "defn": "A person who officially accepts responsibility for another person's actions.",
+                "cam_sense_id": 181119
+            },
+            {
+                "sense_id": 167942,
+                "defn": "A person who promises at a baptism to guide a new Christian member.",
+                "cam_sense_id": 181120
+            }
+        ]
+    },
+    {
+        "src_sense_id": 65282,
+        "src_word": "expand",
+        "src_defn": "to increase in size , number , or importance , or to make something increase in this way",
+        "pos": "v",
+        "tgt_word": "grow",
+        "tgt_senses": [
+            {
+                "sense_id": 170901,
+                "defn": "To become larger or greater in size or amount.",
+                "cam_sense_id": 84019
+            },
+            {
+                "sense_id": 170902,
+                "defn": "To become more developed or mature.",
+                "cam_sense_id": 84019
+            },
+            {
+                "sense_id": 170903,
+                "defn": "To gradually become a particular way or take on a particular quality.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 170904,
+                "defn": "For hair or nails to become longer, or to let them become longer.",
+                "cam_sense_id": 84020
+            },
+            {
+                "sense_id": 170905,
+                "defn": "For a plant to live and develop in a particular place.",
+                "cam_sense_id": 84021
+            },
+            {
+                "sense_id": 170906,
+                "defn": "To put plants in the ground and care for them so they develop.",
+                "cam_sense_id": 84022
+            },
+            {
+                "sense_id": 170907,
+                "defn": "To make a business larger or more successful.",
+                "cam_sense_id": 84023
+            },
+            {
+                "sense_id": 170908,
+                "defn": "To come into existence or take shape.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 170909,
+                "defn": "To become attached by a process like natural growth.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 91172,
+        "src_word": "horrific",
+        "src_defn": "very bad and shocking",
+        "pos": "a",
+        "tgt_word": "poor",
+        "tgt_senses": [
+            {
+                "sense_id": 145013,
+                "defn": "Having little money or few possessions.",
+                "cam_sense_id": 144532
+            },
+            {
+                "sense_id": 145014,
+                "defn": "Not good or of very low quality or substance.",
+                "cam_sense_id": 144534
+            },
+            {
+                "sense_id": 145015,
+                "defn": "Too small in amount to meet a need.",
+                "cam_sense_id": 144534
+            },
+            {
+                "sense_id": 145016,
+                "defn": "Deserving sympathy or pity.",
+                "cam_sense_id": 144535
+            }
+        ]
+    },
+    {
+        "src_sense_id": 187161,
+        "src_word": "submit",
+        "src_defn": "to give or offer something for a decision to be made by others",
+        "pos": "v",
+        "tgt_word": "give",
+        "tgt_senses": [
+            {
+                "sense_id": 45391,
+                "defn": "To provide, supply, or transfer something to someone.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45392,
+                "defn": "To give something as a present.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45393,
+                "defn": "To pay money in exchange or as reward.",
+                "cam_sense_id": 79912
+            },
+            {
+                "sense_id": 45394,
+                "defn": "To tell, show, or communicate information, feelings, or signs.",
+                "cam_sense_id": 79915
+            },
+            {
+                "sense_id": 45395,
+                "defn": "To teach or pass knowledge or skills to someone.",
+                "cam_sense_id": 79915
+            },
+            {
+                "sense_id": 45396,
+                "defn": "To punish someone in a particular way or for a particular time.",
+                "cam_sense_id": 79916
+            },
+            {
+                "sense_id": 45397,
+                "defn": "To allow someone time, space, or a chance to do something.",
+                "cam_sense_id": 79917
+            },
+            {
+                "sense_id": 45398,
+                "defn": "To estimate how long something will last or what will happen.",
+                "cam_sense_id": 79918
+            },
+            {
+                "sense_id": 45399,
+                "defn": "To cause, produce, or bring about something.",
+                "cam_sense_id": 79919
+            },
+            {
+                "sense_id": 45400,
+                "defn": "To perform or carry out an action, especially for others.",
+                "cam_sense_id": 79922
+            },
+            {
+                "sense_id": 45401,
+                "defn": "To organize or be responsible for an event.",
+                "cam_sense_id": 79923
+            },
+            {
+                "sense_id": 45402,
+                "defn": "To formally propose a toast or idea.",
+                "cam_sense_id": 79925
+            },
+            {
+                "sense_id": 45403,
+                "defn": "To bend, stretch, break, or become less firm under pressure.",
+                "cam_sense_id": 79926
+            },
+            {
+                "sense_id": 45404,
+                "defn": "To decide and state something officially in a sport or by judgment.",
+                "cam_sense_id": 79927
+            },
+            {
+                "sense_id": 45405,
+                "defn": "To dedicate or devote something to a person, activity, or cause.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45406,
+                "defn": "To leave something with someone for a time.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45407,
+                "defn": "To lose or sacrifice something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45408,
+                "defn": "To give medicine, food, money, or help to someone or something.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45409,
+                "defn": "To officially award or grant something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45410,
+                "defn": "To offer something sincerely or submit it for use or judgment.",
+                "cam_sense_id": 79911
+            },
+            {
+                "sense_id": 45411,
+                "defn": "To influence or direct someone through behavior or persuasion.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45412,
+                "defn": "To agree to have sex with a man.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 179747,
+        "src_word": "spark",
+        "src_defn": "to cause the start of something, especially an argument or fighting",
+        "pos": "v",
+        "tgt_word": "cause",
+        "tgt_senses": [
+            {
+                "sense_id": 98217,
+                "defn": "To make something happen or exist.",
+                "cam_sense_id": 29358
+            },
+            {
+                "sense_id": 98218,
+                "defn": "To make someone do or act in a particular way.",
+                "cam_sense_id": 29358
+            }
+        ]
+    },
+    {
+        "src_sense_id": 199535,
+        "src_word": "transporting",
+        "src_defn": "to take goods or people from one place to another",
+        "pos": "v",
+        "tgt_word": "haul",
+        "tgt_senses": [
+            {
+                "sense_id": 111918,
+                "defn": "To pull something heavy slowly and with difficulty.",
+                "cam_sense_id": 86737
+            },
+            {
+                "sense_id": 111919,
+                "defn": "To take someone or something somewhere, especially by force.",
+                "cam_sense_id": 86738
+            },
+            {
+                "sense_id": 111920,
+                "defn": "To transport goods or people in a vehicle, usually by road.",
+                "cam_sense_id": 86739
+            }
+        ]
+    },
+    {
+        "src_sense_id": 191331,
+        "src_word": "take something in",
+        "src_defn": "If the police take you in, they take you to the police station",
+        "pos": "v",
+        "tgt_word": "catch",
+        "tgt_senses": [
+            {
+                "sense_id": 45046,
+                "defn": "To take hold of something that is moving and stop it.",
+                "cam_sense_id": 29015
+            },
+            {
+                "sense_id": 45047,
+                "defn": "To find and stop a person or animal that is trying to escape.",
+                "cam_sense_id": 29016
+            },
+            {
+                "sense_id": 45048,
+                "defn": "To discover or notice someone or something suddenly, especially something wrong.",
+                "cam_sense_id": 29017
+            },
+            {
+                "sense_id": 45049,
+                "defn": "To travel on a bus, train, plane, or other vehicle.",
+                "cam_sense_id": 29021
+            },
+            {
+                "sense_id": 45050,
+                "defn": "To arrive in time for a vehicle, event, or activity.",
+                "cam_sense_id": 29022
+            },
+            {
+                "sense_id": 45051,
+                "defn": "To get an illness from someone or something.",
+                "cam_sense_id": 29023
+            },
+            {
+                "sense_id": 45052,
+                "defn": "To manage to hear, see, understand, or remember something briefly.",
+                "cam_sense_id": 29024
+            },
+            {
+                "sense_id": 45053,
+                "defn": "To go to see or watch a film, show, or performance.",
+                "cam_sense_id": 29025
+            },
+            {
+                "sense_id": 45054,
+                "defn": "To become stuck or to make something become stuck.",
+                "cam_sense_id": 29027
+            },
+            {
+                "sense_id": 45055,
+                "defn": "To hit something, often by accident.",
+                "cam_sense_id": 29028
+            },
+            {
+                "sense_id": 45056,
+                "defn": "To start burning.",
+                "cam_sense_id": 29034
+            },
+            {
+                "sense_id": 45057,
+                "defn": "To attract and hold someone's attention or interest.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45058,
+                "defn": "To catch up with someone or something ahead.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45059,
+                "defn": "To stop yourself while doing something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45060,
+                "defn": "To get something needed quickly or briefly.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45061,
+                "defn": "To play the position of catcher in baseball or a similar game.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 45062,
+                "defn": "To delay someone or something and stop progress as planned.",
+                "cam_sense_id": null
+            }
+        ]
+    },
+    {
+        "src_sense_id": 167468,
+        "src_word": "screw (something) up",
+        "src_defn": "to make a mistake , or to spoil something",
+        "pos": "v",
+        "tgt_word": "ruin",
+        "tgt_senses": [
+            {
+                "sense_id": 143737,
+                "defn": "To spoil, destroy, or damage something completely.",
+                "cam_sense_id": 163759
+            },
+            {
+                "sense_id": 143738,
+                "defn": "To make something fail completely.",
+                "cam_sense_id": 163759
+            },
+            {
+                "sense_id": 143739,
+                "defn": "To make a person or company lose all their money.",
+                "cam_sense_id": 163760
+            },
+            {
+                "sense_id": 143740,
+                "defn": "To reduce a building or place to broken remains.",
+                "cam_sense_id": 163759
+            },
+            {
+                "sense_id": 143741,
+                "defn": "To have sex with someone and so take away their virginity.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 143742,
+                "defn": "To become broken, decayed, or destroyed over time.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 143743,
+                "defn": "To destroy someone's good reputation.",
+                "cam_sense_id": 163760
+            }
+        ]
+    },
+    {
+        "src_sense_id": 8771,
+        "src_word": "arouse",
+        "src_defn": "to cause someone to have a particular feeling",
+        "pos": "v",
+        "tgt_word": "cause",
+        "tgt_senses": [
+            {
+                "sense_id": 98217,
+                "defn": "To make something happen or exist.",
+                "cam_sense_id": 29358
+            },
+            {
+                "sense_id": 98218,
+                "defn": "To make someone do or act in a particular way.",
+                "cam_sense_id": 29358
+            }
+        ]
+    },
+    {
+        "src_sense_id": 106070,
+        "src_word": "lapse",
+        "src_defn": "a temporary failure",
+        "pos": "n",
+        "tgt_word": "neglect",
+        "tgt_senses": [
+            {
+                "sense_id": 75821,
+                "defn": "A lack of proper care or attention for someone or something.",
+                "cam_sense_id": 124472
+            },
+            {
+                "sense_id": 75822,
+                "defn": "The poor state of something that has not been used or cared for.",
+                "cam_sense_id": 124472
+            },
+            {
+                "sense_id": 75823,
+                "defn": "A careless habit of not doing responsibilities or showing concern.",
+                "cam_sense_id": 124472
+            },
+            {
+                "sense_id": 75824,
+                "defn": "A failure to take the care that a reasonable person would take.",
+                "cam_sense_id": 124472
+            }
+        ]
+    },
+    {
+        "src_sense_id": 116048,
+        "src_word": "maximized",
+        "src_defn": "to make something as great in amount , size , or importance as possible",
+        "pos": "v",
+        "tgt_word": "go up",
+        "tgt_senses": [
+            {
+                "sense_id": 154211,
+                "defn": "To move to a higher place or position.",
+                "cam_sense_id": 81468
+            },
+            {
+                "sense_id": 154212,
+                "defn": "To increase in amount, value, or level.",
+                "cam_sense_id": 81468
+            },
+            {
+                "sense_id": 154213,
+                "defn": "To make gradual upward progress.",
+                "cam_sense_id": 81468
+            },
+            {
+                "sense_id": 154214,
+                "defn": "To move towards someone or something.",
+                "cam_sense_id": null
+            },
+            {
+                "sense_id": 154215,
+                "defn": "To suddenly explode or be destroyed by fire.",
+                "cam_sense_id": 81469
+            },
+            {
+                "sense_id": 154216,
+                "defn": "To be put into position, especially a sign.",
+                "cam_sense_id": 81470
+            },
+            {
+                "sense_id": 154217,
+                "defn": "To be built or constructed.",
+                "cam_sense_id": 81471
+            },
+            {
+                "sense_id": 154218,
+                "defn": "To begin or continue studying at a college or university after a break.",
+                "cam_sense_id": 81472
+            }
+        ]
+    },
+    {
+        "src_sense_id": 176923,
+        "src_word": "smarting",
+        "src_defn": "to hurt with a sharp pain",
+        "pos": "v",
+        "tgt_word": "rub",
+        "tgt_senses": [
+            {
+                "sense_id": 101450,
+                "defn": "To move something against a surface with pressure and repeated movement.",
+                "cam_sense_id": 163552
+            },
+            {
+                "sense_id": 101451,
+                "defn": "To scrape or rub a part of the body to ease an itch.",
+                "cam_sense_id": 163552
+            }
+        ]
+    },
+    {
+        "src_sense_id": 31821,
+        "src_word": "childminded",
+        "src_defn": "to take care of someone's children in your home while that person is doing something else",
+        "pos": "v",
+        "tgt_word": "tend",
+        "tgt_senses": [
+            {
+                "sense_id": 50158,
+                "defn": "To be likely or inclined to do or be something.",
+                "cam_sense_id": 193482
+            },
+            {
+                "sense_id": 50159,
+                "defn": "To care for or look after someone or something.",
+                "cam_sense_id": 193483
+            },
+            {
+                "sense_id": 50160,
+                "defn": "To manage or run something.",
+                "cam_sense_id": 193483
+            }
+        ]
+    },
+    {
+        "src_sense_id": 168898,
+        "src_word": "selected",
+        "src_defn": "to choose a small number of things, or to choose by making careful decisions",
+        "pos": "v",
+        "tgt_word": "choose",
+        "tgt_senses": [
+            {
+                "sense_id": 93108,
+                "defn": "To decide which thing or person you want from two or more choices.",
+                "cam_sense_id": 32252
+            },
+            {
+                "sense_id": 93109,
+                "defn": "To decide to act in a particular way because you think it is right.",
+                "cam_sense_id": 32252
+            }
+        ]
+    }
+]
