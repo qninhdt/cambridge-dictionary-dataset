@@ -17,12 +17,21 @@ from src.utils.nlp import map_pos
 def resolve_alternatives(text: str):
     if '/' not in text:
         return [text]
-    # Split by slash first
+    
+    # Tách thử bằng dấu gạch chéo
     parts = text.split('/')
+    
+    # Quy tắc loại trừ Literal Slashes:
+    # 1. Không tách nếu có bất kỳ phần nào chỉ có 1 chữ cái (ví dụ: a/c, S/N, km/s, A/B/C)
+    # 2. Không tách nếu có chữ số (ví dụ: 9/11, 7/7, 80/20)
+    if any(len(p.strip()) <= 1 for p in parts) or any(any(c.isdigit() for c in p) for p in parts):
+        return [text]
+        
     # Check if all parts have spaces, or all parts have no spaces
     has_spaces = [(' ' in p.strip()) for p in parts]
     if all(has_spaces) or not any(has_spaces):
         return [p.strip() for p in parts if p.strip()]
+        
     # Otherwise, it's a particle alternative like "cool down/off"
     match = re.search(r'\b(\w+)/(\w+)\b', text)
     if match:
@@ -36,42 +45,79 @@ def resolve_alternatives(text: str):
 def get_match_keys(text: str):
     if not text:
         return []
-    # 1. Clean parenthesized blocks containing placeholders
-    placeholders_in_parents = r'\(\s*(?:someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves|or|/|\s)+\)'
-    cleaned = re.sub(placeholders_in_parents, ' ', text, flags=re.IGNORECASE)
+
+    # 1. Chuẩn hóa Unicode & viết thường
+    text = text.lower()
+    text = "".join(
+        c for c in unicodedata.normalize('NFD', text)
+        if unicodedata.category(c) != 'Mn'
+    )
+    text = text.replace(".", "")  # Xóa dấu chấm viết tắt
+
+    # Đặc biệt: Chuẩn hóa cặp chữ cái viết hoa/thường (ví dụ: "A, a" -> "a")
+    if re.match(r'^[a-z],\s*[a-z]$', text):
+        text = text[0]
+
+    # 2. Xóa sạch các tổ hợp biến số có dấu gạch chéo trước (tránh lỗi chia tách nhầm giới từ)
+    placeholder_slashes = r'\b(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves)/+(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves)\b'
+    text = re.sub(placeholder_slashes, ' ', text, flags=re.IGNORECASE)
+
+    # Xóa sạch các biến số phổ biến (placeholders) đơn lẻ
+    placeholders = r'\b(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves|doing)\b'
+    text = re.sub(placeholders, ' ', text, flags=re.IGNORECASE)
     
-    # 2. Split by slash to handle alternatives using the smart resolver
-    parts = resolve_alternatives(cleaned)
-    
-    candidates = []
-    for part in parts:
-        # Lowercase & Unicode normalization (strip accents)
-        part = part.lower()
-        part = "".join(
-            c for c in unicodedata.normalize('NFD', part)
-            if unicodedata.category(c) != 'Mn'
-        )
-        
-        # Remove dots (e.g. "dr." -> "dr")
-        part = part.replace(".", "")
-        
-        # Remove placeholders without parentheses
-        placeholders_noparentheses = r'\b(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves)\b'
-        part = re.sub(placeholders_noparentheses, ' ', part, flags=re.IGNORECASE)
-        
-        # Replace hyphens with spaces
-        part_clean = part.replace("-", " ")
-        # Collapse spaces
-        part_clean = re.sub(r'\s+', ' ', part_clean).strip()
-        
-        if part_clean:
-            candidates.append(part_clean)
-            
-            # Squashed version (no spaces)
-            squashed = part_clean.replace(" ", "")
-            if squashed != part_clean:
-                candidates.append(squashed)
+    # Xóa các sở hữu cách của biến số
+    possessives = r"\b(someone's|somebody's|one's|your|their|his|her|my|our)\b"
+    text = re.sub(possessives, ' ', text, flags=re.IGNORECASE)
+
+    # 3. Xử lý phân nhánh ngoặc đơn (Optional Expansion)
+    texts_to_resolve = [text]
+    while True:
+        new_texts = []
+        has_bracket = False
+        for t in texts_to_resolve:
+            match = re.search(r'\(([^)]+)\)', t)
+            if match:
+                has_bracket = True
+                span = match.span()
+                inside_content = match.group(1)
                 
+                # Nhánh 1: Giữ từ trong ngoặc
+                t_keep = t[:span[0]] + " " + inside_content + " " + t[span[1]:]
+                # Nhánh 2: Xóa sạch cả cụm ngoặc
+                t_drop = t[:span[0]] + " " + t[span[1]:]
+                
+                new_texts.append(t_keep)
+                new_texts.append(t_drop)
+            else:
+                new_texts.append(t)
+        
+        texts_to_resolve = list(set(new_texts))
+        if not has_bracket:
+            break
+
+    # 4. Tách các lựa chọn dấu gạch chéo (Alternatives)
+    final_phrases = []
+    for t in texts_to_resolve:
+        final_phrases.extend(resolve_alternatives(t))
+
+    # 5. Làm sạch khoảng trắng và tạo các biến thể không dấu cách (squashed)
+    candidates = []
+    for phrase in set(final_phrases):
+        # Thay thế gạch ngang, gạch dưới và dấu hai chấm bằng dấu cách
+        phrase_clean = phrase.replace("-", " ").replace("_", " ").replace(":", " ")
+        # Xóa các ký tự đặc biệt còn sót lại ngoài chữ và số
+        phrase_clean = re.sub(r'[^a-z0-9\s]', '', phrase_clean)
+        phrase_clean = re.sub(r'\s+', ' ', phrase_clean).strip()
+        
+        if phrase_clean:
+            candidates.append(phrase_clean)
+            # Chỉ tạo bản squashed nếu cụm từ KHÔNG chứa chữ số (tránh lỗi "2:1" -> "21")
+            if not any(c.isdigit() for c in phrase_clean):
+                squashed = phrase_clean.replace(" ", "")
+                if squashed != phrase_clean:
+                    candidates.append(squashed)
+
     return list(set(candidates))
 
 from src.utils.db import fetch_cambridge_senses
