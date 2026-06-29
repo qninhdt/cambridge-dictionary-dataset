@@ -260,33 +260,67 @@ def get_pending(conn: sqlite3.Connection) -> list[tuple[int, str, str]]:
 def matches_any_pattern(defn):
     if not defn:
         return False
-    import fnmatch
-    invalid_patterns = [
-        'past simple of %',
-        'past simple and past participle of %',
-        'past participle of %',
-        'past participle, past simple of %',
-        'present participle of %',
-        'plural of %',
-        'pl of %',
-        'comparative of %',
-        'superlative of %',
-        'US spelling of %',
-        'mainly US spelling of %',
-        'another US spelling of %',
-        'a US spelling of %',
-        'UK spelling of %',
-        'another spelling of %',
-        'another word for %',
-        '→ %',
-        'short form of %',
-        'written abbreviation for %',
-        'abbreviation for %'
+        
+    s = defn.strip()
+    s = re.sub(r'\s+', ' ', s)
+    s_lower = s.lower()
+    
+    # Check grammatical inflections first (fnmatch patterns)
+    inflection_patterns = [
+        'past simple of *',
+        'past simple and past participle of *',
+        'past participle of *',
+        'past participle, past simple of *',
+        'present participle of *',
+        'plural of *',
+        'pl of *',
+        'comparative of *',
+        'superlative of *'
     ]
-    for pat in invalid_patterns:
-        fn_pat = pat.replace('%', '*')
-        if fnmatch.fnmatch(defn.lower(), fn_pat.lower()):
+    import fnmatch
+    for pat in inflection_patterns:
+        if fnmatch.fnmatch(s_lower, pat):
             return True
+            
+    # Check spelling redirects regex
+    spelling_pat = re.compile(
+        r"^(?:the |a |an |mainly |old-fashioned |older |old |non-standard |US and Australian English |written |informal |)*?"
+        r"(?:US|UK|English|Australian|non-standard|old-fashioned|older|old|)*?"
+        r"\s*spelling\s+of\s+(.+)$",
+        re.IGNORECASE
+    )
+    if spelling_pat.match(s):
+        if "computer program" not in s_lower:
+            return True
+            
+    # Check abbreviation redirects
+    abbrev_pat = re.compile(
+        r"^(?:the |a |an |mainly |old-fashioned |older |old |non-standard |UK |US |written |informal |offensive |)*?"
+        r"abbreviation\s+(?:for|of)\s+(.+)$",
+        re.IGNORECASE
+    )
+    if abbrev_pat.match(s):
+        if "consisting of" not in s_lower and "that consists" not in s_lower:
+            return True
+            
+    # Check short form redirects
+    sf_pat = re.compile(
+        r"^(?:the |a |an |mainly |old-fashioned |older |old |non-standard |)*?"
+        r"short\s+form\s+(?:of|for)\s+(.+)$",
+        re.IGNORECASE
+    )
+    if sf_pat.match(s):
+        if "giving only" not in s_lower and "combination of words" not in s_lower:
+            return True
+            
+    # Check arrow redirects
+    if s.startswith('→ '):
+        return True
+        
+    # Check another word / another spelling redirects
+    if s_lower.startswith('another spelling of ') or s_lower.startswith('another word for '):
+        return True
+        
     return False
 
 class DbWriterThread(threading.Thread):
@@ -1030,47 +1064,180 @@ def clean_alternatives(conn: sqlite3.Connection):
     print("Post-processing: cleaning spelling alternatives (US-first)...")
     cursor = conn.cursor()
     
-    def clean_target(text, prefix):
-        target = text[len(prefix):].strip()
-        target = re.split(r'[,;]|\bor\b', target)[0].strip()
-        # Strip dialect labels appended by Cambridge (e.g. UK, mainly UK, US, mainly US)
+    # Pre-cache word ID lookups with HTML unescaping and normalization
+    import html
+    cursor.execute("SELECT id, word, display_form FROM words")
+    word_id_cache = {}
+    for r_id, word_slug, display in cursor.fetchall():
+        if word_slug:
+            slug_unesc = html.unescape(word_slug).lower().strip()
+            word_id_cache[slug_unesc] = r_id
+            word_id_cache[slug_unesc.replace("-", " ")] = r_id
+        if display:
+            disp_unesc = html.unescape(display).lower().strip()
+            word_id_cache[disp_unesc] = r_id
+            word_id_cache[disp_unesc.replace(" ", "-")] = r_id
+            
+    def check_cache(target):
         target_lower = target.lower()
-        for suffix in [' mainly uk', ' mainly us', ' uk', ' us']:
-            if target_lower.endswith(suffix):
-                target = target[:-len(suffix)].strip()
-                target_lower = target_lower[:-len(suffix)].strip()
-        return target
+        if target_lower in word_id_cache:
+            return target
+        t_hyphen = target_lower.replace(" ", "-")
+        if t_hyphen in word_id_cache:
+            return target
+        if target_lower.startswith("the "):
+            t_strip = target[4:].strip()
+            t_strip_lower = t_strip.lower()
+            if t_strip_lower in word_id_cache:
+                return t_strip
+            if t_strip_lower.replace(" ", "-") in word_id_cache:
+                return t_strip
+        return None
+
+    def clean_target(target):
+        target = re.split(r'[:;,]|\bor\b', target)[0].strip()
+        target = target.strip('"\' ')
         
-    # 1. Extract UK-to-US spelling mappings from temp_redirects
-    us_patterns = [
-        'US spelling of %',
-        'mainly US spelling of %',
-        'another US spelling of %',
-        'a US spelling of %'
-    ]
-    
+        suffixes = [
+            ' mainly disapproving', ' mainly approving', ' mainly informal', ' mainly formal',
+            ' uk old-fashioned', ' us old-fashioned', ' mainly uk', ' mainly us',
+            ' uk specialized', ' us specialized', ' old-fashioned',
+            ' informal', ' formal', ' specialized', ' disapproving', ' approving', 
+            ' humorous', ' slang', ' literary', ' trademark', ' old use',
+            ' Indian English', ' Australian English', ' Irish English', ' uk', ' us', ' old',
+            ' noun', ' verb', ' adjective', ' adverb', ' s'
+        ]
+        suffixes.sort(key=len, reverse=True)
+        
+        changed = True
+        while changed:
+            changed = False
+            target_lower = target.lower()
+            res = check_cache(target)
+            if res:
+                return res
+                
+            for suffix in suffixes:
+                if target_lower.endswith(suffix.lower()):
+                    target = target[:-len(suffix)].strip()
+                    changed = True
+                    break
+                    
+        return check_cache(target)
+
+    def parse_redirect_definition(defn):
+        if not defn:
+            return None
+            
+        s = defn.strip()
+        s = re.sub(r'\s+', ' ', s)
+        s_lower = s.lower()
+        
+        # 1. Check spelling redirects
+        spelling_pat = re.compile(
+            r"^(?:the |a |an |mainly |old-fashioned |older |old |non-standard |US and Australian English |written |informal |)*?"
+            r"(?:US|UK|English|Australian|non-standard|old-fashioned|older|old|)*?"
+            r"\s*spelling\s+of\s+(.+)$",
+            re.IGNORECASE
+        )
+        m = spelling_pat.match(s)
+        if m:
+            target = clean_target(m.group(1))
+            if target and "computer program" not in s_lower:
+                return {
+                    'type': 'UK spelling',
+                    'target': target
+                }
+                
+        # 2. Check abbreviation redirects
+        abbrev_pat = re.compile(
+            r"^(?:the |a |an |mainly |old-fashioned |older |old |non-standard |UK |US |written |informal |offensive |)*?"
+            r"abbreviation\s+(?:for|of)\s+(.+)$",
+            re.IGNORECASE
+        )
+        m = abbrev_pat.match(s)
+        if m:
+            target = clean_target(m.group(1))
+            if target and "consisting of" not in s_lower and "that consists" not in s_lower:
+                return {
+                    'type': 'abbreviation',
+                    'target': target
+                }
+                
+        # 3. Check short form redirects
+        sf_pat = re.compile(
+            r"^(?:the |a |an |mainly |old-fashioned |older |old |non-standard |)*?"
+            r"short\s+form\s+(?:of|for)\s+(.+)$",
+            re.IGNORECASE
+        )
+        m = sf_pat.match(s)
+        if m:
+            target = clean_target(m.group(1))
+            if target and "giving only" not in s_lower and "combination of words" not in s_lower:
+                return {
+                    'type': 'short form',
+                    'target': target
+                }
+                
+        # 4. Check arrow redirects (Unconditional match)
+        if s.startswith('→ '):
+            target = s[2:].strip()
+            target = re.split(r'[:;,]|\bor\b', target)[0].strip()
+            target = target.strip('"\' ')
+            cleaned = clean_target(target)
+            return {
+                'type': 'arrow',
+                'target': cleaned if cleaned else target
+            }
+            
+        # 5. Check another word / another spelling redirects
+        if s_lower.startswith('another spelling of '):
+            target = clean_target(s[len('another spelling of '):])
+            if target:
+                return {
+                    'type': 'another spelling',
+                    'target': target
+                }
+        if s_lower.startswith('another word for '):
+            target = clean_target(s[len('another word for '):])
+            if target:
+                return {
+                    'type': 'another word',
+                    'target': target
+                }
+                
+        return None
+
+    # Fetch all temp_redirects rows to process
+    cursor.execute("""
+        SELECT w.display_form, tr.pos, tr.definition
+        FROM temp_redirects tr
+        JOIN words w ON w.id = tr.word_id
+    """)
+    temp_rows = cursor.fetchall()
+
+    # 1. Extract UK-to-US spelling mappings
     uk_to_us = {} # (uk_word, pos_char) -> us_word
-    
-    for p in us_patterns:
-        cursor.execute("""
-            SELECT w.display_form, tr.pos, tr.definition
-            FROM temp_redirects tr
-            JOIN words w ON w.id = tr.word_id
-            WHERE tr.definition LIKE ?
-        """, (p,))
-        for us_word, pos, definition in cursor.fetchall():
-            pos_char = map_pos(pos)
-            if not pos_char:
-                continue
-            prefix = p.replace('%', '')
-            uk_word = clean_target(definition, prefix)
-            if uk_word:
+    for headword, pos, definition in temp_rows:
+        pos_char = map_pos(pos)
+        if not pos_char:
+            continue
+        res = parse_redirect_definition(definition)
+        if res and res['type'] == 'UK spelling':
+            defn_lower = definition.lower()
+            spelling_part = defn_lower.split("spelling")[0]
+            if "us" in spelling_part:
+                uk_word = res['target']
+                us_word = headword
+                uk_to_us[(uk_word.lower().strip(), pos_char)] = us_word.lower().strip()
+            elif "uk" in spelling_part:
+                uk_word = headword
+                us_word = res['target']
                 uk_to_us[(uk_word.lower().strip(), pos_char)] = us_word.lower().strip()
 
     # 2. Redirect UK spelling entries to US entries
     redirect_count = 0
     rename_count = 0
-    
     for (uk_word, pos_char), us_word in uk_to_us.items():
         cursor.execute("SELECT id FROM words WHERE word = ? OR display_form = ?", (uk_word, uk_word))
         uk_row = cursor.fetchone()
@@ -1081,7 +1248,6 @@ def clean_alternatives(conn: sqlite3.Connection):
             uk_word_id = uk_row[0]
             us_word_id = us_row[0]
             
-            # Delete any US entries that have no senses (redirect entries)
             cursor.execute("""
                 DELETE FROM entries 
                 WHERE word_id = ? 
@@ -1103,64 +1269,35 @@ def clean_alternatives(conn: sqlite3.Connection):
                 WHERE id = ?
             """, (us_slug, us_word, uk_word_id))
             rename_count += 1
-
     conn.commit()
 
     # 3. Populate word_alternatives table
-    alternative_patterns = {
-        'US spelling of %': 'UK spelling',
-        'mainly US spelling of %': 'UK spelling',
-        'another US spelling of %': 'UK spelling',
-        'a US spelling of %': 'UK spelling',
-        'UK spelling of %': 'UK spelling',
-        'mainly UK spelling of %': 'UK spelling',
-        'another UK spelling of %': 'UK spelling',
-        'a UK spelling of %': 'UK spelling',
-        'another spelling of %': 'another spelling',
-        'another word for %': 'another word',
-        '→ %': 'arrow',
-        'short form of %': 'short form',
-        'written abbreviation for %': 'abbreviation',
-        'abbreviation for %': 'abbreviation'
-    }
-    
     alternatives_to_insert = []
-    
-    # Pre-cache word ID lookups for speed
-    cursor.execute("SELECT id, word, display_form FROM words")
-    word_id_cache = {}
-    for r_id, word_slug, display in cursor.fetchall():
-        if word_slug:
-            word_id_cache[word_slug.lower().strip()] = r_id
-        if display:
-            word_id_cache[display.lower().strip()] = r_id
+    for headword, pos, definition in temp_rows:
+        pos_char = map_pos(pos)
+        res = parse_redirect_definition(definition)
+        if res:
+            headword_clean = headword.lower().strip()
+            target_clean = res['target'].lower().strip()
             
-    for p, alt_type in alternative_patterns.items():
-        cursor.execute("""
-            SELECT w.display_form, tr.pos, tr.definition
-            FROM temp_redirects tr
-            JOIN words w ON w.id = tr.word_id
-            WHERE tr.definition LIKE ?
-        """, (p,))
-        for word, pos, definition in cursor.fetchall():
-            pos_char = map_pos(pos)
-            if not pos_char:
-                continue
-            prefix = p.replace('%', '')
-            target_word = clean_target(definition, prefix)
-            if target_word:
-                word_clean = word.lower().strip()
-                target_clean = target_word.lower().strip()
-                if 'US spelling' in p:
-                    base_word = word_clean
+            if res['type'] == 'UK spelling':
+                defn_lower = definition.lower()
+                if "us" in defn_lower.split("spelling")[0]:
+                    base_word = headword_clean
                     alt_word = target_clean
                 else:
-                    base_word = uk_to_us.get((target_clean, pos_char), target_clean)
-                    alt_word = word_clean
-                    
-                base_word_id = word_id_cache.get(base_word)
-                if base_word_id:
-                    alternatives_to_insert.append((base_word_id, alt_word, alt_type))
+                    base_word = target_clean
+                    alt_word = headword_clean
+            else:
+                base_word = target_clean
+                alt_word = headword_clean
+                
+            if pos_char:
+                base_word = uk_to_us.get((base_word, pos_char), base_word)
+                
+            base_word_id = word_id_cache.get(base_word)
+            if base_word_id:
+                alternatives_to_insert.append((base_word_id, alt_word, res['type']))
 
     cursor.executemany("""
         INSERT OR IGNORE INTO word_alternatives (word_id, alternative_word, alternative_type)
@@ -1171,6 +1308,7 @@ def clean_alternatives(conn: sqlite3.Connection):
     # 4. Drop temporary redirects table
     cursor.execute("DROP TABLE IF EXISTS temp_redirects")
     conn.commit()
+
     # 5. Clean up orphaned entries (entries with no remaining senses)
     cursor.execute("""
         DELETE FROM entries 
@@ -1178,6 +1316,7 @@ def clean_alternatives(conn: sqlite3.Connection):
     """)
     deleted_entries = cursor.rowcount
     conn.commit()
+
     print(f"  - Redirected {redirect_count} UK entries to US word IDs.")
     print(f"  - Renamed {rename_count} missing US words.")
     print(f"  - Populated {len(alternatives_to_insert)} rows in word_alternatives.")
