@@ -1168,6 +1168,14 @@ def clean_alternatives(conn: sqlite3.Connection):
     # 4. Drop temporary redirects table
     cursor.execute("DROP TABLE IF EXISTS temp_redirects")
     conn.commit()
+    # 5. Clean up orphaned entries (entries with no remaining senses)
+    cursor.execute("""
+        DELETE FROM entries 
+        WHERE id NOT IN (SELECT DISTINCT entry_id FROM senses)
+    """)
+    deleted_entries = cursor.rowcount
+    conn.commit()
     print(f"  - Redirected {redirect_count} UK entries to US word IDs.")
     print(f"  - Renamed {rename_count} missing US words.")
     print(f"  - Populated {len(alternatives_to_insert)} rows in word_alternatives.")
+    print(f"  - Deleted {deleted_entries} orphaned entries.")
