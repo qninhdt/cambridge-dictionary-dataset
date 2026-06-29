@@ -1,0 +1,291 @@
+// DBML (Database Markup Language) Specification for dictionary.db
+// This is the final consolidated dictionary schema merging Cambridge Dictionary and WordNet.
+
+Project dictionary_db {
+  database_type: 'SQLite / PostgreSQL'
+  Note: 'Final consolidated dictionary database merging Cambridge Advanced Learner\'s Dictionary (CALD) and Open English WordNet (oewn).'
+}
+
+// ==========================================
+// ENUMS DEFINITIONS (Strict Typing)
+// ==========================================
+
+enum entry_type {
+  word
+  phrasal_verb
+  idiom
+  phrase
+  expression
+}
+
+enum pos_type {
+  noun
+  verb
+  adjective
+  adverb
+  other
+}
+
+enum source_type {
+  cambridge
+  wordnet
+}
+
+enum cefr_level {
+  A1
+  A2
+  B1
+  B2
+  C1
+  C2
+}
+
+enum inflection_type {
+  plural
+  past_tense
+  past_participle
+  present_participle
+  third_person_singular
+}
+
+enum relation_source {
+  wordnet
+  cambridge
+  conceptnet
+}
+
+enum relation_type {
+  // WordNet structural relations
+  hypernym
+  hyponym
+  part_meronym
+  member_holonym
+  cause
+  entailment
+  similar_to
+  attribute
+  derivationally_related
+  domain_topic
+  domain_region
+  domain_usage
+  // ConceptNet common-sense relations (resolved to sense level)
+  related_to
+  form_of
+  is_a
+  part_of
+  has_a
+  used_for
+  capable_of
+  at_location
+  causes
+  has_property
+  has_prerequisite
+  has_subevent
+  has_first_subevent
+  has_last_subevent
+  motivated_by_goal
+  desires
+  created_by
+  synonym
+  antonym
+  distinct_from
+  derived_from
+  defined_as
+}
+
+
+// ==========================================
+// 1. WORD & ENTRY (LEXICAL) LAYER
+// ==========================================
+
+Table words {
+  id integer [primary key, increment]
+  slug varchar [not null, unique, note: 'Unique URL slug identifier (e.g., "give-up", "record")']
+  word varchar [not null, note: 'The canonical word form or multi-word expression normalized with placeholders (e.g., "give up", "act for/on behalf of {sb}/{sth}", "ask {sb} back"). Placeholders include: {sb} (somebody/someone), {sth} (something), {sw} (somewhere), {oneself} (oneself/yourself/himself/etc), {possessive} (one\'s/your/etc), {doing} (doing). Used for robust lookups.']
+  entry_type entry_type [default: 'word', note: 'Lexical category enum']
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+
+  Note: 'Stores canonical lemmas, idioms, and multi-word expressions.'
+  
+  indexes {
+    slug
+    word
+  }
+}
+
+Table entries {
+  id integer [primary key, increment]
+  word_id integer [not null, ref: > words.id, note: 'References words.id']
+  pos pos_type [not null, note: 'Part of speech enum (enables heteronym pronunciation separation)']
+  pronunciation_uk varchar [null, note: 'UK IPA pronunciation string (e.g., "/əˈbæn.dən/")']
+  pronunciation_us varchar [null, note: 'US IPA pronunciation string (e.g., "/əˈbæn.dən/")']
+  audio_uk_url varchar [null, note: 'URL to the UK pronunciation audio clip (MP3)']
+  audio_us_url varchar [null, note: 'URL to the US pronunciation audio clip (MP3)']
+
+  Note: 'Word entries grouping senses by part-of-speech and storing corresponding phonetics and audio clips.'
+
+  indexes {
+    word_id
+    pos
+  }
+}
+
+Table entry_inflections {
+  id integer [primary key, increment]
+  entry_id integer [not null, ref: > entries.id, note: 'References entries.id']
+  form_type inflection_type [not null, note: 'Inflection type enum']
+  inflected_form varchar [not null, note: 'The inflected variant (e.g., "children", "went")']
+
+  Note: 'Stores morphological inflections specific to an entry\'s part-of-speech (e.g., plural nouns, past tense verbs).'
+  
+  indexes {
+    inflected_form
+    entry_id
+  }
+}
+
+
+// ==========================================
+// 2. SENSES (SEMANTIC CORE) LAYER
+// ==========================================
+
+Table senses {
+  id integer [primary key, increment]
+  entry_id integer [not null, ref: > entries.id, note: 'References entries.id']
+  definition text [not null, note: 'Clear definition of the concept']
+  cefr_level cefr_level [null, note: 'CEFR pedagogical level enum']
+  guideword varchar [null, note: 'Cambridge guide word grouping (e.g., "STOP" for "abandon")']
+  grammar varchar [null, note: 'Sense-specific grammar pattern (e.g. "[T]", "[I + to infinitive]")']
+  domain varchar [null, note: 'Specialized domain (e.g., "COMPUTING", "MEDICAL")']
+  labels varchar [default: '[]', note: 'JSON array of usage/style/dialect labels, e.g., ["informal", "UK", "old-fashioned"]']
+
+  Note: 'Consolidated (unified) senses table containing all distinct semantic meanings from Cambridge and WordNet.'
+  
+  indexes {
+    entry_id
+    cefr_level
+  }
+}
+
+Table alternative_definitions {
+  id integer [primary key, increment]
+  sense_id integer [not null, ref: > senses.id, note: 'References senses.id']
+  definition text [not null, note: 'The alternative definition text']
+  source source_type [not null, note: 'Source of this definition: cambridge or wordnet']
+  wordnet_id varchar [null, note: 'If source is wordnet, the specific synset ID it came from']
+
+  Note: 'Stores original raw definitions from Cambridge and WordNet for a unified sense.'
+
+  indexes {
+    sense_id
+    source
+  }
+}
+
+
+
+// ==========================================
+// 3. SYNONYMS & ANTONYMS LAYER
+// ==========================================
+
+Table synonyms_antonyms {
+  id integer [primary key, increment]
+  sense_id integer [not null, ref: > senses.id, note: 'References the source sense in senses.id']
+  target_word varchar [not null, note: 'The synonym or antonym string (e.g., "call off", "desert")']
+  target_sense_id integer [null, ref: > senses.id, note: 'References target sense in senses.id, if resolved']
+  is_antonym boolean [default: false, note: 'false (0) = synonym, true (1) = antonym']
+  source source_type [not null, note: 'Source of this synonym/antonym relation enum: cambridge or wordnet']
+
+  Note: 'Stores synonyms and antonyms. Supports both string-based targets (unresolved) and sense-to-sense links (resolved). IMPORT RULE: When importing synonyms/antonyms from Cambridge and WordNet, filter out/remove all target terms with a different Part-of-Speech (POS) from the source sense, except when a wildcard POS is used.'
+  
+  indexes {
+    sense_id
+    target_word
+    target_sense_id
+    is_antonym
+    source
+  }
+}
+
+
+// ==========================================
+// 4. EXAMPLES & CONTEXT LAYER
+// ==========================================
+
+Table examples {
+  id integer [primary key, increment]
+  sense_id integer [not null, ref: > senses.id, note: 'References senses.id']
+  example_text text [not null, note: 'Example usage sentence']
+  collocation varchar [null, note: 'Collocation pattern highlighted in this example (e.g., "abandon hope")']
+  source source_type [not null, note: 'Source of this example enum: cambridge or wordnet']
+
+  Note: 'Usage examples illustrating the sense in context.'
+  
+  indexes {
+    sense_id
+    source
+  }
+}
+
+Table collocations {
+  id integer [primary key, increment]
+  word_id integer [not null, ref: > words.id, note: 'References words.id']
+  collocation varchar [not null, note: 'Collocation phrase (e.g., "extended run")']
+  example text [null, note: 'Example sentence demonstrating the collocation']
+
+  Note: 'Common word-level collocations.'
+  
+  indexes {
+    word_id
+  }
+}
+
+
+// ==========================================
+// 5. GRAPH LAYER (UNIFIED SEMANTIC & COMMON-SENSE RELATIONSHIPS)
+// ==========================================
+
+Table semantic_relations {
+  id integer [primary key, increment]
+  source_sense_id integer [not null, ref: > senses.id, note: 'References source sense (senses.id)']
+  target_sense_id integer [not null, ref: > senses.id, note: 'References target sense (senses.id)']
+  relation_type relation_type [not null, note: 'Relationship type enum (combines WordNet structure and ConceptNet common-sense relationships resolved to sense level)']
+  source relation_source [not null, note: 'Source of relation enum: wordnet | cambridge | conceptnet']
+
+  Note: 'Unified graph relations linking senses together, merging WordNet structural relations and ConceptNet common-sense assertions resolved to sense level.'
+  
+  indexes {
+    source_sense_id
+    target_sense_id
+    relation_type
+    source
+  }
+}
+
+
+// ==========================================
+// 6. CATEGORIZATION LAYER
+// ==========================================
+
+Table topics {
+  id integer [primary key, increment]
+  slug varchar [not null, unique, note: 'Unique URL slug for the topic category (e.g., "departing")']
+  title varchar [not null, note: 'Display title of the topic category (e.g., "Departing")']
+
+  Note: 'Thematic topics / taxonomy categories (sourced from Cambridge SMART Vocabulary).'
+  
+  indexes {
+    slug
+  }
+}
+
+Table sense_topics {
+  sense_id integer [ref: > senses.id, note: 'References senses.id']
+  topic_id integer [ref: > topics.id, note: 'References topics.id']
+
+  Note: 'Associates senses with thematic topics (many-to-many relationship).'
+  
+  indexes {
+    (sense_id, topic_id) [pk]
+  }
+}

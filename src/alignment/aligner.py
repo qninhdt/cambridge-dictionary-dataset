@@ -165,21 +165,26 @@ def align_database(
         
         # Query all senses to filter out grammatical inflections and spelling variants
         cursor_cam.execute("""
-            SELECT w.display_form, e.pos, s.id, s.definition
+            SELECT w.display_form, e.pos, s.phrase_title, s.id, s.definition
             FROM words w
             JOIN entries e ON w.id = e.word_id
             JOIN senses s ON e.id = s.entry_id
             WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
-              AND (s.phrase_title IS NULL OR s.phrase_title = '')
             ORDER BY w.display_form, e.pos, s.id
         """)
         rows = cursor_cam.fetchall()
         
-        # Group senses by word_pos (senses are already US-by-default in the database)
+        # Group senses by word_pos
         from collections import defaultdict
         word_pos_senses = defaultdict(list)
-        for word, pos, s_id, defn in rows:
-            pos_char = map_pos(pos)
+        for word_display, pos, phrase_title, s_id, defn in rows:
+            word = phrase_title if (phrase_title and phrase_title.strip()) else word_display
+            pos_clean = pos.lower().strip() if pos else 'phrase'
+            if pos_clean in ('idiom', 'phrasal verb', 'phrase', 'collocation'):
+                pos_char = pos_clean
+            else:
+                pos_char = map_pos(pos_clean)
+                
             if pos_char:
                 word_pos_senses[(word, pos_char)].append((s_id, defn))
                 
@@ -209,19 +214,17 @@ def align_database(
         SELECT COUNT(*) FROM senses s
         JOIN entries e ON e.id = s.entry_id
         WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
-          AND (s.phrase_title IS NULL OR s.phrase_title = '')
     """)
     total_cald_senses = cursor_cam.fetchone()[0]
 
     # Fetch all Cambridge senses in deterministic order to group them in memory
     print("Reading Cambridge senses in memory...")
     cursor_cam.execute("""
-        SELECT w.display_form, s.id, e.pos, s.definition
+        SELECT w.display_form, e.pos, s.phrase_title, s.id, s.definition
         FROM words w
         JOIN entries e ON w.id = e.word_id
         JOIN senses s ON e.id = s.entry_id
         WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
-          AND (s.phrase_title IS NULL OR s.phrase_title = '')
         ORDER BY w.display_form, e.pos, s.id
     """)
     rows = cursor_cam.fetchall()
@@ -231,8 +234,14 @@ def align_database(
 
     from collections import defaultdict
     cam_data = defaultdict(list)
-    for word, s_id, pos, definition in rows:
-        pos_char = map_pos(pos)
+    for word_display, pos, phrase_title, s_id, definition in rows:
+        word = phrase_title if (phrase_title and phrase_title.strip()) else word_display
+        pos_clean = pos.lower().strip() if pos else 'phrase'
+        if pos_clean in ('idiom', 'phrasal verb', 'phrase', 'collocation'):
+            pos_char = pos_clean
+        else:
+            pos_char = map_pos(pos_clean)
+            
         if pos_char:
             if (word, pos_char) in pending_set:
                 cam_data[(word, pos_char)].append((s_id, pos, definition))
@@ -306,10 +315,17 @@ def align_database(
         wn_list_for_pos = []
         seen_wn_ids = set()
         for cand in candidates:
-            for item in wn_data.get((cand, pos_char), []):
-                if item['id'] not in seen_wn_ids:
-                    seen_wn_ids.add(item['id'])
-                    wn_list_for_pos.append(item)
+            if pos_char in ('idiom', 'phrase', 'collocation'):
+                for p in ('n', 'v', 'a', 'r'):
+                    for item in wn_data.get((cand, p), []):
+                        if item['id'] not in seen_wn_ids:
+                            seen_wn_ids.add(item['id'])
+                            wn_list_for_pos.append(item)
+            else:
+                for item in wn_data.get((cand, pos_char), []):
+                    if item['id'] not in seen_wn_ids:
+                        seen_wn_ids.add(item['id'])
+                        wn_list_for_pos.append(item)
         
         # POS Mismatch Bypass
         if not wn_list_for_pos:
