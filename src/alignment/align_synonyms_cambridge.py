@@ -1,12 +1,14 @@
 import sqlite3
 import os
 import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import argparse
 import torch
 import numpy as np
 from collections import defaultdict
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel
+from src.utils.nlp import get_match_keys
 
 # Custom Bi-Encoder wrapper
 class BiEncoder:
@@ -59,69 +61,12 @@ def normalize_pos(pos):
     if not pos:
         return ""
     pos = pos.lower().strip()
-    if pos in ['noun', 'n']: return 'n'
-    if pos in ['verb', 'v']: return 'v'
-    if pos in ['adjective', 'adj', 'a']: return 'a'
-    if pos in ['adverb', 'adv', 'r']: return 'r'
+    if 'noun' in pos or pos == 'n': return 'n'
+    if 'verb' in pos or pos == 'v': return 'v'
+    if 'adjective' in pos or pos == 'adj' or pos == 'a': return 'a'
+    if 'adverb' in pos or pos == 'adv' or pos == 'r': return 'r'
     return pos
 
-# Unicode normalization helper for string comparison
-import unicodedata
-import re
-
-def get_match_keys(text: str):
-    if not text:
-        return []
-    text = text.lower()
-    text = "".join(
-        c for c in unicodedata.normalize('NFD', text)
-        if unicodedata.category(c) != 'Mn'
-    )
-    text = text.replace(".", "")
-    if re.match(r'^[a-z],\s*[a-z]$', text):
-        text = text[0]
-    placeholder_slashes = r'\b(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves)/+(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves)\b'
-    text = re.sub(placeholder_slashes, ' ', text, flags=re.IGNORECASE)
-    placeholders = r'\b(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves|doing)\b'
-    text = re.sub(placeholders, ' ', text, flags=re.IGNORECASE)
-    possessives = r"\b(someone's|somebody's|one's|your|their|his|her|my|our)\b"
-    text = re.sub(possessives, ' ', text, flags=re.IGNORECASE)
-
-    texts_to_resolve = [text]
-    while True:
-        new_texts = []
-        has_bracket = False
-        for t in texts_to_resolve:
-            match = re.search(r'\(([^)]+)\)', t)
-            if match:
-                has_bracket = True
-                span = match.span()
-                inside_content = match.group(1)
-                t_keep = t[:span[0]] + " " + inside_content + " " + t[span[1]:]
-                t_drop = t[:span[0]] + " " + t[span[1]:]
-                new_texts.append(t_keep)
-                new_texts.append(t_drop)
-            else:
-                new_texts.append(t)
-        texts_to_resolve = list(set(new_texts))
-        if not has_bracket:
-            break
-
-    final_phrases = []
-    for t in texts_to_resolve:
-        t_clean = re.sub(r'[^\w\s\-\/\']', ' ', t)
-        parts = t_clean.split('/')
-        if any(len(p.strip()) <= 1 for p in parts) or any(any(c.isdigit() for c in p) for p in parts):
-            final_phrases.append(t)
-        else:
-            final_phrases.extend(parts)
-            
-    results = set()
-    for phrase in final_phrases:
-        tokens = [w.strip() for w in phrase.split() if w.strip()]
-        if tokens:
-            results.add(" ".join(tokens))
-    return list(results)
 
 def main():
     parser = argparse.ArgumentParser(description="Map Cambridge synonyms to target sense IDs directly in cambridge.db.")
@@ -131,6 +76,7 @@ def main():
     parser.add_argument("--batch_size", type=int, default=32, help="Batch size for generating embeddings.")
     parser.add_argument("--device", type=str, default=None, help="Device to run PyTorch model ('cuda', 'cpu', 'mps').")
     parser.add_argument("--dry_run", action="store_true", help="Dry run mode. Perform all computations but do not update the DB.")
+    parser.add_argument("--rebuild", action="store_true", help="Rebuild all mappings (including already matched synonyms).")
     args = parser.parse_args()
 
     if not os.path.exists(args.db_path):
@@ -157,6 +103,12 @@ def main():
             cursor.execute("ALTER TABLE sense_synonyms ADD COLUMN target_sense_id INTEGER REFERENCES senses(id)")
             conn.commit()
 
+    # Reset existing mappings if rebuilding
+    if args.rebuild and not args.dry_run:
+        print("Rebuild requested: resetting all existing target_sense_id mappings to NULL...")
+        cursor.execute("UPDATE sense_synonyms SET target_sense_id = NULL")
+        conn.commit()
+
     # Step 3: Load all senses into memory index for quick candidate retrieval
     print("Indexing all Cambridge senses...")
     cursor.execute("""
@@ -170,10 +122,31 @@ def main():
     for s_id, defn, display, slug, pos in cursor.fetchall():
         pos_norm = normalize_pos(pos)
         senses_defn_cache[s_id] = defn
+        
+        # Populate candidates using get_match_keys for robust string matching
+        keys = set()
         if display:
-            senses_by_word_pos[(display.lower().strip(), pos_norm)].append(s_id)
+            keys.update(get_match_keys(display))
         if slug:
-            senses_by_word_pos[(slug.lower().strip(), pos_norm)].append(s_id)
+            keys.update(get_match_keys(slug))
+            
+        for k in keys:
+            senses_by_word_pos[(k, pos_norm)].append(s_id)
+
+    # Build inverted index for close phrase matching
+    print("Building inverted index for close matches...")
+    stop_words = {
+        'and', 'the', 'a', 'an', 'for', 'with', 'to', 'in', 'on', 'at', 
+        'by', 'of', 'about', 'out', 'up', 'down', 'off', 'over', 'under', 
+        'be', 'been', 'is', 'are', 'was', 'were', 'have', 'has', 'had', 'do', 
+        'does', 'did', 'some', 'any', 'that', 'this', 'these', 'those'
+    }
+    inverted_index = defaultdict(list)
+    for idx_key, p_key in senses_by_word_pos.keys():
+        idx_tokens = set(idx_key.split())
+        important_idx_tokens = {t for t in idx_tokens if len(t) > 2 and t not in stop_words}
+        for t in important_idx_tokens:
+            inverted_index[t].append((idx_key, p_key))
 
     # Step 4: Pre-fetch synonyms and examples for rule check and example concatenation
     cursor.execute("SELECT sense_id, synonym FROM sense_synonyms WHERE is_antonym = 0")
@@ -250,14 +223,17 @@ def main():
 
     # Step 6: Fetch synonyms relations to map
     print("Loading synonyms relationships from cambridge.db...")
-    cursor.execute("""
+    query = """
         SELECT ss.id, ss.sense_id, ss.synonym, w.display_form, e.pos
         FROM sense_synonyms ss
         JOIN senses s ON ss.sense_id = s.id
         JOIN entries e ON s.entry_id = e.id
         JOIN words w ON e.word_id = w.id
         WHERE ss.is_antonym = 0
-    """)
+    """
+    if not args.rebuild:
+        query += " AND ss.target_sense_id IS NULL"
+    cursor.execute(query)
     relations = cursor.fetchall()
 
     senses_needing_embeddings = set()
@@ -273,7 +249,52 @@ def main():
         if not pos_norm:
             continue
             
-        tgt_senses = senses_by_word_pos.get((target_text.lower().strip(), pos_norm), [])
+        # Generate match keys for target synonym
+        target_keys = get_match_keys(target_text)
+        
+        # Support wildcard POS matching for collocations, idioms, phrases, expressions, and closed classes
+        wildcards = {
+            'collocation', 'phrase', 'idiom', 'expression', 'exclamation',
+            'preposition', 'conjunction', 'determiner', 'pronoun', 'number',
+            'prefix', 'suffix'
+        }
+        search_pos = {pos_norm}
+        if pos_norm in wildcards:
+            search_pos.update({'n', 'v', 'a', 'r'})
+            search_pos.update(wildcards)
+        else:
+            search_pos.update(wildcards)
+
+        tgt_senses = []
+        for tk in target_keys:
+            # 1. Exact match lookup
+            for p_key in search_pos:
+                tgt_senses.extend(senses_by_word_pos.get((tk, p_key), []))
+                
+            # 2. Close match lookup (Jaccard >= 0.60 and Containment >= 0.99) using inverted index
+            tk_tokens = set(tk.split())
+            important_tokens = {t for t in tk_tokens if len(t) > 2 and t not in stop_words}
+            
+            eval_keys = set()
+            for t in important_tokens:
+                if t in inverted_index:
+                    eval_keys.update(inverted_index[t])
+                    
+            for idx_key, p_key in eval_keys:
+                if p_key not in search_pos:
+                    continue
+                
+                idx_tokens = set(idx_key.split())
+                intersection = len(tk_tokens.intersection(idx_tokens))
+                union = len(tk_tokens.union(idx_tokens))
+                jaccard = intersection / union
+                containment = intersection / min(len(tk_tokens), len(idx_tokens))
+                
+                if jaccard >= 0.60 and containment >= 0.99:
+                    tgt_senses.extend(senses_by_word_pos[(idx_key, p_key)])
+                    
+        tgt_senses = list(set(tgt_senses))
+
         if not tgt_senses:
             skipped_no_candidates += 1
             continue

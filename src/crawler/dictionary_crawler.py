@@ -196,6 +196,20 @@ def init_db(db_path: str) -> sqlite3.Connection:
             source      TEXT
         );
         CREATE INDEX IF NOT EXISTS idx_collocations_word ON collocations(word_id);
+
+        CREATE TABLE IF NOT EXISTS word_alternatives (
+            word_id          INTEGER NOT NULL REFERENCES words(id) ON DELETE CASCADE,
+            alternative_word TEXT NOT NULL,
+            alternative_type TEXT NOT NULL,
+            PRIMARY KEY (word_id, alternative_word)
+        );
+        CREATE INDEX IF NOT EXISTS idx_word_alternatives_alt ON word_alternatives(alternative_word);
+
+        CREATE TABLE IF NOT EXISTS temp_redirects (
+            word_id    INTEGER NOT NULL REFERENCES words(id) ON DELETE CASCADE,
+            pos        TEXT,
+            definition TEXT
+        );
     """)
     conn.commit()
     return conn
@@ -242,6 +256,38 @@ def get_pending(conn: sqlite3.Connection) -> list[tuple[int, str, str]]:
         "SELECT id, word, entry_type FROM words WHERE status='pending' ORDER BY id"
     ).fetchall()
     return rows
+
+def matches_any_pattern(defn):
+    if not defn:
+        return False
+    import fnmatch
+    invalid_patterns = [
+        'past simple of %',
+        'past simple and past participle of %',
+        'past participle of %',
+        'past participle, past simple of %',
+        'present participle of %',
+        'plural of %',
+        'pl of %',
+        'comparative of %',
+        'superlative of %',
+        'US spelling of %',
+        'mainly US spelling of %',
+        'another US spelling of %',
+        'a US spelling of %',
+        'UK spelling of %',
+        'another spelling of %',
+        'another word for %',
+        '→ %',
+        'short form of %',
+        'written abbreviation for %',
+        'abbreviation for %'
+    ]
+    for pat in invalid_patterns:
+        fn_pat = pat.replace('%', '*')
+        if fnmatch.fnmatch(defn.lower(), fn_pat.lower()):
+            return True
+    return False
 
 class DbWriterThread(threading.Thread):
     def __init__(self, db_path: str, batch_size: int = 20):
@@ -326,6 +372,15 @@ class DbWriterThread(threading.Thread):
                         )
 
                     for sense_data in entry_data["senses"]:
+                        defn = sense_data["definition"]
+                        if matches_any_pattern(defn):
+                            cur.execute(
+                                """INSERT INTO temp_redirects (word_id, pos, definition)
+                                   VALUES (?,?,?)""",
+                                (word_id, entry_data["pos"], defn),
+                            )
+                            continue
+
                         cur.execute(
                             """INSERT INTO senses
                                (entry_id, sense_order, guideword, definition,
@@ -335,7 +390,7 @@ class DbWriterThread(threading.Thread):
                                 entry_id,
                                 sense_data["sense_order"],
                                 sense_data["guideword"],
-                                sense_data["definition"],
+                                defn,
                                 sense_data["cefr_level"],
                                 sense_data["grammar"],
                                 sense_data["domain"],
@@ -965,6 +1020,154 @@ def crawl_dictionary(words_file: str = None, db_path: str = "data/cambridge.db",
 
     conn = init_db(db_path)
     print()
+    clean_alternatives(conn)
     print_stats(conn)
     conn.close()
     print("\nDone!")
+
+def clean_alternatives(conn: sqlite3.Connection):
+    import re
+    print("Post-processing: cleaning spelling alternatives (US-first)...")
+    cursor = conn.cursor()
+    
+    def clean_target(text, prefix):
+        target = text[len(prefix):].strip()
+        target = re.split(r'[,;]|\bor\b', target)[0].strip()
+        # Strip dialect labels appended by Cambridge (e.g. UK, mainly UK, US, mainly US)
+        target_lower = target.lower()
+        for suffix in [' mainly uk', ' mainly us', ' uk', ' us']:
+            if target_lower.endswith(suffix):
+                target = target[:-len(suffix)].strip()
+                target_lower = target_lower[:-len(suffix)].strip()
+        return target
+        
+    # 1. Extract UK-to-US spelling mappings from temp_redirects
+    us_patterns = [
+        'US spelling of %',
+        'mainly US spelling of %',
+        'another US spelling of %',
+        'a US spelling of %'
+    ]
+    
+    uk_to_us = {} # (uk_word, pos_char) -> us_word
+    
+    for p in us_patterns:
+        cursor.execute("""
+            SELECT w.display_form, tr.pos, tr.definition
+            FROM temp_redirects tr
+            JOIN words w ON w.id = tr.word_id
+            WHERE tr.definition LIKE ?
+        """, (p,))
+        for us_word, pos, definition in cursor.fetchall():
+            pos_char = map_pos(pos)
+            if not pos_char:
+                continue
+            prefix = p.replace('%', '')
+            uk_word = clean_target(definition, prefix)
+            if uk_word:
+                uk_to_us[(uk_word.lower().strip(), pos_char)] = us_word.lower().strip()
+
+    # 2. Redirect UK spelling entries to US entries
+    redirect_count = 0
+    rename_count = 0
+    
+    for (uk_word, pos_char), us_word in uk_to_us.items():
+        cursor.execute("SELECT id FROM words WHERE word = ? OR display_form = ?", (uk_word, uk_word))
+        uk_row = cursor.fetchone()
+        cursor.execute("SELECT id FROM words WHERE word = ? OR display_form = ?", (us_word, us_word))
+        us_row = cursor.fetchone()
+        
+        if uk_row and us_row:
+            uk_word_id = uk_row[0]
+            us_word_id = us_row[0]
+            
+            # Delete any US entries that have no senses (redirect entries)
+            cursor.execute("""
+                DELETE FROM entries 
+                WHERE word_id = ? 
+                  AND id NOT IN (SELECT DISTINCT entry_id FROM senses)
+            """, (us_word_id,))
+                
+            cursor.execute("""
+                UPDATE entries 
+                SET word_id = ? 
+                WHERE word_id = ?
+            """, (us_word_id, uk_word_id))
+            redirect_count += 1
+        elif uk_row and not us_row:
+            uk_word_id = uk_row[0]
+            us_slug = us_word.replace(" ", "-")
+            cursor.execute("""
+                UPDATE words
+                SET word = ?, display_form = ?
+                WHERE id = ?
+            """, (us_slug, us_word, uk_word_id))
+            rename_count += 1
+
+    conn.commit()
+
+    # 3. Populate word_alternatives table
+    alternative_patterns = {
+        'US spelling of %': 'UK spelling',
+        'mainly US spelling of %': 'UK spelling',
+        'another US spelling of %': 'UK spelling',
+        'a US spelling of %': 'UK spelling',
+        'UK spelling of %': 'UK spelling',
+        'another spelling of %': 'another spelling',
+        'another word for %': 'another word',
+        '→ %': 'arrow',
+        'short form of %': 'short form',
+        'written abbreviation for %': 'abbreviation',
+        'abbreviation for %': 'abbreviation'
+    }
+    
+    alternatives_to_insert = []
+    
+    # Pre-cache word ID lookups for speed
+    cursor.execute("SELECT id, word, display_form FROM words")
+    word_id_cache = {}
+    for r_id, word_slug, display in cursor.fetchall():
+        if word_slug:
+            word_id_cache[word_slug.lower().strip()] = r_id
+        if display:
+            word_id_cache[display.lower().strip()] = r_id
+            
+    for p, alt_type in alternative_patterns.items():
+        cursor.execute("""
+            SELECT w.display_form, tr.pos, tr.definition
+            FROM temp_redirects tr
+            JOIN words w ON w.id = tr.word_id
+            WHERE tr.definition LIKE ?
+        """, (p,))
+        for word, pos, definition in cursor.fetchall():
+            pos_char = map_pos(pos)
+            if not pos_char:
+                continue
+            prefix = p.replace('%', '')
+            target_word = clean_target(definition, prefix)
+            if target_word:
+                word_clean = word.lower().strip()
+                target_clean = target_word.lower().strip()
+                if 'US spelling' in p:
+                    base_word = word_clean
+                    alt_word = target_clean
+                else:
+                    base_word = uk_to_us.get((target_clean, pos_char), target_clean)
+                    alt_word = word_clean
+                    
+                base_word_id = word_id_cache.get(base_word)
+                if base_word_id:
+                    alternatives_to_insert.append((base_word_id, alt_word, alt_type))
+
+    cursor.executemany("""
+        INSERT OR IGNORE INTO word_alternatives (word_id, alternative_word, alternative_type)
+        VALUES (?, ?, ?)
+    """, alternatives_to_insert)
+    conn.commit()
+
+    # 4. Drop temporary redirects table
+    cursor.execute("DROP TABLE IF EXISTS temp_redirects")
+    conn.commit()
+    print(f"  - Redirected {redirect_count} UK entries to US word IDs.")
+    print(f"  - Renamed {rename_count} missing US words.")
+    print(f"  - Populated {len(alternatives_to_insert)} rows in word_alternatives.")

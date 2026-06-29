@@ -12,113 +12,7 @@ import re
 import unicodedata
 
 import wn
-from src.utils.nlp import map_pos
-
-def resolve_alternatives(text: str):
-    if '/' not in text:
-        return [text]
-    
-    # Tách thử bằng dấu gạch chéo
-    parts = text.split('/')
-    
-    # Quy tắc loại trừ Literal Slashes:
-    # 1. Không tách nếu có bất kỳ phần nào chỉ có 1 chữ cái (ví dụ: a/c, S/N, km/s, A/B/C)
-    # 2. Không tách nếu có chữ số (ví dụ: 9/11, 7/7, 80/20)
-    if any(len(p.strip()) <= 1 for p in parts) or any(any(c.isdigit() for c in p) for p in parts):
-        return [text]
-        
-    # Check if all parts have spaces, or all parts have no spaces
-    has_spaces = [(' ' in p.strip()) for p in parts]
-    if all(has_spaces) or not any(has_spaces):
-        return [p.strip() for p in parts if p.strip()]
-        
-    # Otherwise, it's a particle alternative like "cool down/off"
-    match = re.search(r'\b(\w+)/(\w+)\b', text)
-    if match:
-        w1, w2 = match.group(1), match.group(2)
-        span = match.span()
-        text_v1 = text[:span[0]] + w1 + text[span[1]:]
-        text_v2 = text[:span[0]] + w2 + text[span[1]:]
-        return list(set(resolve_alternatives(text_v1) + resolve_alternatives(text_v2)))
-    return [p.strip() for p in parts if p.strip()]
-
-def get_match_keys(text: str):
-    if not text:
-        return []
-
-    # 1. Chuẩn hóa Unicode & viết thường
-    text = text.lower()
-    text = "".join(
-        c for c in unicodedata.normalize('NFD', text)
-        if unicodedata.category(c) != 'Mn'
-    )
-    text = text.replace(".", "")  # Xóa dấu chấm viết tắt
-
-    # Đặc biệt: Chuẩn hóa cặp chữ cái viết hoa/thường (ví dụ: "A, a" -> "a")
-    if re.match(r'^[a-z],\s*[a-z]$', text):
-        text = text[0]
-
-    # 2. Xóa sạch các tổ hợp biến số có dấu gạch chéo trước (tránh lỗi chia tách nhầm giới từ)
-    placeholder_slashes = r'\b(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves)/+(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves)\b'
-    text = re.sub(placeholder_slashes, ' ', text, flags=re.IGNORECASE)
-
-    # Xóa sạch các biến số phổ biến (placeholders) đơn lẻ
-    placeholders = r'\b(someone|something|somebody|somewhere|sth|sb|oneself|yourself|himself|herself|themselves|doing)\b'
-    text = re.sub(placeholders, ' ', text, flags=re.IGNORECASE)
-    
-    # Xóa các sở hữu cách của biến số
-    possessives = r"\b(someone's|somebody's|one's|your|their|his|her|my|our)\b"
-    text = re.sub(possessives, ' ', text, flags=re.IGNORECASE)
-
-    # 3. Xử lý phân nhánh ngoặc đơn (Optional Expansion)
-    texts_to_resolve = [text]
-    while True:
-        new_texts = []
-        has_bracket = False
-        for t in texts_to_resolve:
-            match = re.search(r'\(([^)]+)\)', t)
-            if match:
-                has_bracket = True
-                span = match.span()
-                inside_content = match.group(1)
-                
-                # Nhánh 1: Giữ từ trong ngoặc
-                t_keep = t[:span[0]] + " " + inside_content + " " + t[span[1]:]
-                # Nhánh 2: Xóa sạch cả cụm ngoặc
-                t_drop = t[:span[0]] + " " + t[span[1]:]
-                
-                new_texts.append(t_keep)
-                new_texts.append(t_drop)
-            else:
-                new_texts.append(t)
-        
-        texts_to_resolve = list(set(new_texts))
-        if not has_bracket:
-            break
-
-    # 4. Tách các lựa chọn dấu gạch chéo (Alternatives)
-    final_phrases = []
-    for t in texts_to_resolve:
-        final_phrases.extend(resolve_alternatives(t))
-
-    # 5. Làm sạch khoảng trắng và tạo các biến thể không dấu cách (squashed)
-    candidates = []
-    for phrase in set(final_phrases):
-        # Thay thế gạch ngang, gạch dưới và dấu hai chấm bằng dấu cách
-        phrase_clean = phrase.replace("-", " ").replace("_", " ").replace(":", " ")
-        # Xóa các ký tự đặc biệt còn sót lại ngoài chữ và số
-        phrase_clean = re.sub(r'[^a-z0-9\s]', '', phrase_clean)
-        phrase_clean = re.sub(r'\s+', ' ', phrase_clean).strip()
-        
-        if phrase_clean:
-            candidates.append(phrase_clean)
-            # Chỉ tạo bản squashed nếu cụm từ KHÔNG chứa chữ số (tránh lỗi "2:1" -> "21")
-            if not any(c.isdigit() for c in phrase_clean):
-                squashed = phrase_clean.replace(" ", "")
-                if squashed != phrase_clean:
-                    candidates.append(squashed)
-
-    return list(set(candidates))
+from src.utils.nlp import map_pos, resolve_alternatives, get_match_keys
 
 from src.utils.db import fetch_cambridge_senses
 from src.alignment.sense_aligner import (
@@ -161,16 +55,7 @@ def db_writer_worker(db_path):
             PRIMARY KEY (word, pos)
         )
     """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS word_alternatives (
-            word TEXT NOT NULL,
-            pos TEXT NOT NULL,
-            alternative_word TEXT NOT NULL,
-            alternative_type TEXT NOT NULL,
-            PRIMARY KEY (word, pos, alternative_word, alternative_type)
-        )
-    """)
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_word_alternatives_alt ON word_alternatives(alternative_word)")
+    # word_alternatives dropped from alignment database (fully maintained at sense-level in cambridge.db)
     conn.commit()
     
     print("Database writer worker started.")
@@ -290,151 +175,27 @@ def align_database(
         """)
         rows = cursor_cam.fetchall()
         
-        # Define patterns for inflections and spelling/alternative variants
-        invalid_patterns = [
-            'past simple of %',
-            'past simple and past participle of %',
-            'past participle of %',
-            'past participle, past simple of %',
-            'present participle of %',
-            'plural of %',
-            'pl of %',
-            'comparative of %',
-            'superlative of %',
-            'US spelling of %',
-            'UK spelling of %',
-            'another spelling of %',
-            'another word for %',
-            '→ %',
-            'mainly US spelling of %',
-            'another US spelling of %',
-            'a US spelling of %',
-            'short form of %',
-            'written abbreviation for %',
-            'abbreviation for %'
-        ]
-        
-        # Get list of sense IDs matching these patterns using SQL LIKE logic locally
-        import fnmatch
-        def matches_any_pattern(defn):
-            if not defn:
-                return False
-            for pat in invalid_patterns:
-                fn_pat = pat.replace('%', '*')
-                if fnmatch.fnmatch(defn.lower(), fn_pat.lower()):
-                    return True
-            return False
-            
-        # Build UK to US spelling mapping first
-        # We look for: A (US spelling of B)
-        us_patterns = [
-            'US spelling of %',
-            'mainly US spelling of %',
-            'another US spelling of %',
-            'a US spelling of %'
-        ]
-        
-        uk_to_us = {} # (UK_word, pos_char) -> US_word
-        import re
-        def clean_target(text, prefix):
-            target = text[len(prefix):].strip()
-            target = re.split(r'[,;]|\bor\b', target)[0].strip()
-            return target
-            
-        for p in us_patterns:
-            cursor_cam.execute("""
-                SELECT w.display_form, e.pos, s.definition
-                FROM senses s
-                JOIN entries e ON e.id = s.entry_id
-                JOIN words w ON w.id = e.word_id
-                WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
-                  AND (s.phrase_title IS NULL OR s.phrase_title = '')
-                  AND s.definition LIKE ?
-                ORDER BY w.display_form, e.pos, s.id
-            """, (p,))
-            for us_word, pos, definition in cursor_cam.fetchall():
-                pos_char = map_pos(pos)
-                if not pos_char:
-                    continue
-                prefix = p.replace('%', '')
-                uk_word = clean_target(definition, prefix)
-                if uk_word:
-                    uk_to_us[(uk_word, pos_char)] = us_word
-                    
-        # Group senses by word_pos, redirecting UK words to US words
+        # Group senses by word_pos (senses are already US-by-default in the database)
         from collections import defaultdict
         word_pos_senses = defaultdict(list)
         for word, pos, s_id, defn in rows:
             pos_char = map_pos(pos)
             if pos_char:
-                # Redirect UK to US
-                target_word = uk_to_us.get((word, pos_char), word)
-                word_pos_senses[(target_word, pos_char)].append((s_id, defn))
+                word_pos_senses[(word, pos_char)].append((s_id, defn))
                 
-        # Only insert tasks where at least one sense is NOT an inflection or spelling variant
+        # Insert all remaining tasks (redirect/inflection senses have been removed at crawl time)
         batch_insert = []
-        for (word, pos_char), senses in word_pos_senses.items():
-            if not all(matches_any_pattern(defn) for _, defn in senses):
-                batch_insert.append((word, pos_char, "pending"))
+        for (word, pos_char) in word_pos_senses.keys():
+            batch_insert.append((word, pos_char, "pending"))
                 
         cursor_align.executemany(
             "INSERT OR IGNORE INTO word_pos_alignment_status (word, pos, status) VALUES (?, ?, ?)",
             batch_insert
         )
         
-        # Populate word_alternatives table on first-time initialization
-        print("Populating word_alternatives table (US-first)...")
-        alternative_patterns = {
-            'US spelling of %': 'UK spelling', # We swap: Alt is UK spelling of Base (US)
-            'mainly US spelling of %': 'UK spelling',
-            'another US spelling of %': 'UK spelling',
-            'a US spelling of %': 'UK spelling',
-            'UK spelling of %': 'UK spelling',
-            'another spelling of %': 'another spelling',
-            'another word for %': 'another word',
-            '→ %': 'arrow',
-            'short form of %': 'short form',
-            'written abbreviation for %': 'abbreviation',
-            'abbreviation for %': 'abbreviation'
-        }
-        
-        alternatives_to_insert = []
-        for p, alt_type in alternative_patterns.items():
-            cursor_cam.execute("""
-                SELECT w.display_form, e.pos, s.definition
-                FROM senses s
-                JOIN entries e ON e.id = s.entry_id
-                JOIN words w ON w.id = e.word_id
-                WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
-                  AND (s.phrase_title IS NULL OR s.phrase_title = '')
-                  AND s.definition LIKE ?
-                ORDER BY w.display_form, e.pos, s.id
-            """, (p,))
-            for word, pos, definition in cursor_cam.fetchall():
-                pos_char = map_pos(pos)
-                if not pos_char:
-                    continue
-                prefix = p.replace('%', '')
-                target_word = clean_target(definition, prefix)
-                if target_word:
-                    # If it was a US spelling variant, target_word is UK, word is US.
-                    # We want: Base = US_word (word), Alt = UK_word (target_word)
-                    if 'US spelling' in p:
-                        alternatives_to_insert.append((word, pos_char, target_word, 'UK spelling'))
-                    else:
-                        # For other types, check if their base word needs to be renamed to US
-                        base_word = uk_to_us.get((target_word, pos_char), target_word)
-                        alternatives_to_insert.append((base_word, pos_char, word, alt_type))
-                    
-        cursor_align.executemany(
-            "INSERT OR IGNORE INTO word_alternatives (word, pos, alternative_word, alternative_type) VALUES (?, ?, ?, ?)",
-            alternatives_to_insert
-        )
-        
         conn_cam.close()
         conn_align.commit()
         print(f"Tracking status initialized for {len(batch_insert)} word-POS tasks.")
-        print(f"Word alternatives populated with {len(alternatives_to_insert)} records.")
 
     # 2. Query pending tasks from status table in deterministic order
     cursor_align.execute("SELECT word, pos FROM word_pos_alignment_status WHERE status = 'pending' ORDER BY word, pos")
@@ -466,90 +227,15 @@ def align_database(
     rows = cursor_cam.fetchall()
     conn_cam.close()
     
-    # Define patterns to skip during memory loading
-    invalid_patterns = [
-        'past simple of %',
-        'past simple and past participle of %',
-        'past participle of %',
-        'past participle, past simple of %',
-        'present participle of %',
-        'plural of %',
-        'pl of %',
-        'comparative of %',
-        'superlative of %',
-        'US spelling of %',
-        'UK spelling of %',
-        'another spelling of %',
-        'another word for %',
-        '→ %',
-        'mainly US spelling of %',
-        'another US spelling of %',
-        'a US spelling of %',
-        'short form of %',
-        'written abbreviation for %',
-        'abbreviation for %'
-    ]
-    
-    import fnmatch
-    def matches_any_pattern(defn):
-        if not defn:
-            return False
-        for pat in invalid_patterns:
-            fn_pat = pat.replace('%', '*')
-            if fnmatch.fnmatch(defn.lower(), fn_pat.lower()):
-                return True
-        return False
-
-    # Build UK to US spelling mapping for memory loading redirection
-    conn_cam = sqlite3.connect(cambridge_db_path)
-    cursor_cam = conn_cam.cursor()
-    
-    us_patterns = [
-        'US spelling of %',
-        'mainly US spelling of %',
-        'another US spelling of %',
-        'a US spelling of %'
-    ]
-    
-    uk_to_us = {}
-    import re
-    def clean_target(text, prefix):
-        target = text[len(prefix):].strip()
-        target = re.split(r'[,;]|\bor\b', target)[0].strip()
-        return target
-        
-    for p in us_patterns:
-        cursor_cam.execute("""
-            SELECT w.display_form, e.pos, s.definition
-            FROM senses s
-            JOIN entries e ON e.id = s.entry_id
-            JOIN words w ON w.id = e.word_id
-            WHERE e.dictionary_source = "Cambridge Advanced Learner's Dictionary"
-              AND (s.phrase_title IS NULL OR s.phrase_title = '')
-              AND s.definition LIKE ?
-            ORDER BY w.display_form, e.pos, s.id
-        """, (p,))
-        for us_word, pos, definition in cursor_cam.fetchall():
-            pos_char = map_pos(pos)
-            if not pos_char:
-                continue
-            prefix = p.replace('%', '')
-            uk_word = clean_target(definition, prefix)
-            if uk_word:
-                uk_to_us[(uk_word, pos_char)] = us_word
-    conn_cam.close()
+    # Senses grouping for memory loading
 
     from collections import defaultdict
     cam_data = defaultdict(list)
     for word, s_id, pos, definition in rows:
         pos_char = map_pos(pos)
         if pos_char:
-            # Redirect UK word to US word
-            target_word = uk_to_us.get((word, pos_char), word)
-            if (target_word, pos_char) in pending_set:
-                # Skip inflected or spelling variant senses
-                if not matches_any_pattern(definition):
-                    cam_data[(target_word, pos_char)].append((s_id, pos, definition))
+            if (word, pos_char) in pending_set:
+                cam_data[(word, pos_char)].append((s_id, pos, definition))
             
     tasks_to_process = sorted(list(cam_data.keys()))
     
